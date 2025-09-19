@@ -25,6 +25,7 @@ VAR_GLOBAL
 	ZAS_005_5		{PUBLIC} : BOOL;                 //Zásuvka-ventilátor;102
 	ZAS_006_6      {PUBLIC} : BOOL;                 //Nabijacia stanica;102
 	ZAS_009_9      {PUBLIC} : BOOL;                 //HW-Reset;102
+
 END_VAR
 
 
