@@ -640,7 +640,7 @@
               <Interfaces/>
               <Editor xmlns="http://www.tecomat.com"/>
             </Device>
-            <Device xmlns="http://www.tecomat.com" physAddr="0000" enabled="true" rack="4146" position="6" default="false">
+            <Device xmlns="http://www.tecomat.com" physAddr="0000" enabled="true" rack="4146" position="6" default="false" statLoc="r16_p2_CIB_DIAG.STAT[6]" validStat="87" errLoc="r16_p2_CIB_DIAG.ERR[6]">
               <Info>
                 <ProductCode>3392</ProductCode>
                 <ProductName>C-1W-4000M</ProductName>
@@ -654,7 +654,7 @@
                 </Data>
                 <Aliases/>
                 <Notes/>
-                <Tags/>
+                <Tags xmlns="http://www.tecomat.com"/>
               </Objects>
               <SerialChannels/>
               <Ethernets/>

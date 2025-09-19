@@ -70,7 +70,8 @@
 #usefile "_Nh_DEV.st", 'lib'
 #usefile "_Nh_WEB.st", 'lib'
 #usefile "_Nh_Ini.st", 'lib'
-#usefile "_Nh_SERVICE.st", 'lib'
+#usefile "_Nh_UTIL.st"
+#usefile "_Nh_PRGM.st"
 #usefile "prgMain.ST", 'lib'
 #usefile "200.mos"
 #usefile "PanelMaker\r0_p0_CP_2000.mos", 'auto'

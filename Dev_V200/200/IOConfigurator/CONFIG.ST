@@ -883,6 +883,48 @@ TYPE
       DOs : TCIB_DO3;
    END_STRUCT;
 
+   TCIB_C1W4000M_STAT : STRUCT
+      ERR : BOOL;
+      dummy1 {HIDDEN} : BOOL;
+      dummy2 {HIDDEN} : BOOL;
+      dummy3 {HIDDEN} : BOOL;
+      dummy4 {HIDDEN} : BOOL;
+      dummy5 {HIDDEN} : BOOL;
+      dummy6 {HIDDEN} : BOOL;
+      ARC : BOOL;
+   END_STRUCT;
+
+   TCIB_C_1W_4000M_IN : STRUCT
+      STAT : TCIB_C1W4000M_STAT;
+      ROMCODE1 : WORD;
+      ROMCODE2 : WORD;
+      ROMCODE3 : WORD;
+      ROMCODE4 : WORD;
+      VAL1 : INT;
+      VAL2 : INT;
+      VAL3 : INT;
+      VAL4 : INT;
+      VAL5 : INT;
+      ERRCODE : UINT;
+   END_STRUCT;
+
+   TCIB_C1W4000M_CONT : STRUCT
+      dummy0 {HIDDEN} : BOOL;
+      dummy1 {HIDDEN} : BOOL;
+      dummy2 {HIDDEN} : BOOL;
+      dummy3 {HIDDEN} : BOOL;
+      dummy4 {HIDDEN} : BOOL;
+      dummy5 {HIDDEN} : BOOL;
+      dummy6 {HIDDEN} : BOOL;
+      ACN : BOOL;
+   END_STRUCT;
+
+   TCIB_C_1W_4000M_OUT : STRUCT
+      CONT : TCIB_C1W4000M_CONT;
+      CMD : USINT;
+      CHAN : USINT;
+   END_STRUCT;
+
    TCHStatistic : STRUCT
       STAT : USINT;
       ERR : USINT;
@@ -1053,9 +1095,11 @@ VAR_GLOBAL_INPUT
 (* C-HC-0201F-E *)
    r4146_p4_IN : TCIB_C_HC_0201F_E_IN;
    (* Aliases *)
-   TVE_001_1 AT r4146_p4_IN.VSTAT; (* TVE-Teco typ-1;101 *)
+   TVE_001_1 {PUBLIC_API} AT r4146_p4_IN.VSTAT; (* TVE-Teco typ-1;101 *)
 (* C-WG-0503S *)
    r4146_p5_IN : TCIB_C_WG_0503S_IN;
+(* C-1W-4000M *)
+   r4146_p6_IN : TCIB_C_1W_4000M_IN;
 (* ETH1_UNI0 *)
    r0_p0_Statistic_ETH1_UNI0 : TCHStatistic;
    UNI_ETH1_UNI0_IN : TUNI_ETH1_UNI0_IN;
@@ -1135,9 +1179,11 @@ VAR_GLOBAL_OUTPUT
 (* C-HC-0201F-E *)
    r4146_p4_OUT : TCIB_C_HC_0201F_E_OUT;
    (* Aliases *)
-   TVE_001_Q AT r4146_p4_OUT.VCONT;
+   TVE_001_Q {PUBLIC_API} AT r4146_p4_OUT.VCONT;
 (* C-WG-0503S *)
    r4146_p5_OUT : TCIB_C_WG_0503S_OUT;
+(* C-1W-4000M *)
+   r4146_p6_OUT : TCIB_C_1W_4000M_OUT;
 (* ETH1_UNI0 *)
    r0_p0_Control_ETH1_UNI0 : TCHControl2;
    UNI_ETH1_UNI0_OUT : TUNI_ETH1_UNI0_OUT;
