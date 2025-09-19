@@ -2,7 +2,7 @@
 *                 # ignoruj všetko v tomto priečinku
 !Dev_V200/        # ale povol priečinok Dev_V200
 !Dev_V200/200/    # a v ňom len podpriečinok 200
-Dev_V200/200_Lib  # ale ignoruj priečinok 200_Lib
+Dev_V200/200_Lib/ # ale ignoruj priečinok 200_Lib
 
 
 # ignoruj workspace súbor od VS Code
