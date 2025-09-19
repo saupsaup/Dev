@@ -334,6 +334,7 @@
                 <Notes>
                   <ObjectNote name="r{RACK}_p{POSITION}_IN.DI.UP1">WSB-102;102</ObjectNote>
                   <ObjectNote name="r{RACK}_p{POSITION}_IN.DI.DI1">Tla-1;101</ObjectNote>
+                  <ObjectNote name="r{RACK}_p{POSITION}_IN.DI.CLICK_DOWN1">Tla-xxx</ObjectNote>
                 </Notes>
                 <Tags xmlns="http://www.tecomat.com"/>
               </Objects>
@@ -605,8 +606,8 @@
               <Objects xmlns="http://www.tecomat.com">
                 <Data/>
                 <Aliases>
-                  <ObjectAlias name="r{RACK}_p{POSITION}_IN.VSTAT" public="false" publicAPI="false" userDef="true">TVE_001_1</ObjectAlias>
-                  <ObjectAlias name="r{RACK}_p{POSITION}_OUT.VCONT" public="false" publicAPI="false" userDef="true">TVE_001_Q</ObjectAlias>
+                  <ObjectAlias name="r{RACK}_p{POSITION}_IN.VSTAT" public="false" publicAPI="true" userDef="true">TVE_001_1</ObjectAlias>
+                  <ObjectAlias name="r{RACK}_p{POSITION}_OUT.VCONT" public="false" publicAPI="true" userDef="true">TVE_001_Q</ObjectAlias>
                 </Aliases>
                 <Notes>
                   <ObjectNote name="r{RACK}_p{POSITION}_IN.VSTAT">TVE-Teco typ-1;101</ObjectNote>
@@ -632,6 +633,28 @@
                 <Aliases/>
                 <Notes/>
                 <Tags xmlns="http://www.tecomat.com"/>
+              </Objects>
+              <SerialChannels/>
+              <Ethernets/>
+              <Piggybacks/>
+              <Interfaces/>
+              <Editor xmlns="http://www.tecomat.com"/>
+            </Device>
+            <Device xmlns="http://www.tecomat.com" physAddr="0000" enabled="true" rack="4146" position="6" default="false">
+              <Info>
+                <ProductCode>3392</ProductCode>
+                <ProductName>C-1W-4000M</ProductName>
+                <VendorID>00000000</VendorID>
+                <DeviceGroup>CFOX</DeviceGroup>
+                <Descriptor>3392_C-1W-4000M.tdd</Descriptor>
+              </Info>
+              <Objects xmlns="http://www.tecomat.com">
+                <Data>
+                  <ObjectData name="r{RACK}_p{POSITION}_C_1W_4000M_init.Dev[0].typdev">83</ObjectData>
+                </Data>
+                <Aliases/>
+                <Notes/>
+                <Tags/>
               </Objects>
               <SerialChannels/>
               <Ethernets/>

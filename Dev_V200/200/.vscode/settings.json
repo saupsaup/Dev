@@ -10,4 +10,10 @@
   "mosaic.plcTarget": "192.168.33.200:61682",
   "mosaic.projectDir": "M:\\NachHouseApp\\Dev\\Dev_V200\\200",
 
+    "favorites.resources": [], // resources path you prefer to mark
+    "favorites.sortOrder": "MANUAL", // ASC, DESC, MANUAL
+    "favorites.saveSeparated": false, // whether to use an extra config file
+    "favorites.groups": ["Default"], // the groups you have created
+    "favorites.currentGroup": "Default" // determine the current using group
+
 }

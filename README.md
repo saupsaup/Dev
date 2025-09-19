@@ -78,6 +78,33 @@ Dev/*             # ignoruj všetko v Dev/
 EOF
 
 
+# vyradit subory zo sledovania, kred u su v indexe
+
+ 1. pridaj ignorovanie PNG do .gitignore (ak tam ešte nie je)
+echo -e "\n*.PNG\n*.png" >> .gitignore
+\n = nový riadok,
+*.PNG = pattern pre všetky súbory končiace na .PNG,
+ďalší \n → nový riadok,
+*.png = pattern pre malé písmená.
+(prázdny riadok)
+*.PNG
+*.png
+
+
+# git rm -r --cached *.PNG *.png || true      # 2. vyhoď všetky PNG z indexu (repozitár), ale nechaj ich na disku
+# git rm -r --cached Dev_V200/**/*.PNG Dev_V200/**/*.png || true
+
+git rm -r --cached .        # git odstrani uplne vsetko co je aktualne sledovane v aktualnom priecinku aj -r = podpriecinky - musi prist add git add Dev_V200/200
+git add .gitignore          # zmeny (.gitignore + úprava indexu)
+git add .gitattributes 
+git add README.md      
+git add Dev_V200/200        # pridat spat sledovanie
+git commit -m "Remove PNG files from repo and ignore them"  ## 4. commitni zmenu
+git push                    # # 5. pushni na GitHub
+
+
+
+
 ## Poznámky
 
 - `.gitignore` je nastavený tak, aby Git sledoval iba priečinky, ktoré sú explicitne povolené (`!Dev_V200/XXX/`).  
@@ -87,6 +114,7 @@ EOF
   ```bash
   ./git-check.sh
   ```
+
 
 
 
