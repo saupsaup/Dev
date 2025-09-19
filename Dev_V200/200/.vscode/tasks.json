@@ -62,7 +62,27 @@
    "args": ["stop", "${config:mosaic.vmName}"],
    "problemMatcher": []
   }
-
+  ,
+  {
+ "label": "Set PLC HALT (VM)-3",
+ "type": "shell",
+ "command": "prlctl",
+ "args": [
+  "exec",
+  "${config:mosaic.vmName}",
+  "cmd",
+  "/c",
+  "cd /d \"${config:mosaic.projectDir}\" && \"${config:mosaic.mosaicBin}\\\\VSC2m.exe\" ${config:mosaic.plcHost} halt"
+ ],
+ "problemMatcher": []
+}
+,
+{
+ "label": "Connect → HALT (VM)",
+ "dependsOn": ["Connect Mosaic (VM)", "Set PLC HALT (VM)"],
+ "dependsOrder": "sequence",
+ "problemMatcher": []
+}
   
  ]
 }
