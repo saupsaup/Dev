@@ -1,0 +1,232 @@
+TYPE
+
+TStatC_DL_0012S : STRUCT
+  dummy0 : BOOL;
+  dummy1 : BOOL;
+  RNDOK  : BOOL;
+  SHS    : BOOL;
+  RRE    : BOOL;  (* odpovì¡s chybou *)
+  RRF    : BOOL;  (* kladná odpovìï *)
+  Done   : BOOL;  (* hotová odpovìï ( kladná, záporná, s_chybou) *)
+  ARC    : BOOL;  (* alternace *)
+END_STRUCT;
+
+TContC_DL_0012S : STRUCT
+  LENM   : BOOL;
+  DBL    : BOOL;
+  RNDS   : BOOL;
+  CHS    : BOOL;
+  dummy4 : BOOL;  (* použit jako semafor busy vysílacího buferu C_DL_0012Sout *)
+  dummy5 : BOOL;
+  TRG    : BOOL;  (* vyslat zprávu *)
+  ACN    : BOOL;  (* alternace *)
+END_STRUCT;
+
+tC_DL_0012Sin : STRUCT
+  stat : TStatC_DL_0012S;
+  data : USINT;
+END_STRUCT;
+
+tC_DL_0012Sout : STRUCT
+  cont    : TContC_DL_0012S;
+  address : USINT;
+  command : USINT;
+  data    : USINT;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_BTN : STRUCT
+  BTN1    : BOOL;
+  BTN2    : BOOL;
+  BTN3    : BOOL;
+  BTN4    : BOOL;
+  BTN5    : BOOL;
+  BTN6    : BOOL;
+  BTN7    : BOOL;
+  BTN8    : BOOL;
+  BTN9    : BOOL;
+  BTN10   : BOOL;
+  BTN11   : BOOL;
+  BTN12   : BOOL;
+  dummy12 : BOOL;
+  dummy13 : BOOL;
+  dummy14 : BOOL;
+  PR      : BOOL;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_CLICK : STRUCT
+  CLICKB1  : BOOL;
+  CLICKB2  : BOOL;
+  CLICKB3  : BOOL;
+  CLICKB4  : BOOL;
+  CLICKB5  : BOOL;
+  CLICKB6  : BOOL;
+  CLICKB7  : BOOL;
+  CLICKB8  : BOOL;
+  CLICKB9  : BOOL;
+  CLICKB10 : BOOL;
+  CLICKB11 : BOOL;
+  CLICKB12 : BOOL;
+  dummy12  : BOOL;
+  dummy13  : BOOL;
+  dummy14  : BOOL;
+  dummy15  : BOOL;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_PRESS : STRUCT
+  PRESSB1  : BOOL;
+  PRESSB2  : BOOL;
+  PRESSB3  : BOOL;
+  PRESSB4  : BOOL;
+  PRESSB5  : BOOL;
+  PRESSB6  : BOOL;
+  PRESSB7  : BOOL;
+  PRESSB8  : BOOL;
+  PRESSB9  : BOOL;
+  PRESSB10 : BOOL;
+  PRESSB11 : BOOL;
+  PRESSB12 : BOOL;
+  dummy12  : BOOL;
+  dummy13  : BOOL;
+  dummy14  : BOOL;
+  dummy15  : BOOL;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_BTNs : STRUCT
+  BTN   : TCIB_C_WS_0000R_PG_BTN;
+  CLICK : TCIB_C_WS_0000R_PG_CLICK;
+  PRESS : TCIB_C_WS_0000R_PG_PRESS;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_GLASSI : STRUCT
+  BTNs  : TCIB_C_WS_0000R_PG_BTNs;
+  IDENT : BYTE;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_CONT : STRUCT
+  DOT1A : BOOL;
+  DOT2A : BOOL;
+  DOT1B : BOOL;
+  DOT2B : BOOL;
+  DBA   : BOOL;
+  DBB   : BOOL;
+  BZ    : BOOL;
+  PX    : BOOL;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_LED : STRUCT
+  LED1    : BOOL;
+  LED2    : BOOL;
+  LED3    : BOOL;
+  LED4    : BOOL;
+  LED5    : BOOL;
+  LED6    : BOOL;
+  LED7    : BOOL;
+  LED8    : BOOL;
+  LED9    : BOOL;
+  LED10   : BOOL;
+  LED11   : BOOL;
+  LED12   : BOOL;
+  dummy12 : BOOL;
+  dummy13 : BOOL;
+  dummy14 : BOOL;
+  dummy15 : BOOL;
+  RED1    : BOOL;
+  RED2    : BOOL;
+  RED3    : BOOL;
+  RED4    : BOOL;
+  RED5    : BOOL;
+  RED6    : BOOL;
+  dummy22 : BOOL;
+  dummy23 : BOOL;
+  GREEN1  : BOOL;
+  GREEN2  : BOOL;
+  GREEN3  : BOOL;
+  GREEN4  : BOOL;
+  GREEN5  : BOOL;
+  GREEN6  : BOOL;
+  dummy30 : BOOL;
+  dummy31 : BOOL;
+END_STRUCT;
+
+TCIB_C_WS_0000R_PG_GLASSO : STRUCT
+  CONT   : TCIB_C_WS_0000R_PG_CONT;
+  LED    : TCIB_C_WS_0000R_PG_LED;
+  BLIGHT : USINT;
+  DISPA  : INT;
+  DISPB  : INT;
+  SETA   : USINT;
+  SETB   : USINT;
+END_STRUCT;
+
+END_TYPE
+
+
+VAR_GLOBAL
+
+RHX_101 AT %IB482 : REAL;  (* Vlhkost;101 *)
+TER_101 AT %IB478 : REAL;  (* Pepo;101 *)
+PIR_102_2 AT %IB471.5 : BOOL;  (* PIR-2;102 *)
+PIR_101_2 AT %IB471.4 : BOOL;  (* PIR-1;101 *)
+TTT AT %IB471 : TCIB_C_WS_0000R_PG_BTN;
+TGL_101_6 AT %IB471 : TCIB_C_WS_0000R_PG_BTNs;  (* TGL-01;101 *)
+EEE AT %IB471 : TCIB_C_WS_0000R_PG_GLASSI;
+LUX_001 AT %IB467 : REAL;  (* LUX;101 *)
+PIR_TS2_2 AT %IB461.0 : BOOL;  (* PIR-typ.2-DI-1;101 *)
+DOR_101 AT %IB486.5 : BOOL;  (* Koncak;102 *)
+WSB_101_4 AT %IB486.0 : BOOL;  (* Wsb-tst;101 *)
+TLA_001_2 AT %IB525.5 : BOOL;
+TLA_001_1 AT %IB525.4 : BOOL;  (* Tla-1;101 *)
+WSB_102_4 AT %IB525.0 : BOOL;  (* WSB-102;102 *)
+TER_1A1 AT %IB583 : REAL;  (* Ter-TGL.B;101 *)
+TGL_1B1_6 AT %IB576 : TCIB_C_WS_0000R_PG_GLASSI;  (* TGL-B;102 *)
+DLM_001 AT %IB640 : tC_DL_0012Sin;  (* DALI-1;000 *)
+DLM_002 AT %IB642 : tC_DL_0012Sin;  (* DLm-2;000 *)
+SIR_001 AT %QB8.1 : BOOL;  (* SIR-1;101 *)
+TVE_001 AT %QB8.0 : BOOL;  (* TVE-RE-1 CPU;X02 *)
+SVD_001 AT %QB91.6 : BOOL;  (* Svd;101 *)
+TGL_101_Q AT %QB91 : TCIB_C_WS_0000R_PG_GLASSO;
+WSB_101_Q AT %QB103.0 : BOOL;
+WSB_102_Q AT %QB142.0 : BOOL;
+TGL_1A1_Q AT %QB143 : TCIB_C_WS_0000R_PG_GLASSO;
+TGL_1B1_Q AT %QB155 : TCIB_C_WS_0000R_PG_GLASSO;
+SVA_5A4 AT %QB167 : REAL;  (* AO1-0-10V;101 *)
+DLM_001_Q AT %QB196 : tC_DL_0012Sout;
+DLM_002_Q AT %QB200 : tC_DL_0012Sout;
+VEN_002_Q AT %QB205.1 : BOOL;
+VEN_002_1 AT %QB205.0 : BOOL;  (* Rekup-2st;101 *)
+ROL_102_D AT %QB204.7 : BOOL;
+ROL_102_U AT %QB204.6 : BOOL;  (* Spalna-Dvere;102 *)
+ROL_1C1_D AT %QB204.5 : BOOL;
+ROL_1C1_0U AT %QB204.4 : BOOL;  (* Pepo-Vikier;101 *)
+ROL_101_D AT %QB204.3 : BOOL;
+ROL_101_U AT %QB204.2 : BOOL;  (* Pepo-OKNO;101 *)
+ROL_1B1_D AT %QB204.1 : BOOL;
+ROL_1B1_U AT %QB204.0 : BOOL;  (* Pepo-DVERE pokaz.rele;101 *)
+SVA_002_Q AT %QB236 : USINT;
+SVA_002 AT %QB232 : REAL;  (* SVA-02-WW;102 *)
+SVA_001_Q AT %QB231 : USINT;
+SVA_001 AT %QB227 : REAL;  (* SVA-01-CW;101 *)
+RGB_102_B AT %QB222 : REAL;
+RGB_102_G AT %QB217 : REAL;
+RGB_102_R AT %QB212 : REAL;  (* RGB _2;102 *)
+ROM_101 AT %MB150001 : USINT;  (* Pepo;1 *)
+ROM_102 AT %MB150001 : USINT;  (* Spalna;1 *)
+ROM_000 AT %MB150001 : USINT;  (* System;0 *)
+ROM_X02 AT %MB150001 : USINT;  (* Balkon;2 *)
+ROM_X01 AT %MB150001 : USINT;  (* Vonku;2 *)
+GAT_X01 AT %MB157594.0 : BOOL;  (* Garáž-L;X01 *)
+GAT_X02 AT %MB157594.1 : BOOL;  (* Garáž-P;X01 *)
+GAT_X04_1 AT %MB157594.2 : BOOL;  (* Brána;X01 *)
+GAT_X04_Y AT %MB157594.3 : BOOL;  (* brana-zatvorit;X01 *)
+GAT_X05_2 AT %MB157594.4 : BOOL;  (* Bránièka;X01 *)
+GAT_X03_3 AT %MB157594.5 : BOOL;  (* Vstup.dvere;X01 *)
+ZAS_000 AT %MB157594.6 : BOOL;  (* Zásuvka ON/OFF;102 *)
+ZAS_001_1 AT %MB157594.7 : BOOL;  (* Zásuvka-Lampa;102 *)
+ZAS_002_2 AT %MB157595.0 : BOOL;  (* Stykaè-ON;102 *)
+ZAS_003_3 AT %MB157595.1 : BOOL;  (* Stykaè-OFF;102 *)
+ZAS_004_4 AT %MB157595.2 : BOOL;  (* Zásuvka-ohrievaè;102 *)
+ZAS_005_5 AT %MB157595.3 : BOOL;  (* Zásuvka-ventilátor;102 *)
+ZAS_006_6 AT %MB157595.4 : BOOL;  (* Nabijacia stanica;102 *)
+ZAS_009_9 AT %MB157595.5 : BOOL;  (* HW-Reset;102 *)
+
+END_VAR

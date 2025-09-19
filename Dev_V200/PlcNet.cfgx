@@ -1,0 +1,9 @@
+[PlcNetGroupConfig]
+Version="xPRO","4.3.00"
+[/PlcNetGroupConfig]
+
+[projects]
+project1="200\200.nex",0,"",4294967295
+project2="200_Lib\200_Lib.nex",0,"",4294967295
+[/projects]
+

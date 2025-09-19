@@ -1,0 +1,13 @@
+{
+  // Konfigurácia Mosaic / VM
+  "mosaic.vmName": "ae0a527c-1a74-4e39-9845-1622f6a3c782",
+  //  "mosaic.vmName": "Windows 11",
+  "mosaic.plcHost": "192.168.33.200:61682",
+  "mosaic.mosaicBin": "C:\\Program Files (x86)\\Teco\\Mosaic 2025.1\\Application",
+  "mosaic.makPathWin": "M:\\NachHouseApp\\Dev\\Dev_V200\\200\\200.mak",
+	"workspaceFolderBasename": "M:\\NachHouseApp\\Dev\\Dev_V200\\200\\",
+
+  "mosaic.plcTarget": "192.168.33.200:61682",
+  "mosaic.projectDir": "M:\\NachHouseApp\\Dev\\Dev_V200\\200",
+
+}
