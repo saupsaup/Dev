@@ -1,7 +1,7 @@
 <TecoConfiguration xmlns="http://www.tecomat.com">
   <Configuration version="2022.2" system="FOXTROT2">
     <Global>
-      <Editor left="-1928" top="17" width="1936" height="1071" maximized="true">
+      <Editor left="-8" top="-8" width="1936" height="1048" maximized="true">
         <ProcessData AliasColWidth="120" NoteColWidth="170"/>
       </Editor>
       <Selector left="218" top="106" width="1003" height="713" maximized="false" params="0"/>

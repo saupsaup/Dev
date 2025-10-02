@@ -4,12 +4,17 @@
    END_FUNCTION
 { $ END_IF } 	
 
+VAR_GLOBAL
+  		fbImpCIB				: 	_Nh_Import_CIB;
+		fbCfgRST				: 	_Nh_Cfg_Restart;
+//		fb_Nh_Create_DIR		: 	_Nh_Create_DIR_FB;
+END_VAR
 
+	
 PROGRAM prgMain
    VAR
    	fbCrHet			: _Nh_Create_HET;
-  		fbImpCIB			: _Nh_Import_CIB;
-		fbCfgRST			: _Nh_Cfg_Restart;
+
       { $ IFDEF __NH_WEB }
          fbWebControl   : _NhWebControl;
       { $ END_IF  } 	
@@ -103,6 +108,7 @@ PROGRAM prgMain
 
    aSys.cyc     	:= NOT aSys.Cyc;
 
+
 	// 1. sec	
 	IF SYSTEM_S.F_EDGE_1SEC THEN
    	aSys.n1Sec     := 1;           // kazdu 1.sec bude = 1	
@@ -111,6 +117,9 @@ PROGRAM prgMain
    	aSys.n1Sec     := 0;           // kazdu 1.sec bude = 1	
    	aSys.u1Sec     := 0;           // kazdu 1.sec bude = 1
 	END_IF;
+
+
+//	fb_Nh_Create_DIR();												// test and create directories
 
 
    CASE aSys.ini OF
@@ -682,22 +691,16 @@ zz:=zz+1;
 
 	 249:    // Error of 240
 			;	
-	 250:    // restart
-            aSys.prgChange    		:= PROGRAMISCHANGED();
-            aSys.Restart      		:= true;
-				aSys.RefCyc					:=	1;
-				aSys.rst.In					:= true;
-            aSys.LastRstDT    		:= aSys.NhDT;
-				aSys.CfgBckOk				:=	false;																	// flag, that BckFile no-Exiat
-
-            IF    IS_COLD_RESTART_PLC  THEN aSys.LastRstTyp   := 1 ;
-            ELSIF IS_HOT_RESTART_PLC   THEN aSys.LastRstTyp   := 2 ;
-            ELSIF IS_RESTART_PLC       THEN aSys.LastRstTyp   := 3 ;
-            ELSE                            aSys.LastRstTyp   := 4 ;
-            END_IF;
-				aSys.Size_DBx 		:= UINT_TO_UDINT( SizeOfDataBox()) * 1024;   								// 128 kb   (128*1024=131072 Byte)
-				aSys.IS_DBX			:= aSys.Size_DBx >= 131072;
-//				_NhCloseAllFiles();                                         // otvori subor textov z 'NH2/200/FRM/_NhLang.TXT'
+	 	250:    // restart
+  				//          aSys.prgChange    		:= PROGRAMISCHANGED();
+            	aSys.Restart      		:= true;
+				aSys.RefCyc				:=	1;
+				aSys.rst.In				:= true;
+            	aSys.LastRstDT    		:= aSys.NhDT;
+				aSys.CfgBckOk			:=	false;																	// flag, that BckFile no-Exiat
+				aSys.Size_DBx 			:= UINT_TO_UDINT( SizeOfDataBox()) * 1024;   								// 128 kb   (128*1024=131072 Byte)
+				aSys.IS_DBX				:= aSys.Size_DBx >= 131072;
+				CloseAllFiles();                                         	
 				IF CPU_CODE >= 2000 THEN
 					rb 				:= ResizeRamBox( newSize := 16*1024);   	// 16MB*1024 = 16384 kByte
 					aSys.Size_RBx 	:= UINT_TO_UDINT( SizeOfRamBox() ) * 1024;   							// 128 kb   (128*1024=131072 Byte)
@@ -729,18 +732,15 @@ zz:=zz+1;
 //            aSys.Ini := 231;
 
 
-    251:    // Running createc Dir
+    	251:    // Running createc Dir
             _Nh_Create_DIR(Go:=1);
 				_Nh_Log_Evn_ADD(tsk := 251);
             aSys.Ini := 240;
-
-
-
-	 252:    // test
+	 	252:    // test
             ;
-	 254:    // Error
+		254:    // Error
             ;
-	 255:    // block all function except fbNhCrDir(),fbNhCfgfile()
+		255:    // block all function except fbNhCrDir(),fbNhCfgfile()
             ;
 	END_CASE;
 

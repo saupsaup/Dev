@@ -255,9 +255,9 @@ TYPE
 		exec			: BOOL;
 		disk			: ARRAY[1..4] OF NH_DiskInfo := 								
 					[	(	path := 'NH2/'),   			// root
-						( 	path := 'NH2/'+_NH2_VER+'/USB/'),      // usb
-						( 	path := 'NH2/'+_NH2_VER+'/SDC/'),      // sdc
-						( 	path := 'NH2/'+_NH2_VER+'/RAM/')       // ram
+						( 	path := 'USB/'),      // usb
+						( 	path := 'SDC/'),      // sdc
+						( 	path := 'RAM/')       // ram
 					];
 	END_STRUCT;
    NH_LOG_HED       : STRUCT
@@ -270,6 +270,10 @@ TYPE
 
    NH_SYS       : STRUCT      				// HLAVNA RIADIACA PREMENNA
       ini					: USINT := 250;       		// Cislo procesu, ktory prebieha. Restart zcina 0... , 255 je vykonavanie finalneho programu
+		DiskHed				: NH_DISK_HED;
+   	ADR_DBX    			: STRING[25] := 'NH2/200/DBX/25032423/';          // hlavny adresar konfiguracie
+		IS_USB_DISK			: aTrgQx;
+
 		NewDbx            : BOOL;  				// natvrdo sa po restarte vytvaraju vsetky nove dat1
       UpdDbx            : USINT;                   // sumarny pocet zatial neulozenych modifikacii vo vsetkych suboroch
       UpdFile           : USINT;                   // sumarny pocet zatial neulozenych modifikacii vo vsetkych suboroch
@@ -279,8 +283,7 @@ TYPE
       nDbxToMem         : UINT;
       nDbxToFile        : UINT;
 
-		DiskHed				: NH_DISK_HED;
-   	ADR_DBX    			: STRING[25] := 'NH2/200/DBX/25032423/';          // hlavny adresar konfiguracie
+
 
 		LogHed 				: NH_LOG_HED;
 
@@ -307,7 +310,7 @@ TYPE
 		IS_DBx				: BOOL;					      // DataBox Exist
 
 		CloseAllFiles		: BOOL;
-		IS_USB_DISK			: aTrgQx;
+
 		rst					: aTrgQx;
 		Size_RBx				: UDINT;							
 		Size_DBx				: UDINT;								
@@ -1192,12 +1195,12 @@ END_FUNCTION
 
 
 FUNCTION _NhCloseAllFiles {HIDDEN} : BOOL;
-	aSys.OpenFilesCount	:= OpenFilesCount();
+	aSys.OpenFilesCount		:= OpenFilesCount();
 	rb 						:= CloseAllFiles();
 	_LangTXT 				:= CONCAT(aSys.DiskHed.Disk[4].path,'FRM/_NhLang.TXT');
   	aSys.LangfH 			:= FileOpen(fileName := _LangTXT, mode := F_READ);
-	aSys.LogHed.fhEvn 	:= INVALID_HANDLE_VALUE;
-	aSys.CloseAllFiles	:= true;
+	aSys.LogHed.fhEvn 		:= INVALID_HANDLE_VALUE;
+	aSys.CloseAllFiles		:= true;
 END_FUNCTION
 
 FUNCTION _Nh_LangTxt  {HIDDEN}  : BOOL
@@ -1214,18 +1217,12 @@ FUNCTION _Nh_Lang  {HIDDEN}    : BOOL                              // nazov subo
       txt      : PTR_TO STRING;                                // pointer premennej
       zn       : USINT := 30;                                  // pocet znakov premennej
    END_VAR
-(*
-   IF aSys.LangfH = INVALID_HANDLE_VALUE THEN
-		_LangTXT 				:= CONCAT(aSys.ADR_RAM,'FRM/_NhLang.TXT');
-  		aSys.LangfH 			:= FileOpen(fileName := _LangTXT, mode := F_READ);
-	END_IF;
-*)
-   rb 		:= FileSetPos(hFile := aSys.LangfH, offset := INT_TO_UDINT(id-1) * 64);
+	rb	:= FileSetPos(hFile := aSys.LangfH, offset := INT_TO_UDINT(id-1) * 64);
    IF FileRead (hFile := aSys.LangfH, adrBuf := PTR_TO_UDINT(txt), size := USINT_TO_UDINT(zn)) > 0 THEN
 		_Nh_Lang := aTrim(wht:=0,txt:=txt);
 	ELSE
 		_Nh_Lang := false;
-      txt^ 	:= '_NhLang ?';
+      	txt^ 	:= '_NhLang ?';
 	END_IF;
 (*
 	IF _NhLang THEN
@@ -1997,17 +1994,18 @@ FUNCTION _Nh_Log_Path  : BOOL    // nacita/zapise do suboru
 		month		: BOOL;
 		read		: BOOL;
 		write		: BOOL;
-		restart  : BOOL;
-		mem		: BOOL;						// test file included in dbx.mem
-		wrk		: BOOL;                 // create dbx.wrk and a new one-clock file with path in dbx.wrk
-   	wh			: USINT;
+		restart  	: BOOL;
+		mem			: BOOL;						// test file included in dbx.mem
+		wrk			: BOOL;                 // create dbx.wrk and a new one-clock file with path in dbx.wrk
+   		wh			: USINT;
 		fN			: STRING[3];            // file name
-      frm      : UINT;
+      	frm      	: UINT;
 	END_VAR
 	_Nh_Log_Path	:= true;
 	yTx1			:= fN; STRING_TO_LOWER(yTx1);
 	CASE wh OF
    	0: ;
+
 	  	1:	// create path in version after restart {FRM}
 			month := false;
 			yTx2 	:= CONCAT(aSys.DiskHed.Disk[1].path,_NH2_VER,'/',fN,'/');
@@ -2197,12 +2195,112 @@ FUNCTION _Nh_DiskInfo  {HIDDEN} : BOOL   // check OR create DIR in the entire pa
 END_FUNCTION
 
 
+FUNCTION_BLOCK _Nh_Create_DIR_FB
+	VAR_INPUT
+		go				: USINT;
+		IniEnd		: USINT;
+		IniErr		: USINT;
+		IniRun		: USINT:=255;
+		copy			: BOOL:=true;	// copy:=false => delete after copy  (move)
+		file			: BOOL:=true ;	// dir or file
+      exec        : BOOL;        // leading edge start new write/read. if a process is running, interrupt it and close the file
+//      break       : BOOL;      	// immediate termination
+		init			: BOOL;			// only open files an prepare for run on the next call
+	END_VAR	
+	VAR
+		IS_USB_DISK			: aTrgQx;
+	END_VAR		
+   	VAR_OUTPUT
+      done       	: BOOL;         // action is done
+      busy       	: BOOL;         // action in progress
+      err        	: BOOL;         // error flag
+      errID      	: UDINT;        // error number
+      size        : UDINT;        // data length                      {it is entered at the beginning and cannot be changed after that !!!}
+   	END_VAR
+	
+	IF IS_USB_DISK.Qx THEN
+		exec	:= false;
+	END_IF;
+
+
+	CASE go OF
+		0: 
+		1:
+		2:
+	END_CASE;
+	IF busy THEN
+		;
+	ELSIF exec THEN
+		busy	:= true;
+		err		:= false;
+		errID	:= 0;
+
+	   	yTx1	:= 'RAM/';			  											          // bude skusat pre CP-2000
+		FOR i:=1 TO 2 DO
+	   		IF FileExists( fileName := yTx1) THEN
+	    	  aSys.DiskHed.Disk[4].path 	:= yTx1;	                                        // RAM/
+		      aSys.DiskHed.Disk[4].ready  	:= true;
+		   	ELSIF i=2 THEN
+			  	RETURN;
+			ELSE
+    		  	aSys.DiskHed.Disk[4].ready 	:= true;
+	    	  	aSys.DiskHed.Disk[4].path 	:= CONCAT(aSys.DiskHed.Disk[1].path,_NH2_VER,'/');	           // NH2/200/
+    	  		yTx1		         := '';
+	   		END_IF;
+		END_FOR;
+		done	:= false;
+		exec	:= false;
+		busy	:= false;	
+	END_IF
+	IF done THEN 
+
+	END_IF		
+	// main ROOT NH2
+	FOR i:=1 TO 2 DO
+	   		IF FileExists( fileName := aSys.DiskHed.Disk[1].path) THEN										// exist
+				_Nh_DiskInfo(disk:=2);
+		   	ELSIF i=2 THEN																					// CP-1001, or CP-2000 not Crerated
+			  	RETURN;
+			ELSIF CPU_CODE < 2000 THEN																		// cmothod freate CP-1000
+			  	rb := DirCreate(dirName:=aSys.DiskHed.Disk[1].path);
+			ELSE
+				rb := ForceDirs(fileName:=aSys.DiskHed.Disk[1].path);
+	   		END_IF;
+	END_FOR;
+
+
+
+
+
+	yTx1	:= 'SDC/';			  											          						// prepare test if exist SDC --- only CP-2000
+
+	aSys.DiskHed.Disk[2].path 	:= 'USB/';                             
+	aSys.DiskHed.Disk[3].path 	:= 'SDC/';
+	aSys.DiskHed.Disk[4].path 	:= 'RAM/';                             
+	IF CPU_CODE < 2000 THEN
+    	aSys.DiskHed.Disk[2].path 	:= CONCAT(aSys.DiskHed.Disk[1].path,aSys.DiskHed.Disk[2].path);
+    	aSys.DiskHed.Disk[3].path 	:= CONCAT(aSys.DiskHed.Disk[1].path,aSys.DiskHed.Disk[3].path);
+    	aSys.DiskHed.Disk[4].path 	:= CONCAT(aSys.DiskHed.Disk[1].path,aSys.DiskHed.Disk[4].path);
+	ELSIF	FileExists( fileName := aSys.DiskHed.Disk[2].path) THEN   										// USB exist, everything ok
+
+	ELSIF	FileExists( fileName := aSys.DiskHed.Disk[3].path) THEN   										// SDC exist, 
+		aSys.DiskHed.Disk[2].path 	:= aSys.DiskHed.Disk[3].path;											// map USB to SDC
+	END_IF;
+	IF	FileExists( fileName := aSys.DiskHed.Disk[3].path) THEN   										// SDC exist, 
+		aSys.DiskHed.Disk[2].path 	:= aSys.DiskHed.Disk[3].path;											// map USB to SDC
+	END_IF;
+
+END_FUNCTION_BLOCK
+
+
+
+
 FUNCTION _Nh_Create_DIR   : BOOL   // check OR create DIR in the entire path
 	VAR_INPUT
       Go          : USINT;
-	END_VAR
+	END_VAR 
 	_Nh_Create_DIR		:= true;
-   err      			:= false;
+   	err      			:= false;
 	aSys.DiskHed.run	:=	false;
 //   yTx1  := _Nh_ADR_ROT;			  											
    IF FileExists( fileName := aSys.DiskHed.Disk[1].path) = false THEN

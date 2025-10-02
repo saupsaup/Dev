@@ -94,7 +94,7 @@ echo -e "\n*.PNG\n*.png" >> .gitignore
 # git rm -r --cached *.PNG *.png || true      # 2. vyhoď všetky PNG z indexu (repozitár), ale nechaj ich na disku
 # git rm -r --cached Dev_V200/**/*.PNG Dev_V200/**/*.png || true
 
-git rm -r --cached .        # git odstrani uplne vsetko co je aktualne sledovane v aktualnom priecinku aj -r = podpriecinky - musi prist add git add Dev_V200/200
+git rm -r --cached .        # git odstrani uplne vsetko co je aktualne sledovane v aktualnom priecinku aj -r = podpriecinky - musi prist # add git add Dev_V200/200
 git add .gitignore          # zmeny (.gitignore + úprava indexu)
 git add .gitattributes 
 git add README.md      

@@ -42,6 +42,7 @@ Thumbs.db
 # Build / generované súbory (Mosaic, kompilátory)
 ###############################################################################
 
+*.exp
 *.FRM
 *.png
 *.PNG

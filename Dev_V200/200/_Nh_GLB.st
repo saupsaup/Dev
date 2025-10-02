@@ -1186,7 +1186,8 @@ END_FUNCTION_BLOCK
 *)
 
 VAR_GLOBAL
-	fbCfgBck		: _Nh_Cfg_Backup;
+	fbCfgBck		      : _Nh_Cfg_Backup;
+	fb_RBx_To_File		: _Nh_Cfg_Backup;
 END_VAR		
 
 FUNCTION _NhSysUpd  : BOOL	

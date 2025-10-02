@@ -46,7 +46,6 @@
 #usefile "IOConfigurator\CONFIG.ST", 'auto'
 #usefile "IOConfigurator\CONFIG.HWC", 'auto'
 #usefile "_Nh_SYS.st", 'lib'
-#usefile "200.st"
 #usefile "_Nh_TYP.st", 'lib'
 #usefile "_Nh_CFG.st", 'lib'
 #usefile "_Nh_GLB.st", 'lib'
@@ -56,7 +55,7 @@
 #usefile "_Nh_NOTIFY.st", 'lib'
 #usefile "_Nh_Het.st", 'lib'
 #usefile "_Nh_DALI.st", 'lib'
-#usefile "_Nh_WRK.st"
+#usefile "_Nh_WRK.st", 'lib'
 #usefile "_Nh_IMP_CFG.st", 'lib'
 #usefile "_Nh_Web_LIB.st", 'lib'
 #usefile "_Nh_Web_SHW.st", 'lib'
@@ -70,8 +69,8 @@
 #usefile "_Nh_DEV.st", 'lib'
 #usefile "_Nh_WEB.st", 'lib'
 #usefile "_Nh_Ini.st", 'lib'
-#usefile "_Nh_UTIL.st"
-#usefile "_Nh_PRGM.st"
+#usefile "_Nh_UTIL.st", 'lib'
+#usefile "200.st"
 #usefile "prgMain.ST", 'lib'
 #usefile "200.mos"
 #usefile "PanelMaker\r0_p0_CP_2000.mos", 'auto'
