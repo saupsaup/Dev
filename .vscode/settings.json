@@ -89,9 +89,7 @@
 //	"**/SendRoot/WWW/**": true,
 	"**/SendRoot/**": true,
 	"**/WebMaker/**": true,
-	"Dev_V200/200/.vscode": true,
-
-
+//	"Dev_V200/200/.vscode": true,
 
 	"**/*.mpr": true,
 	"**/*.cfg": true,	
