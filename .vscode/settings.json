@@ -55,6 +55,7 @@
   	"**/*.st",
   	"**/*.ST"
   ], 
+
   // Doplnkové vylúčenia pre istotu
   "search.exclude": {
     "**/.git": true,
