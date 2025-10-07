@@ -1,0 +1,25 @@
+{
+  "tasks": [
+    {
+      "label": "Connect Mosaic (VM)",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec", "Windows 11", "cmd", "/c",
+        "net use M: /delete /y >NUL 2>&1 & net use M: \"\\\\Mac\\Mosaic\" /persistent:no & \"C:\\\\Program Files (x86)\\\\Teco\\\\Mosaic 2025.1\\\\Application\\\\VSC2m.exe\" CONNECT"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Disconnect Mosaic (VM)",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec", "Windows 11", "cmd", "/c",
+        "net use M: /delete /y >NUL 2>&1 & net use M: \"\\\\Mac\\Mosaic\" /persistent:no & \"C:\\\\Program Files (x86)\\\\Teco\\\\Mosaic 2025.1\\\\Application\\\\VSC2m.exe\" DISCONNECT"
+      ],
+      "problemMatcher": []
+    }
+
+]
+}

@@ -1,0 +1,105 @@
+{
+ "version": "2.0.0",
+ "tasks": [
+  {
+   "label": "Mosaic build (VM, M:)",
+   "type": "shell",
+   "command": "prlctl",
+   "args": [
+    "exec",
+    "${config:mosaic.vmName}",
+    "cmd",
+    "/c",
+    "net use M: /delete /y >NUL 2>&1 & net use M: \"${config:mosaic.shareRoot}\" /persistent:no & \"${config:mosaic.mosaicBin}\\\\MosaicL.exe\" -ttr -lnk -sg+ -sr- -log- -pub -olc- -psw- -plcpsw- -sc- -sl- -exml- -epub- -eexp+ \"${config:mosaic.makPathWin}\""
+   ],
+   "problemMatcher": {
+    "owner": "st",
+    "fileLocation": ["relative", "${workspaceFolder}"],
+    "pattern": {
+     "regexp": "^\\[ST:(Warning|Error)\\]\\s+([^\\s]+)\\s+\\((\\d+),\\s*(\\d+)\\):\\s+(.*)$",
+     "severity": 1,
+     "file": 2,
+     "line": 3,
+     "column": 4,
+     "message": 5
+    }
+   },
+   "group": { "kind": "build", "isDefault": true }
+  },
+  {
+   "label": "Build → Upload → RUN (VM)",
+   "dependsOn": [
+    "Mosaic build (VM, M:)"
+   ],
+   "dependsOrder": "sequence",
+   "problemMatcher": []
+  },
+  {
+   "label": "VM: Start",
+   "type": "shell",
+   "command": "prlctl",
+   "args": ["start", "${config:mosaic.vmName}"],
+   "problemMatcher": []
+  },
+  {
+   "label": "VM: Resume",
+   "type": "shell",
+   "command": "prlctl",
+   "args": ["resume", "${config:mosaic.vmName}"],
+   "problemMatcher": []
+  },
+  {
+   "label": "VM: Suspend",
+   "type": "shell",
+   "command": "prlctl",
+   "args": ["suspend", "${config:mosaic.vmName}"],
+   "problemMatcher": []
+  },
+  {
+   "label": "VM: Stop",
+   "type": "shell",
+   "command": "prlctl",
+   "args": ["stop", "${config:mosaic.vmName}"],
+   "problemMatcher": []
+  }
+  ,
+  {
+ "label": "Set PLC HALT (VM)-3",
+ "type": "shell",
+ "command": "prlctl",
+ "args": [
+  "exec",
+  "${config:mosaic.vmName}",
+  "cmd",
+  "/c",
+  "cd /d \"${config:mosaic.projectDir}\" && \"${config:mosaic.mosaicBin}\\\\VSC2m.exe\" ${config:mosaic.plcHost} halt"
+ ],
+ "problemMatcher": []
+}
+,
+{
+ "label": "Connect → HALT (VM)",
+ "dependsOn": ["Connect Mosaic (VM)", "Set PLC HALT (VM)"],
+ "dependsOrder": "sequence",
+ "problemMatcher": []
+}
+ ,
+	// Task „Fix ST code style“ spustí Python skript na aktuálny súbor alebo na celý projekt.
+	{
+      "label": "Fix ST code style (current file)",
+      "type": "shell",
+      "command": "python",
+      "args": ["${workspaceFolder}/.vscode/st_style_fix.py", "--files", "${file}"],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Fix ST code style (all *.st in workspace)",
+      "type": "shell",
+      "command": "python",
+      "args": ["${workspaceFolder}/.vscode/st_style_fix.py", "--glob", "**/*.st"],
+      "problemMatcher": [],
+      "group": "none"
+    }
+ ]
+}

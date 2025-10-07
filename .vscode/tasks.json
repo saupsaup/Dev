@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Mosaic: Map M:",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "${config:mosaic.vmName}",
+        "cmd",
+        "/c",
+        "net use M: /delete /y >NUL 2>&1 & net use M: ${config:mosaic.shareRoot} /persistent:no"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Mosaic: Build",
+      "type": "shell",
+      "dependsOn": "Mosaic: Map M:",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "${config:mosaic.vmName}",
+        "cmd",
+        "/c",
+        "cd /d \"${config:mosaic.mosaicBin}\" && \"MosaicL.exe\" -ttr -lnk -sg+ -sr- -log- -pub -olc- -psw- -plcpsw- -sc- -sl- -exml- -epub- -eexp+ \"${config:mosaic.makPathWin}\""
+      ],
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    },
+	{
+  "label": "Mosaic: Upload (latest .TTR)",
+  "type": "shell",
+  "dependsOn": "Mosaic: Map M:",
+  "command": "prlctl",
+  "args": [
+    "exec",
+    "${config:mosaic.vmName}",
+    "cmd",
+    "/c",
+    "for /f \"delims=\" %F in ('dir /b /a:-d /o:-d \"M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200\\\\*.TTR\"') do ( set TTR=%F & goto doUpload ) & echo No .TTR found & exit /b 1 & :doUpload & \"C:\\\\Program Files (x86)\\\\Teco\\\\Mosaic 2025.1\\\\Application\\\\VSC2m.exe\" ${config:mosaic.plcHost} upload-ttr \"M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200\\\\%TTR%\""
+  ],
+  "problemMatcher": []
+}
+
+	
+  ]
+}

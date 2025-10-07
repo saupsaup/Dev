@@ -1,0 +1,104 @@
+#!*
+
+Dev_V200/200_Lib/
+
+#**Backup.st/**
+#**/Backup/**
+**/DATA_SIM/**
+#**/Datalogger/**
+#**/FOXTROT/**
+#**/GPMaker/**
+#**/GraphMaker/**
+#**/IOConfigurator
+#**/KEYB2Maker/**
+#**/LocalLib/**
+#**/PanelMaker/**
+#**/PIDMaker/**
+#**/PLCnet/**			
+#**/Root/**
+#**/SendBackup/**
+**/SendRoot/WWW/**
+**/Sysgen/**
+**/WebMaker/images/**
+**/WebMaker/temp/**
+
+#*.FRM
+#*.png
+#*.PNG
+
+
+*.mpr_
+*.OEM
+*.mos
+*.mcf
+*.exp
+*.pub
+*.PUB
+*.exe
+*.dll
+*.obj
+*.out
+*.bin
+*.elf
+*.map
+*.[Pp][Rr][Gg]
+*.70l
+*.70K
+*.TTL
+*.mlb
+*.mjf
+*.mso
+*.bak
+*.log
+*.DSK
+*.PLC
+*.MWB
+*.nex
+*.pch
+*.sym
+*.mtb
+*.pckg
+*.TTR
+*.webx
+*.tod           # popisovace
+*.tdd           # popisovace
+*.rgl			# PIDMaker
+#*.dbx			# RAM save
+*.exp           # exporty
+*.filelist
+
+
+
+
+#######################################################################
+# Všeobecné systémové súbory
+###############################################################################
+.DS_Store
+Thumbs.db
+desktop.ini
+##############################################################################
+# Archívy a exporty
+###############################################################################
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+
+###############################################################################
+# Office a iné veľké dokumenty (ak si nepraješ commitovať)
+###############################################################################
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+
+###############################################################################
+# Python/Node (ak niečo testuješ)
+###############################################################################
+__pycache__/
+node_modules/
+
+

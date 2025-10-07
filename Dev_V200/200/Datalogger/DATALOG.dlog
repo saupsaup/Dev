@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<Locked>0</Locked>
+<Datalogger Version="1.0" Name="rnd" Enable="1" Author="Teco" MaxCollections="16" MaxSignalsInCollection="16" MaxDataInSignal="4" SumCollections="1" SumSignals="1" SumData="4" Directory="USB/rnd" WWW="0" Note="" FullIntf="0">
+	<Collection Name="OUT" Enable="1" NumSignals="1" Note="" Debug="0">
+		<FileInfo>
+			<Dir>OUT</Dir>
+			<Separator>;</Separator>
+			<DecimalPoint>,</DecimalPoint>
+			<DirForDays>0</DirForDays>
+			<Simulation>0</Simulation>
+			<NewFileConditions>
+				<MaxSize Enable="0" Value="1"></MaxSize>
+				<MaxItems Enable="0" Value="1"></MaxItems>
+				<MaxTime Enable="0" Value="1"></MaxTime>
+				<Periodicity Enable="0" Value="1" Units="Hours"></Periodicity>
+			</NewFileConditions>
+		</FileInfo>
+		<ComSig>
+			<Date Enable="0" Header="DATE" Format="%TYYYY-MM-DD"></Date>
+			<Time Enable="1" Header="TIME" Format="%Thh:mm:ss"></Time>
+		</ComSig>
+		<SignalCollection>
+			<DataInColumns>1</DataInColumns>
+		</SignalCollection>
+		<Signal Name="CMD" Enable="1" NumData="4" Note="">
+			<Header>CMD</Header>
+			<Source Name="outCMD" Zone="R" Offset="281013" Type="USINT" IEC="11" Format="%3u"></Source>
+			<Changes Enable="1">
+				<Change Up="1" Dw="1" Val="0" Hst="0" Txt="" Add="0"></Change>
+			</Changes>
+			<Levels Enable="0">
+				<Hi3 Up="0" Dw="0" Val="0" Hst="0" Txt="" Add="0"></Hi3>
+				<Hi2 Up="0" Dw="0" Val="0" Hst="0" Txt="" Add="0"></Hi2>
+				<Hi1 Up="0" Dw="0" Val="0" Hst="0" Txt="" Add="0"></Hi1>
+				<Lo1 Up="0" Dw="0" Val="0" Hst="0" Txt="" Add="0"></Lo1>
+				<Lo2 Up="0" Dw="0" Val="0" Hst="0" Txt="" Add="0"></Lo2>
+				<Lo3 Up="0" Dw="0" Val="0" Hst="0" Txt="" Add="0"></Lo3>
+			</Levels>
+			<Data Name="ET" Enable="1" Note="">
+				<Label>ET</Label>
+				<Source Name="outET" Zone="R" Offset="281014" Type="UINT" IEC="12" Format="%6u"></Source>
+			</Data>
+			<Data Name="Qf" Enable="1" Note="">
+				<Label>Qf</Label>
+				<Source Name="outQf" Zone="R" Offset="281012" Type="BIT0" IEC="0" Format="%b{^OK}"></Source>
+			</Data>
+			<Data Name="RND" Enable="1" Note="">
+				<Label>RND</Label>
+				<Source Name="outRND" Zone="R" Offset="281016" Type="USINT" IEC="11" Format="%3u"></Source>
+			</Data>
+			<Data Name="seed" Enable="1" Note="">
+				<Label>seed</Label>
+				<Source Name="_NhSeed" Zone="R" Offset="122660" Type="DINT" IEC="9" Format="%d"></Source>
+			</Data>
+		</Signal>
+	</Collection>
+</Datalogger>

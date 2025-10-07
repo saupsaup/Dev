@@ -1,0 +1,17 @@
+# Auto detect text files and perform LF normalization
+//* text=auto
+* text eol=crlf
+*.sh  text eol=lf
+*.js  text eol=lf
+*.md  text eol=crlflf diff=markdown
+.gitignore  text eol=lf
+.gitattributes  text eol=lf
+
+# Binárne súbory
+*.exe  binary
+*.dll  binary
+*.png  binary
+*.jpg  binary
+
+# Lock súbory nech vyhráva naša verzia
+*.lock merge=ours

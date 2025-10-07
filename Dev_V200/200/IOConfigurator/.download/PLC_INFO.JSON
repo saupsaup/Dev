@@ -1,0 +1,120 @@
+{
+  "plc":
+  {
+    "family": "F2x",
+    "type": "CP2000",
+    "variant": "11NDNN",
+    "serialNumber": "R3 0742",
+    "version": "F2x CP2000I v2.5.073",
+    "mode": "RUN ",
+    "userProg":
+    {
+      "name": "200_LIB v2.0.0.0",
+      "resources":
+      {
+        "usedCode": 720682,
+        "maxCode": 1048572,
+        "usedR": 223289,
+        "maxR": 327680,
+        "usedX": 1211,
+        "maxX": 65536,
+        "usedY": 766,
+        "maxY": 65536,
+        "usedD": 15360,
+        "maxD": 196608,
+        "usedT": 1808,
+        "maxT": 65535,
+        "usedRetain": 0,
+        "maxRetain": 49152
+      },
+      "compiled": "2025-09-19T00:27:07.000Z",
+      "stamp": "FE437E4F"
+    },
+    "network":
+    {
+      "ETH1":
+      {
+        "dhcpEnabled": false,
+        "ip": "192.168.33.200",
+        "mask": "255.255.255.0",
+        "gw": "192.168.33.1",
+        "dns1": "192.168.33.1",
+        "dns2": "",
+        "mac": "F8:DC:7A:9F:4D:B2"
+      },
+      "ETH2":
+      {
+        "dhcpEnabled": true,
+        "ip": "",
+        "mask": "",
+        "gw": "",
+        "dns1": "",
+        "dns2": "",
+        "mac": "F8:DC:7A:9F:4D:B3"
+      }
+    },
+    "submodules":
+    {
+      "SX-2191":
+      {
+        "adr": 2,
+        "interface": "1x RS-232"
+      }
+    },
+    "storage":
+    {
+      "internal":
+      {
+        "FS_type": "ubifs",
+        "size_KB": 131656,
+        "free_KB": 114360
+      },
+      "SDC":
+      {
+        "FS_type": "ext4",
+        "size_KB": 59855764,
+        "free_KB": 59802276
+      },
+      "RAM":
+      {
+        "FS_type": "tmpfs",
+        "size_KB": 16384,
+        "free_KB": 15836
+      },
+      "USB":
+      {
+        "size_KB": 0,
+        "free_KB": 0
+      },
+      "DataBox":
+      {
+        "size_KB": 128
+      }
+    },
+    "appProfiles":
+    {
+      "number": 1,
+      "name":
+      [
+        "TXF 68990 MOSAIC SINGLE LICENCE"
+      ]
+    },
+    "TecoRoute":
+    {
+      "serviceEnabled": true,
+      "plcName": "rbed2",
+      "serverName": "route.tecomat.com",
+      "serverIp": "77.236.203.188:8080",
+      "driverStatus": "NET_CLOSE    ",
+      "serviceStatus": "service_break",
+      "connectionTime_ms": 0,
+      "isError": true,
+      "lastError": "Account doesn't exist or incorrect PLC name or password",
+      "lastErrorTime": "2025-09-19T10:20:24.846Z",
+      "counterTx": 22,
+      "counterRx": 22,
+      "counterBreak": 11
+    },
+    "time": "2025-09-19T18:59:55.210Z"
+  }
+}

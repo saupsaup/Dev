@@ -1,0 +1,652 @@
+;Upozornení
+;Soubor je automaticky regenerován a všechny rucní modifikace budou ztracené.
+
+#struct _TCIBHeader_
+        UINT code,
+        WORD mode,
+        WORD fadr,
+        USINT ladr,
+        USINT ndev
+
+#struct _TCIBDevice
+        BYTE typdev,
+        BYTE bloko,
+        UINT leindev,
+        UINT leoutdev
+
+#struct TCIB_3391_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[6] Dev,
+        USINT tPress,
+        BYTE ai1type,
+        BYTE ai2type,
+        USINT ai1tau,
+        USINT ai2tau,
+        INT thermOffset
+
+#struct TModulE2
+        USINT version,
+        UDINT hwCode,
+        DWORD busId,
+        UDINT address,
+        UDINT port,
+        UINT lenInputs,
+        UINT lenOutputs,
+        DINT offsetInputs,
+        DINT offsetOutputs,
+        INT initTable,
+        INT driverInitTable
+
+#struct TCIB_3357_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[5] Dev,
+        INT thermOffset,
+        BYTE ai1type,
+        BYTE ai2type,
+        USINT thermTau,
+        USINT ai1tau,
+        USINT ai2tau,
+        USINT tPress
+
+#struct TCIB_3384_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[6] Dev,
+        BYTE ezsenb,
+        BYTE ezstype,
+        INT thermOffset,
+        USINT thermTau,
+        BYTE ai1type,
+        BYTE ai2type,
+        USINT ai1tau,
+        USINT ai2tau,
+        USINT Font,
+        USINT tPress,
+        BOOL TouchBuzzer,
+        BOOL dummy13,
+        BOOL dummy14,
+        BOOL dummy15,
+        BOOL dummy16,
+        BOOL dummy17,
+        BOOL dummy18,
+        BOOL dummy19
+
+#struct TCIB_3326_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[5] Dev,
+        BYTE ezsenb,
+        BYTE ezstype,
+        BYTE ai1_4type,
+        BYTE ai5type,
+        USINT ai1_4tau,
+        USINT ai5tau
+
+#struct TCIB_4335_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[6] Dev,
+        USINT tPress,
+        BYTE ai1type,
+        BYTE ai2type,
+        USINT ai1tau,
+        USINT ai2tau,
+        INT thermOffset,
+        BYTE[6] rez
+
+#struct TCIB_3354_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[1] Dev
+
+#struct TCIB_3368_init
+        _TCIBHeader_ Header,
+        _TCIBDevice Dev1,
+        _TCIBDevice Dev2,
+        _TCIBDevice Dev3,
+        BYTE manDis,
+        USINT reversTime
+
+#struct TCIB_3345_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[4] Dev
+
+#struct TCIB_3348_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[5] Dev,
+        BYTE ai1type,
+        BYTE ai2type,
+        USINT ai1tau,
+        USINT ai2tau,
+        SINT offsetTrack,
+        SINT offsetSeal
+
+#struct TCIB_3353_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[5] Dev,
+        BYTE ezs,
+        BYTE ai4type,
+        BYTE ai5type,
+        USINT ai4tau,
+        USINT ai5tau,
+        BYTE codeType
+
+#struct TCIB_3392_init
+        _TCIBHeader_ Header,
+        _TCIBDevice[1] Dev
+
+#struct _TTS_UNIINIT
+        UINT code,
+        UINT mode,
+        USINT chMod,
+        USINT adr,
+        USINT speed,
+        USINT tor,
+        USINT tot,
+        USINT rez1,
+        USINT rez11,
+        USINT interface,
+        WORD sysMap,
+        USINT[10] rez2,
+        UINT lendi,
+        UINT lendo,
+        UDINT idati,
+        UDINT idato,
+        USINT lnc,
+        USINT msc,
+        USINT opd,
+        USINT opm,
+        USINT prot,
+        USINT sdl,
+        USINT edl,
+        USINT edh,
+        USINT acl,
+        USINT ach,
+        UINT pad,
+        UINT pas,
+        UINT chs,
+        UINT plm,
+        UINT mlm
+
+#struct _TTS_UNIINIT_ETH
+        _TTS_UNIINIT uniInit,
+        DWORD his_ip,
+        UINT his_port,
+        UINT my_port
+
+#struct _TTS_Head
+        UINT ModulID,
+        BYTE Stat0,
+        BYTE Stat1
+
+#struct _TTS_EnbCHAI
+        BYTE ESTAT,
+        BYTE EFS,
+        BYTE EENG,
+        BYTE EPCT
+
+#struct _TTS_SPE4
+        BOOL SPE0,
+        BOOL SPE1,
+        BOOL SPE2,
+        BOOL SPE3,
+        BOOL dummy4,
+        BOOL dummy5,
+        BOOL dummy6,
+        BOOL dummy7
+
+#struct _TTS_SPP4
+        BOOL SPP0,
+        BOOL SPP1,
+        BOOL SPP2,
+        BOOL SPP3,
+        BOOL dummy4,
+        BOOL dummy5,
+        BOOL dummy6,
+        BOOL dummy7
+
+#struct _TTS_IniCHAI
+        BYTE Mode,
+        USINT Filter,
+        REAL Offset,
+        REAL Gain
+
+#struct _TTS_IR2553
+        _TTS_Head Head,
+        USINT NUMVARI,
+        USINT NUMVARO,
+        USINT EDIS,
+        USINT EDIP,
+        _TTS_EnbCHAI[4] EAI,
+        USINT ESTPW,
+        USINT EUSRC,
+        USINT ESACU,
+        USINT EIACU,
+        USINT EDOS,
+        _TTS_SPE4 SPE,
+        _TTS_SPP4 SPP,
+        _TTS_IniCHAI[4] SetAI
+
+#struct _TTS_OI2872
+        _TTS_Head Head,
+        USINT NUMVARI,
+        USINT NUMVARO,
+        BYTE EKEY,
+        BYTE EDISP0,
+        BYTE EDISP1,
+        BYTE EDISP2,
+        BYTE EDISP3,
+        BYTE ECDPG,
+        UINT CDPG,
+        USINT AREP,
+        BYTE MARK,
+        UINT LIGHTTIME,
+        DWORD MODE
+
+;C-WS-0000R-PG
+#table TCIB_3391_init r4144_p0_C_WS_0000R_PG_init = 3391,$0000,$1344,0,6,
+                                                    $00,$00,8,0,
+                                                    $00,$00,8,0,
+                                                    $80,$00,16,0,
+                                                    $80,$00,16,0,
+                                                    $83,$00,56,96,
+                                                    $80,$00,24,0,
+                                                    70,
+                                                    $28,
+                                                    $28,
+                                                    0,
+                                                    0,
+                                                    0
+
+;C-WS-0000R-PG - Inicializacni tabulka driveru
+#table BYTE r4144_p0_DriverInit = $01,13,'C-WS-0000R-PG',
+                                  $02,13,'C-WS-0000R-PG',
+                                  $03,7,$41,$41,$93,$93,$07,$93,$82,
+                                  $04,1,$0C,
+                                  $00
+
+;C-WS-0400R-Logus
+#table TCIB_3357_init r4144_p1_C_WS_0400R_Lo_init = 3357,$0000,$ECDD,1,5,
+                                                    $83,$00,24,8,
+                                                    $00,$00,8,0,
+                                                    $00,$00,16,0,
+                                                    $00,$00,16,0,
+                                                    $00,$00,16,0,
+                                                    0,
+                                                    $22,
+                                                    $22,
+                                                    0,
+                                                    0,
+                                                    0,
+                                                    70
+
+;C-WS-0400R-Logus - Inicializacni tabulka driveru
+#table BYTE r4144_p1_DriverInit = $01,16,'C-WS-0400R-Logus',
+                                  $02,16,'C-WS-0400R-Logus',
+                                  $03,5,$03,$41,$44,$44,$44,
+                                  $04,1,$01,
+                                  $00
+
+;C-KY-0001R
+#table TCIB_3384_init r4144_p2_C_KY_0001R_init = 3384,$0000,$7E9C,2,6,
+                                                 $80,$00,72,0,
+                                                 $80,$00,8,0,
+                                                 $00,$00,16,0,
+                                                 $80,$00,8,0,
+                                                 $00,$00,32,0,
+                                                 $81,$00,0,304,
+                                                 $00,
+                                                 $00,
+                                                 0,
+                                                 100,
+                                                 $22,
+                                                 $22,
+                                                 100,
+                                                 100,
+                                                 1,
+                                                 70,
+                                                 1,0,0,0,0,0,0,0
+
+;C-KY-0001R - Inicializacni tabulka driveru
+#table BYTE r4144_p2_DriverInit = $01,10,'C-KY-0001R',
+                                  $02,10,'C-KY-0001R',
+                                  $03,4,$0B,$44,$44,$44,
+                                  $04,1,$26,
+                                  $00
+
+;C-WS-0400R-Logus
+#table TCIB_3357_init r4144_p3_C_WS_0400R_Lo_init = 3357,$0000,$F29D,3,5,
+                                                    $83,$00,24,8,
+                                                    $00,$00,8,0,
+                                                    $00,$00,16,0,
+                                                    $00,$00,16,0,
+                                                    $00,$00,16,0,
+                                                    0,
+                                                    $22,
+                                                    $22,
+                                                    0,
+                                                    0,
+                                                    0,
+                                                    70
+
+;C-WS-0400R-Logus - Inicializacni tabulka driveru
+#table BYTE r4144_p3_DriverInit = $01,16,'C-WS-0400R-Logus',
+                                  $02,16,'C-WS-0400R-Logus',
+                                  $03,5,$03,$41,$44,$44,$44,
+                                  $04,1,$01,
+                                  $00
+
+;C-WS-0000R-PG
+#table TCIB_3391_init r4144_p4_C_WS_0000R_PG_init = 3391,$0000,$1354,4,6,
+                                                    $00,$00,8,0,
+                                                    $00,$00,8,0,
+                                                    $00,$00,16,0,
+                                                    $00,$00,16,0,
+                                                    $83,$00,56,96,
+                                                    $00,$00,24,0,
+                                                    70,
+                                                    $22,
+                                                    $22,
+                                                    0,
+                                                    0,
+                                                    0
+
+;C-WS-0000R-PG - Inicializacni tabulka driveru
+#table BYTE r4144_p4_DriverInit = $01,13,'C-WS-0000R-PG',
+                                  $02,13,'C-WS-0000R-PG',
+                                  $03,7,$41,$41,$44,$44,$07,$44,$44,
+                                  $04,1,$0C,
+                                  $00
+
+;C-WS-0000R-PG
+#table TCIB_3391_init r4144_p5_C_WS_0000R_PG_init = 3391,$0000,$1355,5,6,
+                                                    $00,$00,8,0,
+                                                    $00,$00,8,0,
+                                                    $00,$00,16,0,
+                                                    $00,$00,16,0,
+                                                    $83,$00,56,96,
+                                                    $80,$00,24,0,
+                                                    70,
+                                                    $22,
+                                                    $22,
+                                                    0,
+                                                    0,
+                                                    0
+
+;C-WS-0000R-PG - Inicializacni tabulka driveru
+#table BYTE r4144_p5_DriverInit = $01,13,'C-WS-0000R-PG',
+                                  $02,13,'C-WS-0000R-PG',
+                                  $03,7,$41,$41,$44,$44,$07,$93,$82,
+                                  $04,1,$0C,
+                                  $00
+
+;C-IT-0504S - Inicializacni tabulka modulu C-IT-0504S
+#table TCIB_3326_init r4144_p6_C_IT_0504S_init = 3326,$0000,$609F,6,5,
+                                                 $80,$00,16,0,
+                                                 $81,$00,0,32,
+                                                 $00,$00,16,0,
+                                                 $00,$00,64,0,
+                                                 $00,$00,16,0,
+                                                 $00,
+                                                 $00,
+                                                 $22,
+                                                 $22,
+                                                 0,
+                                                 0
+
+;C-IT-0504S - Inicializacni tabulka driveru
+#table BYTE r4144_p6_DriverInit = $01,10,'C-IT-0504S',
+                                  $02,10,'C-IT-0504S',
+                                  $03,4,$02,$42,$50,$44,
+                                  $04,4,$C2,$C2,$C2,$C2,
+                                  $00
+
+;C-WS-0000R-TG2
+#table TCIB_4335_init r4144_p7_C_WS_0000R_TG2_init = 4335,$0000,$0000,7,6,
+                                                     $00,$00,8,0,
+                                                     $00,$00,8,0,
+                                                     $00,$00,16,0,
+                                                     $00,$00,16,0,
+                                                     $83,$00,56,104,
+                                                     $00,$00,24,0,
+                                                     70,
+                                                     $22,
+                                                     $22,
+                                                     0,
+                                                     0,
+                                                     0,
+                                                     $00,
+                                                     $00,
+                                                     $00,
+                                                     $00,
+                                                     $00,
+                                                     $00
+
+;C-WS-0000R-TG2 - Inicializacni tabulka driveru
+#table BYTE r4144_p7_DriverInit = $01,14,'C-WS-0000R-TG2',
+                                  $02,14,'C-WS-0000R-TG2',
+                                  $03,7,$41,$41,$44,$44,$07,$44,$44,
+                                  $04,1,$0D,
+                                  $00
+
+;C-DL-0064M - Inicializacni tabulka modulu C-DL-0064M
+#table TCIB_3354_init r4146_p0_C_DL0064M_init = 3354,$0000,$0371,0,1,
+                                                $83,$00,16,32
+
+;C-DL-0064M - Inicializacni tabulka driveru
+#table BYTE r4146_p0_DriverInit = $01,10,'C-DL-0064M',
+                                  $02,10,'C-DL-0064M',
+                                  $03,1,$02,
+                                  $04,1,$04,
+                                  $00
+
+;C-DL-0064M - Inicializacni tabulka modulu C-DL-0064M
+#table TCIB_3354_init r4146_p1_C_DL0064M_init = 3354,$0000,$A367,1,1,
+                                                $83,$00,16,32
+
+;C-DL-0064M - Inicializacni tabulka driveru
+#table BYTE r4146_p1_DriverInit = $01,10,'C-DL-0064M',
+                                  $02,10,'C-DL-0064M',
+                                  $03,1,$02,
+                                  $04,1,$04,
+                                  $00
+
+;C-JC-0006M
+#table TCIB_3368_init r4146_p2_C_JC_0006M_init = 3368,$0000,$7E10,2,3,
+                                                 $80,$00,8,0,
+                                                 $81,$02,0,16,
+                                                 $81,$00,0,48,
+                                                 $00,
+                                                 30
+
+;C-JC-0006M - Inicializacni tabulka driveru
+#table BYTE r4146_p2_DriverInit = $01,10,'C-JC-0006M',
+                                  $02,10,'C-JC-0006M',
+                                  $03,1,$01,
+                                  $04,1,$08,
+                                  $00
+
+;C-DM-0006M-ULED - Inicializacni tabulka modulu C-DM-0006MULED
+#table TCIB_3345_init r4146_p3_C_DM_0006MULED_init = 3345,$0000,$A234,3,4,
+                                                     $80,$00,8,0,
+                                                     $80,$00,16,0,
+                                                     $81,$00,0,48,
+                                                     $81,$00,0,48
+
+;C-DM-0006M-ULED - Inicializacni tabulka driveru
+#table BYTE r4146_p3_DriverInit = $01,15,'C-DM-0006M-ULED',
+                                  $02,15,'C-DM-0006M-ULED',
+                                  $03,2,$01,$93,
+                                  $04,12,$C1,$01,$C1,$01,$C1,$01,$C1,$01,$C1,$01,$C1,$01,
+                                  $00
+
+;C-HC-0201F-E - Inicializacni tabulka modulu C-HC-0201F-E
+#table TCIB_3348_init r4146_p4_C_HC_0201F_E_init = 3348,$0000,$0000,4,5,
+                                                   $80,$00,8,0,
+                                                   $00,$00,32,0,
+                                                   $80,$00,16,0,
+                                                   $00,$00,8,0,
+                                                   $83,$00,16,16,
+                                                   $22,
+                                                   $22,
+                                                   0,
+                                                   0,
+                                                   0,
+                                                   0
+
+;C-HC-0201F-E - Inicializacni tabulka driveru
+#table BYTE r4146_p4_DriverInit = $01,12,'C-HC-0201F-E',
+                                  $02,12,'C-HC-0201F-E',
+                                  $03,6,$01,$48,$93,$41,$01,$82,
+                                  $04,2,$01,$C2,
+                                  $00
+
+;C-WG-0503S
+#table TCIB_3353_init r4146_p5_C_WG_0503S_init = 3353,$0000,$9E8A,5,5,
+                                                 $83,$00,48,8,
+                                                 $00,$00,8,0,
+                                                 $00,$00,16,0,
+                                                 $00,$00,16,0,
+                                                 $00,$00,8,0,
+                                                 $00,
+                                                 $22,
+                                                 $22,
+                                                 0,
+                                                 0,
+                                                 $00
+
+;C-WG-0503S - Inicializacni tabulka driveru
+#table BYTE r4146_p5_DriverInit = $01,10,'C-WG-0503S',
+                                  $02,10,'C-WG-0503S',
+                                  $03,5,$06,$41,$44,$44,$41,
+                                  $04,1,$01,
+                                  $00
+
+;C-1W-4000M
+#table TCIB_3392_init r4146_p6_C_1W_4000M_init = 3392,$0000,$0000,6,1,
+                                                 $83,$00,168,24
+
+;C-1W-4000M - Inicializacni tabulka driveru
+#table BYTE r4146_p6_DriverInit = $01,10,'C-1W-4000M',
+                                  $02,10,'C-1W-4000M',
+                                  $03,1,$15,
+                                  $04,1,$03,
+                                  $00
+
+;ETH1_UNI0 - Inicializacni tabulka UNI režimu kanálu Ethernet
+#table _TTS_UNIINIT_ETH r0_p0_Table_UNI_ETH1_UNI0 = 197,2,5,0,14,0,0,0,0,0,$07E1,0,0,0,0,0,0,0,0,0,0,516,516,__offset32(UNI_ETH1_UNI0_IN),__offset32(UNI_ETH1_UNI0_OUT),0,0,0,0,33,0,0,0,0,0,0,0,0,0,0,
+                                                    $00000000,
+                                                    61000,
+                                                    61000
+
+;ETH1_UNI0 - Inicializacni tabulka driveru
+#table BYTE r0_p0_DriverInit_ETH1_UNI0 = $01,9,'ETH1_UNI0',
+                                         $02,12,'Obecný kanál',
+                                         $00
+
+;CP-2000 - Inicializacní tabulka IO desky CP-2000
+#table _TTS_IR2553 r16_p6_IO_Table = 2553,$00,$01,
+                                     22,
+                                     1,
+                                     128,
+                                     0,
+                                     $00,$00,$00,$00,
+                                     $00,$00,$00,$00,
+                                     $00,$00,$00,$00,
+                                     $00,$00,$00,$00,
+                                     128,
+                                     0,
+                                     0,
+                                     0,
+                                     128,
+                                     0,0,0,0,0,0,0,0,
+                                     1,1,1,1,0,0,0,0,
+                                     $2C,0,0,1,
+                                     $2C,0,0,1,
+                                     $2C,0,0,1,
+                                     $2C,0,0,1
+
+;CP-2000 - Inicializacní tabulka desky OI-2872
+#table _TTS_OI2872 r16_p7_DISP_Table = 2872,$02,$01,
+                                       1,
+                                       5,
+                                       $80,
+                                       $80,
+                                       $80,
+                                       $80,
+                                       $80,
+                                       $00,
+                                       1250,
+                                       15,
+                                       $80,
+                                       60,
+                                       $00040014
+
+;C-WS-0000R-PG
+#module TModulE2 $02,3391,$1030,0,9,__sizeof(r4144_p0_IN),__sizeof(r4144_p0_OUT),__offset(r4144_p0_IN),__offset(r4144_p0_OUT),__indx(r4144_p0_C_WS_0000R_PG_init),__indx(r4144_p0_DriverInit)
+
+;C-WS-0400R-Logus
+#module TModulE2 $02,3357,$1030,1,9,__sizeof(r4144_p1_IN),__sizeof(r4144_p1_OUT),__offset(r4144_p1_IN),__offset(r4144_p1_OUT),__indx(r4144_p1_C_WS_0400R_Lo_init),__indx(r4144_p1_DriverInit)
+
+;C-KY-0001R
+#module TModulE2 $02,3384,$1030,2,9,__sizeof(r4144_p2_IN),__sizeof(r4144_p2_OUT),__offset(r4144_p2_IN),__offset(r4144_p2_OUT),__indx(r4144_p2_C_KY_0001R_init),__indx(r4144_p2_DriverInit)
+
+;C-WS-0400R-Logus
+#module TModulE2 $02,3357,$1030,3,9,__sizeof(r4144_p3_IN),__sizeof(r4144_p3_OUT),__offset(r4144_p3_IN),__offset(r4144_p3_OUT),__indx(r4144_p3_C_WS_0400R_Lo_init),__indx(r4144_p3_DriverInit)
+
+;C-WS-0000R-PG
+#module TModulE2 $02,3391,$1030,4,9,__sizeof(r4144_p4_IN),__sizeof(r4144_p4_OUT),__offset(r4144_p4_IN),__offset(r4144_p4_OUT),__indx(r4144_p4_C_WS_0000R_PG_init),__indx(r4144_p4_DriverInit)
+
+;C-WS-0000R-PG
+#module TModulE2 $02,3391,$1030,5,9,__sizeof(r4144_p5_IN),__sizeof(r4144_p5_OUT),__offset(r4144_p5_IN),__offset(r4144_p5_OUT),__indx(r4144_p5_C_WS_0000R_PG_init),__indx(r4144_p5_DriverInit)
+
+;C-IT-0504S
+#module TModulE2 $02,3326,$1030,6,9,__sizeof(r4144_p6_IN),__sizeof(r4144_p6_OUT),__offset(r4144_p6_IN),__offset(r4144_p6_OUT),__indx(r4144_p6_C_IT_0504S_init),__indx(r4144_p6_DriverInit)
+
+;C-WS-0000R-TG2
+#module TModulE2 $02,4335,$1030,7,9,__sizeof(r4144_p7_IN),__sizeof(r4144_p7_OUT),__offset(r4144_p7_IN),__offset(r4144_p7_OUT),__indx(r4144_p7_C_WS_0000R_TG2_init),__indx(r4144_p7_DriverInit)
+
+;C-DL-0064M
+#module TModulE2 $02,3354,$1032,0,9,__sizeof(r4146_p0_IN),__sizeof(r4146_p0_OUT),__offset(r4146_p0_IN),__offset(r4146_p0_OUT),__indx(r4146_p0_C_DL0064M_init),__indx(r4146_p0_DriverInit)
+
+;C-DL-0064M
+#module TModulE2 $02,3354,$1032,1,9,__sizeof(r4146_p1_IN),__sizeof(r4146_p1_OUT),__offset(r4146_p1_IN),__offset(r4146_p1_OUT),__indx(r4146_p1_C_DL0064M_init),__indx(r4146_p1_DriverInit)
+
+;C-JC-0006M
+#module TModulE2 $02,3368,$1032,2,9,__sizeof(r4146_p2_IN),__sizeof(r4146_p2_OUT),__offset(r4146_p2_IN),__offset(r4146_p2_OUT),__indx(r4146_p2_C_JC_0006M_init),__indx(r4146_p2_DriverInit)
+
+;C-DM-0006M-ULED
+#module TModulE2 $02,3345,$1032,3,9,__sizeof(r4146_p3_IN),__sizeof(r4146_p3_OUT),__offset(r4146_p3_IN),__offset(r4146_p3_OUT),__indx(r4146_p3_C_DM_0006MULED_init),__indx(r4146_p3_DriverInit)
+
+;C-HC-0201F-E
+#module TModulE2 $02,3348,$1032,4,9,__sizeof(r4146_p4_IN),__sizeof(r4146_p4_OUT),__offset(r4146_p4_IN),__offset(r4146_p4_OUT),__indx(r4146_p4_C_HC_0201F_E_init),__indx(r4146_p4_DriverInit)
+
+;C-WG-0503S
+#module TModulE2 $02,3353,$1032,5,9,__sizeof(r4146_p5_IN),__sizeof(r4146_p5_OUT),__offset(r4146_p5_IN),__offset(r4146_p5_OUT),__indx(r4146_p5_C_WG_0503S_init),__indx(r4146_p5_DriverInit)
+
+;C-1W-4000M
+#module TModulE2 $02,3392,$1032,6,9,__sizeof(r4146_p6_IN),__sizeof(r4146_p6_OUT),__offset(r4146_p6_IN),__offset(r4146_p6_OUT),__indx(r4146_p6_C_1W_4000M_init),__indx(r4146_p6_DriverInit)
+
+;ETH1_UNI0 - Deklarace UNI_ETH
+#module TModulE2 $02,2000,$0,0,$FFFFFFFF,__sizeof(r0_p0_Statistic_ETH1_UNI0),__sizeof(r0_p0_Control_ETH1_UNI0),__offset(r0_p0_Statistic_ETH1_UNI0),__offset(r0_p0_Control_ETH1_UNI0),__indx(r0_p0_Table_UNI_ETH1_UNI0),__indx(r0_p0_DriverInit_ETH1_UNI0)
+
+;CP-2000 - Deklarace virtuálního rozhraní ITCL
+#module TModulE2 $02,0,$0,0,$C9,__sizeof(r0_p0_ITCL_DIAG),__sizeof(r0_p0_ITCL_CONTROL),__offset(r0_p0_ITCL_DIAG),__offset(r0_p0_ITCL_CONTROL),-1,-1
+
+;CP-2000 - Deklarace rozhraní TCL2
+#module TModulE2 $02,2190,$10,1,$C1,__sizeof(r16_p1_TCL2_DIAG),__sizeof(r16_p1_TCL2_CONTROL),__offset(r16_p1_TCL2_DIAG),__offset(r16_p1_TCL2_CONTROL),-1,-1
+
+;CP-2000 - Deklarace rozhraní CIB
+#module TModulE2 $02,2190,$10,1,$E2,__sizeof(r16_p1_CIB_DIAG),__sizeof(r16_p1_CIB_CONTROL),__offset(r16_p1_CIB_DIAG),__offset(r16_p1_CIB_CONTROL),-1,-1
+
+;CP-2000 - Deklarace rozhraní CIB
+#module TModulE2 $02,2191,$10,2,$E2,__sizeof(r16_p2_CIB_DIAG),__sizeof(r16_p2_CIB_CONTROL),__offset(r16_p2_CIB_DIAG),__offset(r16_p2_CIB_CONTROL),-1,-1
+
+;CP-2000 - Deklarace I/O rozhraní
+#module TModulE2 $02,2553,$10,6,$09,__sizeof(r16_p6_IO_IN),__sizeof(r16_p6_IO_OUT),__offset(r16_p6_IO_IN),__offset(r16_p6_IO_OUT),__indx(r16_p6_IO_Table),-1
+
+;CP-2000 - Deklarace rozhraní pro uživatelský displej
+#module TModulE2 $02,2872,$10,7,$4A,__sizeof(r16_p7_DISP_IN),__sizeof(r16_p7_DISP_OUT),__offset(r16_p7_DISP_IN),__offset(r16_p7_DISP_OUT),__indx(r16_p7_DISP_Table),-1
+
+;CP-2000 - Deklarace CPU modulu
+#module TModulE2 $02,2000,$0,0,$0,0,0,0,0,-1,-1
+
+;*******************************************************************************
+;Generováno programem Mosaic
+;© 2001-2025 Teco a.s.

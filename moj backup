@@ -1,0 +1,112 @@
+# ignoruj všetko pod Dev
+*                 # ignoruj všetko v tomto priečinku
+!Dev_V200/        # ale povol priečinok Dev_V200
+!Dev_V200/200/    # a v ňom len podpriečinok 200
+Dev_V200/200_Lib/ # ale ignoruj priečinok 200_Lib
+
+
+# ignoruj workspace súbor od VS Code
+Dev.code-workspace
+
+
+########################################################################
+# Všeobecné systémové súbory
+###############################################################################
+.DS_Store
+Thumbs.db
+desktop.ini
+
+###############################################################################
+# VS Code nastavenia (lokálne, nepodstatné pre repo)
+# --- VS Code: ignoruj všetko v .vscode, okrem vybraných súborov
+###############################################################################
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+###############################################################################
+# Parallels / macOS / Windows odpad
+###############################################################################
+.parallels/
+*.lnk
+*.tmp
+*.bak
+*.swp
+~$*
+Thumbs.db
+.DS_Store
+
+###############################################################################
+# Build / generované súbory (Mosaic, kompilátory)
+###############################################################################
+
+*.exp
+*.FRM
+*.png
+*.PNG
+*.pub
+*.PUB
+*.exe
+*.dll
+*.obj
+*.out
+*.bin
+*.elf
+*.map
+*.[Pp][Rr][Gg]
+*.70l
+*.70K
+*.TTL
+*.mlb
+*.mjf
+*.mso
+*.bak
+*.log
+*.DSK
+*.PLC
+*.MWB
+*.nex
+*.pch
+*.sym
+*.mtb
+*.pckg
+*.TTR
+*.webx
+*.tod           # popisovace
+*.tdd           # popisovace
+*.rgl			# PIDMaker
+#*.dbx			# RAM save
+*.exp           # exporty
+*.filelist
+
+
+###############################################################################
+# Adresare Mo/saic
+###############################################################################
+
+**/Sysgen/**
+**/DATA_SIM/**
+**/PanelMaker/**
+**/GpMaker/**
+**/SendBackup/**
+**/LocalLib/**
+**/IOConfigurator/Backup/**
+
+
+# --- Špeciál: ignoruj všetko v .../SendRoot/WWW/, ale nechaj XML/XLS/JS
+**/SendRoot/WWW/**
+
+# výnimky: XML, XLS, JS (case-insensitive)
+# !**/SendRoot/WWW/**/*.[Xx][Mm][Ll]
+# !**/SendRoot/WWW/**/*.[Xx][Ll][Ss]
+# !**/SendRoot/WWW/**/*.[Jj][Ss]
+
+
+
+
+###############################################################################
+# webmarer subory
+###############################################################################
+# *.png
