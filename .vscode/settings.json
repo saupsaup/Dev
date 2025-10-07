@@ -45,7 +45,16 @@
 
   // Vyhľadávanie rešpektuje .gitignore / .ignore
   "search.useIgnoreFiles": true,
+  
+  // otvorenie Search automaticky preberie tvoj označený text.
+  "search.seedWithSelection": "always",
 
+
+  // vyhladavat len v ST suboroch
+  "search.include": [
+  	"**/*.st",
+  	"**/*.ST"
+  ], 
   // Doplnkové vylúčenia pre istotu
   "search.exclude": {
     "**/.git": true,
@@ -54,7 +63,10 @@
     "**/.Trash": true,
     "**/Thumbs.db": true
   },
+  
 
+
+  
   // .vscode nech je stále viditeľný
   "files.exclude": {
     ".vscode/**": false,
@@ -73,7 +85,12 @@
 	"**/PLCnet/**": true,			
 	"**/Root/**": true,
 	"**/SendBackup/**": true,
-	"**/SendRoot/WWW/**": true,
+//	"**/SendRoot/WWW/**": true,
+	"**/SendRoot/**": true,
+	"**/WebMaker/**": true,
+	"Dev_V200/200/.vscode": true,
+
+
 
 	"**/*.mpr": true,
 	"**/*.cfg": true,	

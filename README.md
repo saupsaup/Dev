@@ -1,6 +1,6 @@
+# Projekt Dev
 
-git status
-
+```bash
 # zobraz stav (sledované / ignorované súbory)
 git status
 # stiahni zmeny z GitHubu
@@ -16,7 +16,7 @@ git check-ignore -v cesta/k_suboru
 
 
 
-## Poznámky
+## full reset repository
 rm -rf .git
 git init
 git add .
@@ -28,6 +28,8 @@ git status
 
 # Zobraziť všetky ignorované súbory (globálne)
 git status --ignored
+# Zobraziť všetky ignorované súbory (short)
+git status --ignored -s 
 
 # Overiť, či konkrétny súbor je ignorovaný
 git check-ignore -v <cesta/k/suboru>
@@ -43,3 +45,7 @@ git add .
 git commit -m "Reset repo" 
 # odošli na GitHub
 git push           
+
+# Označiť .sh súbor ako spustiteľný
+cd ~/Mosaic/NachHouseApp/Dev
+chmod +x SH/reset_dev_repo.sh

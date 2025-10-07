@@ -1,5 +1,7 @@
 #!*
 
+!.vscode/**
+
 Dev_V200/200_Lib/
 
 #**Backup.st/**
