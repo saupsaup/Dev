@@ -2011,6 +2011,7 @@ FUNCTION _Nh_Shw_Obj   {HIDDEN}    : BOOL                    // vykresli objekty
 						vr				:= xDev^.al.ou.val;
 						vr		:= xDev^.al.OU.val;
 						IF xR^.h.chk  AND aCfg[xR^.h.cf.c].ou THEN
+							{$IFDEF __NH_DALI}
 							IF xR^.h.cf.c = 43 AND xF^.cf.c = 44 THEN
 			      	      dlgr  := _Nh_DL_sha(gr:=1, nd := xF^.cf.n)-100;                    // cislo GRP - 100
 								xDLs 	:= xDEv;
@@ -2021,6 +2022,10 @@ FUNCTION _Nh_Shw_Obj   {HIDDEN}    : BOOL                    // vykresli objekty
 								xDLs 	:= xPt;
 								vr 	:= USINT_TO_REAL(xDLs^.cx.scn.lvl[dlgr]);							
 							ELSIF aCfg[xO^.cf.c].par > 0 THEN
+							{$ELSE}
+							IF aCfg[xO^.cf.c].par > 0 THEN
+							{$END_IF}
+
                    		IF _NhxPar(cp := aCfg[xO^.cf.c].par, np := xR^.h.cf.p ,x:=238) THEN
 									vr		:= USINT_TO_REAL(xPar^.all.lvl);
 								ELSE

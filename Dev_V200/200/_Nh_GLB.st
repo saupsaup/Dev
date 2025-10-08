@@ -304,6 +304,7 @@ FUNCTION _NhxPt {HIDDEN} : BOOL	    // namapuje xRom,xZon a ich docasne pamate
    END_IF;
 END_FUNCTION
 
+(*
 FUNCTION _NhVarSdc {HIDDEN} : BOOL  // zapise na SDC
    VAR_INPUT
       src   : UDINT;       // adresa premennej
@@ -315,7 +316,7 @@ FUNCTION _NhVarSdc {HIDDEN} : BOOL  // zapise na SDC
    END_IF;
    FileClose(hFile := fH);
 END_FUNCTION
-
+*)
 (*
 FUNCTION {HIDDEN} _NhRowTxtNext : BOOL    // nacita riadok do yTx1 ukonceny CRLF od aktualne nastavenej pozice a presunie na zaciatok dalsieho riadka
    VAR_INPUT

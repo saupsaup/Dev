@@ -1,7 +1,7 @@
 <TecoConfiguration xmlns="http://www.tecomat.com">
   <Configuration version="2022.2" system="FOXTROT2">
     <Global>
-      <Editor left="-8" top="-8" width="1936" height="1048" maximized="true">
+      <Editor left="-8" top="17" width="1936" height="1071" maximized="true">
         <ProcessData AliasColWidth="120" NoteColWidth="170"/>
       </Editor>
       <Selector left="218" top="106" width="1003" height="713" maximized="false" params="0"/>
@@ -9,7 +9,7 @@
     <Dependencies>
       <MosaicLib id="1" name="DaliLibEx" refs="2">&gt;=1.1</MosaicLib>
     </Dependencies>
-    <Device xmlns="http://www.tecomat.com" alias="Centrální jednotka" enabled="true" rack="0" position="0" expanded="true">
+    <Device xmlns="http://www.tecomat.com" alias="Centrální jednotka" enabled="false" rack="0" position="0" expanded="true">
       <Info>
         <ProductCode>2000</ProductCode>
         <ProductName>CP-2000</ProductName>
@@ -464,7 +464,7 @@
             </Device>
           </Peripheries>
         </Interface>
-        <Interface Class="CIB" SubClass="2" alias="CIB sbernice" rackOffset="0" busID="1032" Icon="cib_interface" expanded="true">
+        <Interface Class="CIB" SubClass="2" alias="CIB sbernice" rackOffset="0" busID="1032" Icon="cib_interface" expanded="false">
           <Peripheries>
             <Device xmlns="http://www.tecomat.com" physAddr="0371" enabled="true" rack="4146" position="0" default="false" dependID="1" statLoc="r16_p2_CIB_DIAG.STAT[0]" validStat="87" errLoc="r16_p2_CIB_DIAG.ERR[0]">
               <Info>

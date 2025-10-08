@@ -670,9 +670,6 @@ TYPE
    END_STRUCT;
 
 
-	{$IFDEF __NH_DALI}
-
-	{$END_IF}
 
 
 //	{ $IFNDEF __NH_METEO_IQWS_4000 }

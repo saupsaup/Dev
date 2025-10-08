@@ -579,73 +579,73 @@
                                        $00040014
 
 ;C-WS-0000R-PG
-#module TModulE2 $02,3391,$1030,0,9,__sizeof(r4144_p0_IN),__sizeof(r4144_p0_OUT),__offset(r4144_p0_IN),__offset(r4144_p0_OUT),__indx(r4144_p0_C_WS_0000R_PG_init),__indx(r4144_p0_DriverInit)
+;#module TModulE2 $02,3391,$1030,0,9,__sizeof(r4144_p0_IN),__sizeof(r4144_p0_OUT),__offset(r4144_p0_IN),__offset(r4144_p0_OUT),__indx(r4144_p0_C_WS_0000R_PG_init),__indx(r4144_p0_DriverInit)
 
 ;C-WS-0400R-Logus
-#module TModulE2 $02,3357,$1030,1,9,__sizeof(r4144_p1_IN),__sizeof(r4144_p1_OUT),__offset(r4144_p1_IN),__offset(r4144_p1_OUT),__indx(r4144_p1_C_WS_0400R_Lo_init),__indx(r4144_p1_DriverInit)
+;#module TModulE2 $02,3357,$1030,1,9,__sizeof(r4144_p1_IN),__sizeof(r4144_p1_OUT),__offset(r4144_p1_IN),__offset(r4144_p1_OUT),__indx(r4144_p1_C_WS_0400R_Lo_init),__indx(r4144_p1_DriverInit)
 
 ;C-KY-0001R
-#module TModulE2 $02,3384,$1030,2,9,__sizeof(r4144_p2_IN),__sizeof(r4144_p2_OUT),__offset(r4144_p2_IN),__offset(r4144_p2_OUT),__indx(r4144_p2_C_KY_0001R_init),__indx(r4144_p2_DriverInit)
+;#module TModulE2 $02,3384,$1030,2,9,__sizeof(r4144_p2_IN),__sizeof(r4144_p2_OUT),__offset(r4144_p2_IN),__offset(r4144_p2_OUT),__indx(r4144_p2_C_KY_0001R_init),__indx(r4144_p2_DriverInit)
 
 ;C-WS-0400R-Logus
-#module TModulE2 $02,3357,$1030,3,9,__sizeof(r4144_p3_IN),__sizeof(r4144_p3_OUT),__offset(r4144_p3_IN),__offset(r4144_p3_OUT),__indx(r4144_p3_C_WS_0400R_Lo_init),__indx(r4144_p3_DriverInit)
+;#module TModulE2 $02,3357,$1030,3,9,__sizeof(r4144_p3_IN),__sizeof(r4144_p3_OUT),__offset(r4144_p3_IN),__offset(r4144_p3_OUT),__indx(r4144_p3_C_WS_0400R_Lo_init),__indx(r4144_p3_DriverInit)
 
 ;C-WS-0000R-PG
-#module TModulE2 $02,3391,$1030,4,9,__sizeof(r4144_p4_IN),__sizeof(r4144_p4_OUT),__offset(r4144_p4_IN),__offset(r4144_p4_OUT),__indx(r4144_p4_C_WS_0000R_PG_init),__indx(r4144_p4_DriverInit)
+;#module TModulE2 $02,3391,$1030,4,9,__sizeof(r4144_p4_IN),__sizeof(r4144_p4_OUT),__offset(r4144_p4_IN),__offset(r4144_p4_OUT),__indx(r4144_p4_C_WS_0000R_PG_init),__indx(r4144_p4_DriverInit)
 
 ;C-WS-0000R-PG
-#module TModulE2 $02,3391,$1030,5,9,__sizeof(r4144_p5_IN),__sizeof(r4144_p5_OUT),__offset(r4144_p5_IN),__offset(r4144_p5_OUT),__indx(r4144_p5_C_WS_0000R_PG_init),__indx(r4144_p5_DriverInit)
+;#module TModulE2 $02,3391,$1030,5,9,__sizeof(r4144_p5_IN),__sizeof(r4144_p5_OUT),__offset(r4144_p5_IN),__offset(r4144_p5_OUT),__indx(r4144_p5_C_WS_0000R_PG_init),__indx(r4144_p5_DriverInit)
 
 ;C-IT-0504S
-#module TModulE2 $02,3326,$1030,6,9,__sizeof(r4144_p6_IN),__sizeof(r4144_p6_OUT),__offset(r4144_p6_IN),__offset(r4144_p6_OUT),__indx(r4144_p6_C_IT_0504S_init),__indx(r4144_p6_DriverInit)
+;#module TModulE2 $02,3326,$1030,6,9,__sizeof(r4144_p6_IN),__sizeof(r4144_p6_OUT),__offset(r4144_p6_IN),__offset(r4144_p6_OUT),__indx(r4144_p6_C_IT_0504S_init),__indx(r4144_p6_DriverInit)
 
 ;C-WS-0000R-TG2
-#module TModulE2 $02,4335,$1030,7,9,__sizeof(r4144_p7_IN),__sizeof(r4144_p7_OUT),__offset(r4144_p7_IN),__offset(r4144_p7_OUT),__indx(r4144_p7_C_WS_0000R_TG2_init),__indx(r4144_p7_DriverInit)
+;#module TModulE2 $02,4335,$1030,7,9,__sizeof(r4144_p7_IN),__sizeof(r4144_p7_OUT),__offset(r4144_p7_IN),__offset(r4144_p7_OUT),__indx(r4144_p7_C_WS_0000R_TG2_init),__indx(r4144_p7_DriverInit)
 
 ;C-DL-0064M
-#module TModulE2 $02,3354,$1032,0,9,__sizeof(r4146_p0_IN),__sizeof(r4146_p0_OUT),__offset(r4146_p0_IN),__offset(r4146_p0_OUT),__indx(r4146_p0_C_DL0064M_init),__indx(r4146_p0_DriverInit)
+;#module TModulE2 $02,3354,$1032,0,9,__sizeof(r4146_p0_IN),__sizeof(r4146_p0_OUT),__offset(r4146_p0_IN),__offset(r4146_p0_OUT),__indx(r4146_p0_C_DL0064M_init),__indx(r4146_p0_DriverInit)
 
 ;C-DL-0064M
-#module TModulE2 $02,3354,$1032,1,9,__sizeof(r4146_p1_IN),__sizeof(r4146_p1_OUT),__offset(r4146_p1_IN),__offset(r4146_p1_OUT),__indx(r4146_p1_C_DL0064M_init),__indx(r4146_p1_DriverInit)
+;#module TModulE2 $02,3354,$1032,1,9,__sizeof(r4146_p1_IN),__sizeof(r4146_p1_OUT),__offset(r4146_p1_IN),__offset(r4146_p1_OUT),__indx(r4146_p1_C_DL0064M_init),__indx(r4146_p1_DriverInit)
 
 ;C-JC-0006M
-#module TModulE2 $02,3368,$1032,2,9,__sizeof(r4146_p2_IN),__sizeof(r4146_p2_OUT),__offset(r4146_p2_IN),__offset(r4146_p2_OUT),__indx(r4146_p2_C_JC_0006M_init),__indx(r4146_p2_DriverInit)
+;#module TModulE2 $02,3368,$1032,2,9,__sizeof(r4146_p2_IN),__sizeof(r4146_p2_OUT),__offset(r4146_p2_IN),__offset(r4146_p2_OUT),__indx(r4146_p2_C_JC_0006M_init),__indx(r4146_p2_DriverInit)
 
 ;C-DM-0006M-ULED
-#module TModulE2 $02,3345,$1032,3,9,__sizeof(r4146_p3_IN),__sizeof(r4146_p3_OUT),__offset(r4146_p3_IN),__offset(r4146_p3_OUT),__indx(r4146_p3_C_DM_0006MULED_init),__indx(r4146_p3_DriverInit)
+;#module TModulE2 $02,3345,$1032,3,9,__sizeof(r4146_p3_IN),__sizeof(r4146_p3_OUT),__offset(r4146_p3_IN),__offset(r4146_p3_OUT),__indx(r4146_p3_C_DM_0006MULED_init),__indx(r4146_p3_DriverInit)
 
 ;C-HC-0201F-E
-#module TModulE2 $02,3348,$1032,4,9,__sizeof(r4146_p4_IN),__sizeof(r4146_p4_OUT),__offset(r4146_p4_IN),__offset(r4146_p4_OUT),__indx(r4146_p4_C_HC_0201F_E_init),__indx(r4146_p4_DriverInit)
+;#module TModulE2 $02,3348,$1032,4,9,__sizeof(r4146_p4_IN),__sizeof(r4146_p4_OUT),__offset(r4146_p4_IN),__offset(r4146_p4_OUT),__indx(r4146_p4_C_HC_0201F_E_init),__indx(r4146_p4_DriverInit)
 
 ;C-WG-0503S
-#module TModulE2 $02,3353,$1032,5,9,__sizeof(r4146_p5_IN),__sizeof(r4146_p5_OUT),__offset(r4146_p5_IN),__offset(r4146_p5_OUT),__indx(r4146_p5_C_WG_0503S_init),__indx(r4146_p5_DriverInit)
+;#module TModulE2 $02,3353,$1032,5,9,__sizeof(r4146_p5_IN),__sizeof(r4146_p5_OUT),__offset(r4146_p5_IN),__offset(r4146_p5_OUT),__indx(r4146_p5_C_WG_0503S_init),__indx(r4146_p5_DriverInit)
 
 ;C-1W-4000M
-#module TModulE2 $02,3392,$1032,6,9,__sizeof(r4146_p6_IN),__sizeof(r4146_p6_OUT),__offset(r4146_p6_IN),__offset(r4146_p6_OUT),__indx(r4146_p6_C_1W_4000M_init),__indx(r4146_p6_DriverInit)
+;#module TModulE2 $02,3392,$1032,6,9,__sizeof(r4146_p6_IN),__sizeof(r4146_p6_OUT),__offset(r4146_p6_IN),__offset(r4146_p6_OUT),__indx(r4146_p6_C_1W_4000M_init),__indx(r4146_p6_DriverInit)
 
 ;ETH1_UNI0 - Deklarace UNI_ETH
-#module TModulE2 $02,2000,$0,0,$FFFFFFFF,__sizeof(r0_p0_Statistic_ETH1_UNI0),__sizeof(r0_p0_Control_ETH1_UNI0),__offset(r0_p0_Statistic_ETH1_UNI0),__offset(r0_p0_Control_ETH1_UNI0),__indx(r0_p0_Table_UNI_ETH1_UNI0),__indx(r0_p0_DriverInit_ETH1_UNI0)
+;#module TModulE2 $02,2000,$0,0,$FFFFFFFF,__sizeof(r0_p0_Statistic_ETH1_UNI0),__sizeof(r0_p0_Control_ETH1_UNI0),__offset(r0_p0_Statistic_ETH1_UNI0),__offset(r0_p0_Control_ETH1_UNI0),__indx(r0_p0_Table_UNI_ETH1_UNI0),__indx(r0_p0_DriverInit_ETH1_UNI0)
 
 ;CP-2000 - Deklarace virtuálního rozhraní ITCL
-#module TModulE2 $02,0,$0,0,$C9,__sizeof(r0_p0_ITCL_DIAG),__sizeof(r0_p0_ITCL_CONTROL),__offset(r0_p0_ITCL_DIAG),__offset(r0_p0_ITCL_CONTROL),-1,-1
+;#module TModulE2 $02,0,$0,0,$C9,__sizeof(r0_p0_ITCL_DIAG),__sizeof(r0_p0_ITCL_CONTROL),__offset(r0_p0_ITCL_DIAG),__offset(r0_p0_ITCL_CONTROL),-1,-1
 
 ;CP-2000 - Deklarace rozhraní TCL2
-#module TModulE2 $02,2190,$10,1,$C1,__sizeof(r16_p1_TCL2_DIAG),__sizeof(r16_p1_TCL2_CONTROL),__offset(r16_p1_TCL2_DIAG),__offset(r16_p1_TCL2_CONTROL),-1,-1
+;#module TModulE2 $02,2190,$10,1,$C1,__sizeof(r16_p1_TCL2_DIAG),__sizeof(r16_p1_TCL2_CONTROL),__offset(r16_p1_TCL2_DIAG),__offset(r16_p1_TCL2_CONTROL),-1,-1
 
 ;CP-2000 - Deklarace rozhraní CIB
-#module TModulE2 $02,2190,$10,1,$E2,__sizeof(r16_p1_CIB_DIAG),__sizeof(r16_p1_CIB_CONTROL),__offset(r16_p1_CIB_DIAG),__offset(r16_p1_CIB_CONTROL),-1,-1
+;#module TModulE2 $02,2190,$10,1,$E2,__sizeof(r16_p1_CIB_DIAG),__sizeof(r16_p1_CIB_CONTROL),__offset(r16_p1_CIB_DIAG),__offset(r16_p1_CIB_CONTROL),-1,-1
 
 ;CP-2000 - Deklarace rozhraní CIB
-#module TModulE2 $02,2191,$10,2,$E2,__sizeof(r16_p2_CIB_DIAG),__sizeof(r16_p2_CIB_CONTROL),__offset(r16_p2_CIB_DIAG),__offset(r16_p2_CIB_CONTROL),-1,-1
+;#module TModulE2 $02,2191,$10,2,$E2,__sizeof(r16_p2_CIB_DIAG),__sizeof(r16_p2_CIB_CONTROL),__offset(r16_p2_CIB_DIAG),__offset(r16_p2_CIB_CONTROL),-1,-1
 
 ;CP-2000 - Deklarace I/O rozhraní
-#module TModulE2 $02,2553,$10,6,$09,__sizeof(r16_p6_IO_IN),__sizeof(r16_p6_IO_OUT),__offset(r16_p6_IO_IN),__offset(r16_p6_IO_OUT),__indx(r16_p6_IO_Table),-1
+;#module TModulE2 $02,2553,$10,6,$09,__sizeof(r16_p6_IO_IN),__sizeof(r16_p6_IO_OUT),__offset(r16_p6_IO_IN),__offset(r16_p6_IO_OUT),__indx(r16_p6_IO_Table),-1
 
 ;CP-2000 - Deklarace rozhraní pro uživatelský displej
-#module TModulE2 $02,2872,$10,7,$4A,__sizeof(r16_p7_DISP_IN),__sizeof(r16_p7_DISP_OUT),__offset(r16_p7_DISP_IN),__offset(r16_p7_DISP_OUT),__indx(r16_p7_DISP_Table),-1
+;#module TModulE2 $02,2872,$10,7,$4A,__sizeof(r16_p7_DISP_IN),__sizeof(r16_p7_DISP_OUT),__offset(r16_p7_DISP_IN),__offset(r16_p7_DISP_OUT),__indx(r16_p7_DISP_Table),-1
 
 ;CP-2000 - Deklarace CPU modulu
-#module TModulE2 $02,2000,$0,0,$0,0,0,0,0,-1,-1
+;#module TModulE2 $02,2000,$0,0,$0,0,0,0,0,-1,-1
 
 ;*******************************************************************************
 ;Generováno programem Mosaic

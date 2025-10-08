@@ -52,18 +52,24 @@ chmod +x SH/reset_dev_repo.sh
 
 ```
 
+## VS Code – Bookmarks (klávesové skratky)
+| Akcia | macOS | Windows / Linux |
+|---|---|---|
+| Toggle bookmark (zap./vyp.) 			| ⌥ ⌘ K | Ctrl Alt K |
+| Ďalšia záložka 						| ⌥ ⌘ L | Ctrl Alt L |
+| Predchádzajúca záložka 				| ⌥ ⌘ J | Ctrl Alt J |
+| Zoznam záložiek v súbore 				| Command Palette → `Bookmarks: List` | Command Palette → `Bookmarks: List` |
+| Zoznam zo všetkých súborov 			| Command Palette → `Bookmarks: List from All Files` | Command Palette → `Bookmarks: List from All Files` |
+| Zmazať záložky v súbore 				| Command Palette → `Bookmarks: Clear` | Command Palette → `Bookmarks: Clear` |
+| Zmazať záložky vo všetkých súboroch 	| Command Palette → `Bookmarks: Clear from All Files` | Command Palette → `Bookmarks: Clear from All Files` |
 
-# Ovladanie Magic Keyboard Home/End dokumenu
-Začiatok riadka (Home): 	⌘ + ←
-Koniec riadka (End): 		⌘ + →
-Začiatok dokumentu: 		⌘ + ↑ (alebo fn + ←)
-Koniec dokumentu: 			⌘ + ↓ (alebo fn + →)
-so Shift pridáva výber
+> Pozn.: Skutočné skratky si môžeš skontrolovať/prenastaviť v **Keyboard Shortcuts** (⌘K ⌘S / Ctrl K Ctrl S) a vyhľadať „Bookmarks“. :contentReference[oaicite:0]{index=0}
+
 
 # Základné klávesové skratky vo VS Code
 Legend: macOS (⌘ Cmd, ⌥ Option, ⌃ Ctrl, ⇧ Shift) · Windows/Linux (Ctrl, Alt, Shift)
 
-Akcia						macOS	Windows / Linux
+Akcia			ignored			macOS	Windows / Linux
 Build Mosacic				⌥ B
 Paleta príkazov				⌘ P		Ctrl ⇧ P
 Hľadať v súbore				⌘ F		Ctrl F
@@ -103,5 +109,12 @@ Prepnutie na editor 1/2/3	⌘ 1/2/3	Ctrl 1/2/3
 # standard VSCobe, ja som  si ich nahradil
 //Paleta príkazov				⌘ ⇧ P	Ctrl ⇧ P
 //Hľadať v celom projekte		⌘ ⇧ F	Ctrl ⇧ F
-
 Tip pre Mac (Home/End): začiatok/koniec riadku ⌘ ← / ⌘ → · začiatok/koniec dokumentu ⌘ ↑ / ⌘ ↓ (alternatíva: fn ← / fn →).
+
+# Ovladanie Magic Keyboard Home/End dokumenu
+Legend: macOS (⌘ Cmd, ⌥ Option, ⌃ Ctrl, ⇧ Shift) · Windows/Linux (Ctrl, Alt, Shift)
+Začiatok riadka (Home): 	⌘ + ←
+Koniec riadka (End): 		⌘ + →
+Začiatok dokumentu: 		⌘ + ↑ (alebo fn + ←)
+Koniec dokumentu: 			⌘ + ↓ (alebo fn + →)
+so Shift pridáva výber

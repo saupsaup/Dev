@@ -92,41 +92,53 @@ PROGRAM prgMain
 
 
 	// USINT
-   aSys.n1Min     := BOOL_TO_USINT(SYSTEM_S.F_EDGE_1MIN);           // kazdu 1.Min bude = 1
-   aSys.n100ms    := BOOL_TO_USINT(SYSTEM_S.F_EDGE_100MS);     //;
-   aSys.n50ms     := BOOL_TO_USINT(SYSTEM_S.R_EDGE_100MS OR SYSTEM_S.F_EDGE_100MS);     //;
+	aSys.n1Min     := BOOL_TO_USINT(SYSTEM_S.F_EDGE_1MIN);           // kazdu 1.Min bude = 1
+	aSys.n100ms    := BOOL_TO_USINT(SYSTEM_S.F_EDGE_100MS);     //;
+	aSys.n50ms     := BOOL_TO_USINT(SYSTEM_S.R_EDGE_100MS OR SYSTEM_S.F_EDGE_100MS);     //;
 	// UINT
 
-   aSys.u1Min     := BOOL_TO_UINT(SYSTEM_S.F_EDGE_1MIN);           // kazdu 1.Min bude = 1
-   aSys.i1Sec     := USINT_TO_INT(aSys.n1Sec);                     // kazdu 1.Sec bude = 1
+	aSys.u1Min     := BOOL_TO_UINT(SYSTEM_S.F_EDGE_1MIN);           // kazdu 1.Min bude = 1
+	aSys.i1Sec     := USINT_TO_INT(aSys.n1Sec);                     // kazdu 1.Sec bude = 1
 
 	aSys.RestCyc   := aSys.RestCyc + 1;
 
 	// INT
-   aSys.i1Min     := USINT_TO_INT(aSys.n1Min);           // kazdu 1.Min bude = 1
-   aSys.rTime     := TIME_TO_REAL(aSys.NhTime);
+   	aSys.i1Min     := USINT_TO_INT(aSys.n1Min);           // kazdu 1.Min bude = 1
+   	aSys.rTime     := TIME_TO_REAL(aSys.NhTime);
 
-   aSys.cyc     	:= NOT aSys.Cyc;
+	aSys.cyc     	:= NOT aSys.Cyc;
 
 
 	// 1. sec	
 	IF SYSTEM_S.F_EDGE_1SEC THEN
-   	aSys.n1Sec     := 1;           // kazdu 1.sec bude = 1	
-   	aSys.u1Sec     := 1;           // kazdu 1.sec bude = 1
+	   	aSys.n1Sec     := 1;           // kazdu 1.sec bude = 1	
+   		aSys.u1Sec     := 1;           // kazdu 1.sec bude = 1
 	ELSE
-   	aSys.n1Sec     := 0;           // kazdu 1.sec bude = 1	
-   	aSys.u1Sec     := 0;           // kazdu 1.sec bude = 1
+	   	aSys.n1Sec     := 0;           // kazdu 1.sec bude = 1	
+   		aSys.u1Sec     := 0;           // kazdu 1.sec bude = 1
 	END_IF;
 
 
-	fb_Nh_Create_DIR();												// test and create directories
 
 
-   CASE aSys.ini OF
-       0:    // riadna prevadzka
-				// sekvencia 3 cyklov za sebou po prechode na novu minutu, alebo natvrdo zadanim aSys.RefCycNew := true
-				// 1 -> 2 -> 3 ->  0
 
+
+	CASE aSys.ini OF
+       0:	// riadna prevadzka
+			// sekvencia 3 cyklov za sebou po prechode na novu minutu, alebo natvrdo zadanim aSys.RefCycNew := true
+			// 1 -> 2 -> 3 ->  0
+			CASE aSys.RefCyc OF
+			0:  IF aSys.RefCycNew THEN										// je zaradena nova poziadavka na restart sekvencie - zacne az ked skonci predchadzajuca sekvencia
+					aSys.RefCyc		:=	1;
+					aSys.RefCycNew	:= false;
+				END_IF;
+			3:  // obehlo 3x
+				aSys.RefCyc	:=	0;						
+			ELSE			
+				aSys.RefCyc := aSys.RefCyc + 1;                 // rucne sa moze nastartovat hocikde v programe na (1), tu sa prida na (2)
+			END_CASE;
+
+(*)
             IF SYSTEM_S.F_EDGE_1DAY OR aSys.Restart THEN                   // novy den
 					aSys.RefCyc	:=	1;														// v dalsom cykle nastartuje TypDay
 	  				aMeteo.SunriseTime := SunTime( direction := Sunrise, zenith := Zenith_Official,
@@ -149,19 +161,23 @@ PROGRAM prgMain
 				ELSE
 					aSys.RefCyc := aSys.RefCyc + 1;                 // rucne sa moze nastartovat hocikde v programe na (1), tu sa prida na (2)
 				END_IF;
-
+*)
             { $ IFDEF __NH_WEB }
                fbWebControl();
             { $ END_IF }                      // zobrazenie nastavenych DEV - za DEV. Ak sa nieco prestavi vo web v dalej otocke sa to prejavi v DEV
             { $ IFDEF __NH_WRK }
                _NhDataWrk();
-				{ $ END_IF }
+			{ $ END_IF }
 
             _NhDevControl();           // fyzicke nastavenie DEV, malo buy byt prve
 
 				fbNotify();
 				fbWebPush();
-            aSys.Restart   := false;                     						// vynuluje sa restart, ale az ked sa prebehu prvykrat vsetky DEV
+            
+			aSys.F_EDGE_1MIN		:= FALSE;		// vynuluje sa edge
+			aSys.F_EDGE_1DAY		:= FALSE;		// vynuluje sa edge			
+			aSys.F_EDGE_1MON		:= FALSE;		// vynuluje sa edge
+			aSys.Restart   			:= false;                     						// vynuluje sa restart, ale az ked sa prebehu prvykrat vsetky DEV
 
 				IF aSys.RestartBck = false THEN										// este nebol urobeny backup po restarte		
 					IF  SUB_DT_DT(aSys.NhDT,aSys.LastRstDT) > T#1m THEN     // 1min after restart, create backup file
@@ -691,6 +707,7 @@ PROGRAM prgMain
 					yTx1 					:= 'WWW/LOGS/';
 					rb						:= DirCreate(dirName := yTx1);
 			  	END_IF;
+
 	 			yTx2 					:= ' *** RESTART  *** ';
 				rb						:= _Nh1RowTxt(logRst := 1, adTime := 3, EmpRow := 1, write:=TRUE );
 
@@ -720,6 +737,9 @@ PROGRAM prgMain
 //			  rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=_NH_RAM, value := 0);
 
 				_Nh_CUST_RESTART();                          											// nejake vlasne veci po restarte
+				
+				SYSTEM_S.F_EDGE_1DAY := true;														// vynuluje sa edge		
+		
 				fb_Nh_Create_DIR.exec := TRUE;												// vynuluje sa vytvaranie adresarov
             	aSys.Ini := 251;
 
@@ -737,6 +757,25 @@ PROGRAM prgMain
             ;
 	END_CASE;
 
+	// time events
+	IF SYSTEM_S.F_EDGE_1DAY  THEN				   											// novy den
+		aSys.F_EDGE_1DAY	:= true;														// NH event	
+		aSys.RefCycNew		:= true;														// v dalsom cykle nastartuje TypDay
+		IF aSys.COUNTER_MONTHS <> SYSTEM_S.COUNTER_MONTHS THEN								// new month
+			fb_Nh_Create_DIR.exec	:= true;												// vytvori nove adresare pre novy mesiac
+			aSys.F_EDGE_1MON 		:= true;												// NH event		
+			aSys.COUNTER_MONTHS 	:= SYSTEM_S.COUNTER_MONTHS;								// Nh month
+		END_IF
+	ELSIF  SYSTEM_S.F_EDGE_1MIN  THEN                   									// new min
+		aSys.F_EDGE_1MIN			:= true;												// NH event		
+		aSys.RefCycNew				:= true;												// v dalsom cykle nastartuje TypDay
+bb:=bb+1;			
+//			fb_Nh_Create_DIR.exec	:= true;												// vytvori nove adresare pre novy mesiac
+
+	END_IF;
+
+
+	fb_Nh_Create_DIR();												// test and create directories
 
 //	fbCfgBck();      	// save from mRam[] to file, or restore to mRam[] from file
 //	fbCopyDir();  		// copies/renames a file or the entire contents of a directory

@@ -66,8 +66,7 @@
   },
   
 
-
-  
+ 
   // .vscode nech je stále viditeľný
   "files.exclude": {
     ".vscode/**": false,
