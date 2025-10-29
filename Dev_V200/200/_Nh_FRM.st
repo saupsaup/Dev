@@ -3056,7 +3056,7 @@ END_VAR
 	END_FUNCTION_BLOCK
 
 	VAR_GLOBAL
-   	fbCrFRM    : _Nh_Create_FRM;
+   	fb_Nh_Create_FRM    : _Nh_Create_FRM;
 	END_VAR
 
 

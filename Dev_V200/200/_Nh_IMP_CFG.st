@@ -143,11 +143,9 @@ FUNCTION_BLOCK _Nh_Import_CIB	// kopia vsetkych, alebo modifikovanych CFG/PAR/VA
 				ELSE
 					busy	:= true;	grp:=0;
 					Go		:= 11;         				
-//					_Nh_Log_Path(wh:=4,fN:='EXP');
-//					yTx0	:= CONCAT(yTx2, 'cib.txt');
-					
-					yTx0  := CONCAT( aSys.ADR_DBX,DT_TO_STRINGF(aSys.NhDT,'%Thh_mm.cib'));
-
+					_Nh_Log_Path(wh:=22,frm:=1,wh2:=1);
+//					yTx0	:= CONCAT(yTx1, DT_TO_STRINGF(aSys.NhDT,'%TDD_hhmm.cib') );
+					yTx0	:= yTx1;
 					yTx2	:= CONCAT('.Import to: ',yTx0);
 					_Nh1RowTxt(logRst:=1);
 					fbLine(open:=true,del:=true,seek:=0,nLine:=1, aLine:=PTR_TO_UDINT(ADR(yImp)) ,sLine:=SIZEOF(yImp));

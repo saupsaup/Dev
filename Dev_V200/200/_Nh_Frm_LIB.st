@@ -1441,7 +1441,11 @@ FUNCTION _Nh_Chk_DALI  {HIDDEN}   : BOOL
       set   : BOOL;           // nastavit
       mnu   : SINT;
    END_VAR
+	rb := set;	// only for debug
+	jj := mnu; // only for debug
+
    _Nh_Chk_DALI := false;
+
 	{$IFDEF __NH_DALI}
 //	ok 	:= _NhxPt(c := xF^.cf.c, n := xF^.cf.n,x:=-431);  	
 //   xDev2 := xPt;
@@ -1456,7 +1460,7 @@ FUNCTION _Nh_Chk_DALI  {HIDDEN}   : BOOL
 		_Nh_Chk_DALI:= true;
       dlma        := INT_TO_USINT(xF^.cf.n);                            // v hlavicke je vzdy master co je cislo vety
       xDls        := xDev;
-      IF set   THEN
+      IF set THEN
          CASE mnu OF
               2 : xL^.dsh := _Nh_U12(xL^.dsh = 3,1,3);                  // DSH
               3 : IF xL^.obj = 47 THEN                                     // zoznam DLg

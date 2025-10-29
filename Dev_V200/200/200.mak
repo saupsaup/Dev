@@ -24,7 +24,7 @@
 #uselib "LocalLib\CanvasLib_V23_20190122.mlb"
 #uselib "LocalLib\ToStringLib_V13_20110203.mlb"
 #uselib "LocalLib\FileLib_V35_20250701.mlb"
-#uselib "LocalLib\ComLib_V40_20250616.mlb"
+#uselib "LocalLib\ComLib_V42_20251016.mlb"
 #uselib "LocalLib\ConvertLib_V26_20240105.mlb"
 #uselib "LocalLib\SfcLib_V15_20190605.mlb"
 #uselib "LocalLib\EncryptLib_V14_20231018.mlb"

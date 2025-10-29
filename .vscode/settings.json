@@ -1,115 +1,136 @@
 {
-  // ============================================================
-  // ⭐ FAVORITES (ponechané z tvojho pôvodného súboru)
-  // ============================================================
-  "favorites.groups": [
-    "Default",
-    "Dev_V200/200 "
-  ],
-  "favorites.currentGroup": "Dev_V200/200 ",
+	// ============================================================
+	// ⭐ FAVORITES (ponechané z tvojho pôvodného súboru)
+	// ============================================================
+	"favorites.groups": [
+		"Default",
+		"Dev_V200/200 "
+	],
+	"favorites.currentGroup": "Dev_V200/200 ",
 
-  // ============================================================
-  // ⚙️ MOSAIC / VM KONFIGURÁCIA
-  // ============================================================
-  // IP a port PLC (pre VSC2m.exe)
-  "mosaic.plcHost": "192.168.33.200:61682",
+	// ============================================================
+	// ⚙️ MOSAIC / VM KONFIGURÁCIA
+	// ============================================================
+	// IP a port PLC (pre VSC2m.exe)
+	"mosaic.plcHost": "192.168.33.200:61682",
 
-  // Hlavný adresár projektu – zostane rovnaký aj pri Dev ako root
-  "mosaic.projectDir": "M:\\NachHouseApp\\Dev\\Dev_V200\\200",
+	// Hlavný adresár projektu – zostane rovnaký aj pri Dev ako root
+	"mosaic.projectDir": "M:\\NachHouseApp\\Dev\\Dev_V200\\200",
+	// Cesta k .mak súboru pre kompiláciu
+	"mosaic.makPathWin": "M:\\NachHouseApp\\Dev\\Dev_V200\\200\\200.mak",
+	// Cesta ku Mosaic binárkam vo Windows VM
+	"mosaic.mosaicBin": "C:\\Program Files (x86)\\Teco\\Mosaic 2025.1\\Application",
+	// Zdieľaný priečinok medzi Mac ↔ Windows
+	"mosaic.shareRoot": "\\\\Mac\\Mosaic",
+	// VM názov (alebo UUID)
+	"mosaic.vmName": "ae0a527c-1a74-4e39-9845-1622f6a3c782",
 
-  // Cesta k .mak súboru pre kompiláciu
-  "mosaic.makPathWin": "M:\\NachHouseApp\\Dev\\Dev_V200\\200\\200.mak",
-
-  // Cesta ku Mosaic binárkam vo Windows VM
-  "mosaic.mosaicBin": "C:\\Program Files (x86)\\Teco\\Mosaic 2025.1\\Application",
-
-  // Zdieľaný priečinok medzi Mac ↔ Windows
-  "mosaic.shareRoot": "\\\\Mac\\Mosaic",
-
-  // VM názov (alebo UUID)
-  "mosaic.vmName": "ae0a527c-1a74-4e39-9845-1622f6a3c782",
-
-  // ============================================================
-  // 🧱 EDITOR – odsadenie, formátovanie
-  // ============================================================
-  "editor.insertSpaces": false,
-  "editor.tabSize": 4,
-  "editor.detectIndentation": false,
-  "editor.formatOnSave": false,
-
-  // ============================================================
-  // 👁️ EXPLORER & SEARCH (len ST + .vscode)
-  // ============================================================
-  // Explorer zohľadňuje .gitignore (len *.st, *.ST a .vscode)
-  "explorer.excludeGitIgnore": true,
-
-  // Vyhľadávanie rešpektuje .gitignore / .ignore
-  "search.useIgnoreFiles": true,
-  
-  // otvorenie Search automaticky preberie tvoj označený text.
-  "search.seedWithSelection": "always",
+	// ============================================================
+	// 🧱 EDITOR – odsadenie, formátovanie
+	// ============================================================
 
 
-  // vyhladavat len v ST suboroch
-  "search.include": [
-  	"**/*.st",
-  	"**/*.ST"
-  ], 
-
-  // Doplnkové vylúčenia pre istotu
-  "search.exclude": {
-    "**/.git": true,
-    "**/node_modules": true,
-    "**/.DS_Store": true,
-    "**/.Trash": true,
-    "**/Thumbs.db": true
-  },
-  
-
- 
-  // .vscode nech je stále viditeľný
-  "files.exclude": {
-    ".vscode/**": false,
-    "**/Backup.st/**": true,
-	"**/Backup/**": true,
-	"**/DATA_SIM/**": true,
-	"**/Datalogger/**": true,
-	"**/FOXTROT/**": true,
-	"**/GPMaker/**": true,
-	"**/GraphMaker/**": true,
-	"**/IOConfigurator": true,
-	"**/KEYB2Maker/**": true,
-	"**/LocalLib/**": true,
-	"**/PanelMaker/**": true,
-	"**/PIDMaker/**": true,
-	"**/PLCnet/**": true,			
-	"**/Root/**": true,
-	"**/SendBackup/**": true,
-//	"**/SendRoot/WWW/**": true,
-	"**/SendRoot/**": true,
-	"**/WebMaker/**": true,
-//	"Dev_V200/200/.vscode": true,
-
-	"**/*.mpr": true,
-	"**/*.cfg": true,	
-	"**/*.cfgx": true,		
-
-	"**/Dev.code-workspace": true,		
-	"**/moj backup": true,		
+	"files.associations": {
+		"*.st": "structured-text"
+	},
+	"editor.quickSuggestions": {
+		"other": true,
+		"comments": true,
+		"strings": true
+	},
+	"editor.suggestOnTriggerCharacters": true,
+	"editor.snippetSuggestions": "top",
+	"editor.tabCompletion": "on",
+	"editor.suggest.showWords": true,
+	"editor.suggest.snippetsPreventQuickSuggestions": false,
+	"editor.wordBasedSuggestions": "off",
 
 
 
+	// Globálne: TAB (nie medzery), veľkosť tabu = 3
+	"editor.insertSpaces": false,
+	"editor.tabSize": 3,
+	"editor.detectIndentation": false,
+	"editor.formatOnSave": false,
 
-},
+	// Jednotné nastavenie aj pre JSON a JSONC súbory
+	"[json]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 3
+	},
+	"[jsonc]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 3
+	},
 
-  // Prehľadný strom (nie zbalené priečinky)
-  "explorer.compactFolders": false,
+	// (voliteľné) Ak chceš, aby sa JSON súbory s komentármi zobrazovali ako jsonc
+	// "files.associations": {
+	// 	"*.json": "jsonc"
+	// },
 
-  
-  // Sleduj len potrebné zmeny
-  "files.watcherExclude": {
-    "**/.git/**": true,
-    "**/node_modules/**": true,
-    "**/.Trash/**": true
-  }
+	// ============================================================
+	// 👁️ EXPLORER & SEARCH (len ST + .vscode)
+	// ============================================================
+	// vyhľadávať len v ST súboroch
+	"search.include": [
+		"**/*.st",
+		"**/*.ST"
+	],
+	// Explorer zohľadňuje .gitignore (len *.st, *.ST a .vscode)
+	"explorer.excludeGitIgnore": true,
+
+	// Vyhľadávanie rešpektuje .gitignore / .ignore
+	"search.useIgnoreFiles": true,
+	"search.useGlobalIgnoreFiles": true,
+	"search.seedWithSelection": "always",
+
+	// Doplnkové vylúčenia pre istotu
+	"search.exclude": {
+		"**/.git": true,
+		"**/node_modules": true,
+		"**/.DS_Store": true,
+		"**/.Trash": true,
+		"**/Thumbs.db": true
+	},
+
+	// .vscode nech je stále viditeľný + ostatné väčšie priečinky skryté
+	"files.exclude": {
+		".vscode/**": false,
+		"**/Backup.st/**": true,
+		"**/Backup/**": true,
+		"**/DATA_SIM/**": true,
+		"**/Datalogger/**": true,
+		"**/FOXTROT/**": true,
+		"**/GPMaker/**": true,
+		"**/GraphMaker/**": true,
+		"**/IOConfigurator/**": true,
+		"**/KEYB2Maker/**": true,
+		"**/LocalLib/**": true,
+		"**/PanelMaker/**": true,
+		"**/PIDMaker/**": true,
+		"**/PLCnet/**": true,
+		"**/Root/**": true,
+		"**/SendBackup/**": true,
+		// "**/SendRoot/WWW/**": true,
+		"**/SendRoot/**": true,
+		"**/WebMaker/**": true,
+		// "Dev_V200/200/.vscode": true,
+
+		"**/*.mpr": true,
+		"**/*.cfg": true,
+		"**/*.cfgx": true,
+
+		"**/Dev.code-workspace": true,
+		"**/moj backup": true
+	},
+
+	// Prehľadný strom (nie zbalené priečinky)
+	"explorer.compactFolders": false,
+
+	// Sleduj len potrebné zmeny
+	"files.watcherExclude": {
+		"**/.git/**": true,
+		"**/node_modules/**": true,
+		"**/.Trash/**": true
+	}
 }

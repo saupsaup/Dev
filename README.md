@@ -1,5 +1,6 @@
 # Projekt Dev
 
+
 ```bash
 # zobraz stav (sledované / ignorované súbory)
 git status
@@ -52,6 +53,29 @@ chmod +x SH/reset_dev_repo.sh
 
 ```
 
+# Ovladanie Magic Keyboard Home/End dokumenu
+Legend: macOS (⌘ Cmd, ⌥ Option, ⌃ Ctrl, ⇧ Shift) · Windows/Linux (Ctrl, Alt, Shift)
+Začiatok dokumentu: 		⌘ + ↑ (alebo fn + ←)
+Koniec dokumentu: 			⌘ + ↓ (alebo fn + →)
+so Shift pridáva výber
+
+
+## VS Code – (klávesové skratky) editoru
+Hľadať v súbore								⌘ F		Ctrl F
+Hľadať v celom projekte						⌥ F		Ctrl ⇧ F
+Nahradiť v súbore								⌥ ⌘ F
+Nahradiť v celom projekte					⌘ ⇧ H	Ctrl ⇧ H
+Hľadať 				FUNCTION [clipb]		Ctrl ⌥ F
+nastavit previos	FUNCTION [clipb]		⌥ PgUp	- skok na predchadzajucie blok zaciankuci FUNCTION
+nastavit Next	 	FUNCTION [clipb]		⌥ PgDn	- skok na nasledujuci blok zaciankuci FUNCTION
+Prejsť na riadok…								⌃ G		Ctrl G
+Home 												⌘ ↑ 
+End												⌘ ↓
+Začiatok riadka  								↑
+Koniec riadka 									↓
+
+
+
 ## VS Code – Bookmarks (klávesové skratky)
 | Akcia | macOS | Windows / Linux |
 |---|---|---|
@@ -69,22 +93,14 @@ chmod +x SH/reset_dev_repo.sh
 # Základné klávesové skratky vo VS Code
 Legend: macOS (⌘ Cmd, ⌥ Option, ⌃ Ctrl, ⇧ Shift) · Windows/Linux (Ctrl, Alt, Shift)
 
-Akcia			ignored			macOS	Windows / Linux
-Build Mosacic				⌥ B
-Paleta príkazov				⌘ P		Ctrl ⇧ P
-Hľadať v súbore				⌘ F		Ctrl F
-Hľadať v celom projekte		⌥ F		Ctrl ⇧ F
-Hľadať FUNCTION [clipb]		Ctrl ⌥ F
+Akcia										macOS	Windows / Linux
+Build Mosacic							⌥ B
+Paleta príkazov						⌘ P		Ctrl ⇧ P
 
-Nahradiť v súbore			⌘ H		Ctrl H
-Nahradiť v celom projekte	⌘ ⇧ H	Ctrl ⇧ H
-
-Rýchlo otvoriť súbor		⌘ P		Ctrl P
-
-Prejsť na riadok…			⌃ G		Ctrl G
-Prejsť na symbol v súbore	⌘ ⇧ O	Ctrl ⇧ O
+Rýchlo otvoriť súbor					⌘ P		Ctrl P
+Prejsť na symbol v súbore			⌘ ⇧ O	Ctrl ⇧ O
 Prejsť na symbol v pracovnom priestore	⌘ T	Ctrl T
-Prejsť na definíciu			F12		F12
+Prejsť na definíciu					F12		F12
 Náhľad definície			⌥ F12	Alt F12
 Premenovať symbol			F2		F2
 Formátovať dokument			⌥ ⇧ F	Alt ⇧ F
@@ -109,12 +125,28 @@ Prepnutie na editor 1/2/3	⌘ 1/2/3	Ctrl 1/2/3
 # standard VSCobe, ja som  si ich nahradil
 //Paleta príkazov				⌘ ⇧ P	Ctrl ⇧ P
 //Hľadať v celom projekte		⌘ ⇧ F	Ctrl ⇧ F
-Tip pre Mac (Home/End): začiatok/koniec riadku ⌘ ← / ⌘ → · začiatok/koniec dokumentu ⌘ ↑ / ⌘ ↓ (alternatíva: fn ← / fn →).
 
-# Ovladanie Magic Keyboard Home/End dokumenu
-Legend: macOS (⌘ Cmd, ⌥ Option, ⌃ Ctrl, ⇧ Shift) · Windows/Linux (Ctrl, Alt, Shift)
-Začiatok riadka (Home): 	⌘ + ←
-Koniec riadka (End): 		⌘ + →
-Začiatok dokumentu: 		⌘ + ↑ (alebo fn + ←)
-Koniec dokumentu: 			⌘ + ↓ (alebo fn + →)
-so Shift pridáva výber
+
+# Rspberry Pi 
+
+pi@pi3server:~ $ influx
+Connected to http://localhost:8086 version 1.6.7~rc0
+InfluxDB shell version: 1.6.7~rc0
+> SHOW DATABASES
+name: databases
+name
+----
+_internal
+plcdata
+> USE plcdata
+Using database plcdata
+> INSERT hvac,ev=HET,sub=02,rm=005,src=TER temp=22.5
+> SELECT * FROM hvac LIMIT 5
+name: hvac
+time                ev  rm  src sub temp
+----                --  --  --- --- ----
+1760835873002681201 HET 005 TER 02  22.5
+
+Grafana vo web:
+http://192.168.33.111:3000/
+

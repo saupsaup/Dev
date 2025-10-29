@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="windows-1250" ?>
-<web version="8.1" propfont="true" foot="" dwMode="0" MaxUid="28171" height="1219" width="610" menu="false" title="false" border="false" top="0" left="0" iniScale="100" maxScale="100" useIniScale="false" useMaxScale="false" userScale="true" webApp="true" bgdupl="true" bgcolor="16777215" icon="FAVICON.ICO" id18="0" author="© Au Media, s.r.o." encoding="windows-1250">
+<web version="8.1" propfont="true" foot="" dwMode="0" MaxUid="28172" height="1219" width="610" menu="false" title="false" border="false" top="0" left="0" iniScale="100" maxScale="100" useIniScale="false" useMaxScale="false" userScale="true" webApp="true" bgdupl="true" bgcolor="16777215" icon="FAVICON.ICO" id18="0" author="© Au Media, s.r.o." encoding="windows-1250" flat="false" flatcolor="16771043">
 	<panels></panels>
 	<Grid Enable="1" X="5" Y="5" />
-	<globalset newdim="1" pvstyle="1" />
+	<globalset newdim="1" pvstyle="1" maxvar="0" />
 	<group caption="Index" level="1" locked="0" altdim="false" notforid="true" Uid="27919">
 		<page notification="true" caption="Redir" name="REDIR.XML" background="" bgcolor="3548178" repeat="false" hidden="true" ajax="true" pause="1000" level="1" default="true" ucid="1695538966" width="420" height="178" Uid="27918">
 			<object caption="" X="4" Y="11" xoff="6" yoff="5" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="30" transparent="false" visneg="false" Uid="27712">
@@ -173,18 +173,18 @@
 		</page>
 	</group>
 	<group caption="Service" level="9" locked="0" altdim="true" notforid="true" width="585" height="800" dwMode="0" useIniScale="false" useMaxScale="false" userScale="true" iniScale="100" maxScale="100" Uid="28163">
-		<page caption="RBx" name="RAMBOX.XML" background="" bgcolor="3548178" repeat="false" hidden="false" ajax="true" pause="1000" level="0" ucid="1759476153" width="409" height="253" Uid="28162">
-			<object caption="" X="7" Y="7" xoff="2" yoff="7" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="25" transparent="false" visneg="false" Uid="28161">
+		<page caption="RBx" name="RAMBOX.XML" background="" bgcolor="3548178" repeat="false" hidden="false" ajax="true" pause="1000" level="0" ucid="1760243872" width="575" height="253" Uid="28162">
+			<object caption="" X="6" Y="6" xoff="0" yoff="5" level="0" readonly="false" front="16744448" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28161">
 				<postfile variable="yTx4" type="STRING[255]" border="true" />
 			</object>
-			<object caption="aSys.ini = 40 spusti load" X="31" Y="15" xoff="5" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28167">
+			<object caption="" X="6" Y="11" xoff="5" yoff="0" level="0" readonly="false" front="8453888" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28167">
 				<imagebtn variable="aSys.ini" value="40" timeout="500" type="USINT" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="14" Y="26" xoff="6" yoff="5" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28169">
 				<image optcap="" variable="fb_Nh_Create_DIR.exec" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
-			<object caption="" X="26" Y="26" xoff="5" yoff="5" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28170">
-				<image optcap="" variable="fb_Nh_Create_DIR.busy" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			<object caption="" X="1" Y="19" xoff="5" yoff="1" level="0" readonly="false" front="3548178" back="16777215" strong="false" italic="false" size="11" transparent="false" visneg="false" Uid="28171">
+				<edit variable="yTx4" type="STRING[255]" intf="0" timf="" align="left" zero="false" prec="-1" size="80" global="true" border="true" width="570" height="19" tabindex="1" />
 			</object>
 		</page>
 	</group>
@@ -200,7 +200,7 @@
 		</page>
 	</group>
 	<group caption="M" level="1" locked="0" altdim="false" notforid="true" Uid="27814">
-		<page caption="003_NHM" name="003_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1728823225" width="590" height="1199" Uid="27969">
+		<page caption="003_NHM" name="003_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1759952477" width="590" height="1199" Uid="27969">
 			<placeholders>
 				<alias name="web" type="NH_M" description="">aWeb.M[3]</alias>
 				<alias name="can" type="NH_CAN" description="">aWeb.A[3].can</alias>
@@ -590,7 +590,7 @@
 				<image optcap="" variable="SYSTEM_S.S2_2" type="BOOL" on="OK1.PNG" off="ERROR.PNG" />
 			</object>
 		</page>
-		<page caption="002_NHM" name="002_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1728823207" width="590" height="1199" Uid="27931">
+		<page caption="002_NHM" name="002_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1759952480" width="590" height="1199" Uid="27931">
 			<placeholders>
 				<alias name="web" type="NH_M" description="">aWeb.M[2]</alias>
 				<alias name="can" type="NH_CAN" description="">aWeb.A[2].can</alias>
@@ -980,7 +980,7 @@
 				<image optcap="" variable="SYSTEM_S.S2_2" type="BOOL" on="OK1.PNG" off="ERROR.PNG" />
 			</object>
 		</page>
-		<page caption="001_NHM" name="001_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1739571754" width="590" height="1199" Uid="28128">
+		<page caption="001_NHM" name="001_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1759952481" width="590" height="1199" Uid="28128">
 			<placeholders>
 				<alias name="web" type="NH_M" description="">aWeb.M[1]</alias>
 				<alias name="can" type="NH_CAN" description="">aWeb.A[1].can</alias>

@@ -3865,7 +3865,7 @@ FUNCTION _Nh_TER  {HIDDEN}  : BOOL
 			xTer^.me.f1R (	In 	:= 	xDev^.al.in.val + xTer^.cx.kor ,
 								fil	:=    USINT_TO_REAL( xTer^.cx.fil ),	// * 800.0,
 								hys	:=		xTer^.cx.hys,
-								rst	:= 	xDev^.al.in.cmd = 7 OR aSys.rst.Qr ,
+								rst	:= 	xDev^.al.in.cmd = 7 ,	//OR aSys.rst.Qr ,
 								sample:=    xTer^.cx.sample,
 								Out 	=> 	xDev^.al.OU.val		);										// tu uz pride len s 1.des. miestom
 
@@ -3939,7 +3939,7 @@ FUNCTION _Nh_LUX  {HIDDEN}  :BOOL
 								fil	:=    USINT_TO_REAL( xLux^.cx.fil ),	// * 800.0,
 								hys	:=		xLux^.cx.hys,
 								sample:=    xLux^.cx.sample,
-								rst	:= 	xDev^.al.in.cmd = 7 OR aSys.rst.Qr,
+								rst	:= 	xDev^.al.in.cmd = 7 , //OR aSys.rst.Qr,
 								Out 	=> 	xLux^.me.f1R.Out	);
 
 			IF xLux^.me.f1R.Qr OR aSys.RefCyc=2 THEN
@@ -7546,8 +7546,8 @@ FUNCTION	_NhDevControl  {HIDDEN}  : BOOL
 
 //	_Nh_Qx2( trg:=ADR(aSys.rst));
 //	aSys.rst.In	:= false;
-	aSys.rst();
-	aSys.rst.in	:= false;
+//	aSys.rst();
+//	aSys.rst.in	:= false;
 
 (*
 	CASE aSys.RefLvl OF

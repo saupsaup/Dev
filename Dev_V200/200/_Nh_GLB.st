@@ -887,8 +887,8 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 		IniErr		: USINT;
 		IniRun		: USINT;	//:=255;
 //		Init			: BOOL;
-		SaveMem		: BOOL;
-		logRst		: BOOL := true;	// loguje akciu do _NhRest,LOG
+//		SaveMem		: BOOL:=TRUE;		// pri nacitani z RBx/DBX do mObr sa najprv ulozi aktualny stav RAM do RBx/DBX
+		logRst		: BOOL:=TRUE;		// loguje akciu do _NhRest,LOG
 	END_VAR                        	
 	VAR_OUTPUT
 		Err			: BOOL;	
@@ -896,11 +896,10 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 		Done			: BOOL;
 		busy			: BOOL;
 		toFile		: BOOL;
+		cycleCnt		: UINT;	
 	END_VAR
 	VAR
 		fbCfgRW		: _Nh_File_RW;
-//		yDbx1	      : NH_DBX;                                // hlavny riadiaci subor vratane organizacie DBX
-//		yDbx2	      : NH_DBX;                                // hlavny riadiaci subor vratane organizacie DBX
 	END_VAR
 	done	:= false;		
 	CASE Go OF
@@ -913,29 +912,20 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 			fbCfgRW.size		:= xDbx^.vRam;
 		2:	// RBx->file
 			toFile				:= true;
-//yDbx1 := aDbx;
-        	IF SaveMem  THEN
-           	_Nh_Go_MemToDBX();
-				SaveMem	:= 0;
-			END_IF;				
-			ReadFromRBx(ramBoxAddress:=0, length:=SIZEOF(aDbx), varAddress:=PTR_TO_UDINT(ADR(mObr)));
-			xDbx					:= ADR(mObr);
-//yDbx2 := xDbx^;
-			fbCfgRW.adrVar		:= 0;
+        	_Nh_Go_MemToDBX();
+//			ReadFromRBx(ramBoxAddress:=0, length:=SIZEOF(aDbx), varAddress:=PTR_TO_UDINT(ADR(mObr)));		// only  for xDbx^.vRam 
+//			xDbx					:= ADR(mObr);
+			fbCfgRW.adrVar		:= aDbx.ver.Dbx0;
 			fbCfgRW.whatVar	:= 1;	
-			fbCfgRW.size		:= xDbx^.vRam;
+			fbCfgRW.size		:= aDbx.vRam;
 		3:	// DBX->file
 			toFile				:= true;
 			xDbx					:= ADR(mObr);
-
-	     	IF SaveMem  THEN
-           	_Nh_Go_MemToDBX(DBX:=true);
-				SaveMem	:= 0;
-			END_IF;				
-			ReadFromDBx(dataBoxAddress:=0, length:=SIZEOF(aDbx), varAddress:=PTR_TO_UDINT(ADR(mObr)));
-			fbCfgRW.adrVar		:= 0;
+        	_Nh_Go_MemToDBX(DBX:=true);
+//			ReadFromDBx(dataBoxAddress:=0, length:=SIZEOF(aDbx), varAddress:=PTR_TO_UDINT(ADR(mObr)));
+			fbCfgRW.adrVar		:= aDbx.ver.Dbx0;
 			fbCfgRW.whatVar	:= 2;	
-			fbCfgRW.size		:= MIN(aSys.Size_DBx, xDbx^.vRam);	// DBX max 128*1024=131072							
+			fbCfgRW.size		:= MIN(aSys.Size_DBx, aDbx.vRam);	// DBX max 128*1024=131072							
 
 	  11:	// file->MEM
 			toFile				:= false;
@@ -949,27 +939,33 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 			toFile				:= false;
 			fbCfgRW.adrVar		:= 0;
 			fbCfgRW.whatVar	:= 2;	
+	 201:	RETURN;
+	 202:	RETURN;
 	 255:	;
    ELSE	RETURN;
 	END_CASE;
-//	Go					:= 255;
 	IF Go = 255 THEN  																
 		;
 	ELSIF toFile THEN  																// write xxx -> to file
-		IF _Nh_Log_Path(wh:=3,wrk:=true,write:=true) THEN
-			// yTx1	:= CONCAT(aSys.DiskHed.Disk[1].path,'dbx.wrk');    // read from dbx.mem to yTx2
-			// yTx2 	:= CONCAT(aSys.ADR_DBX,DT_TO_STRINGF(aSys.NhDT,'%Thh_mm.dbx') ); // new backup file 'NH2/002/25_01_03/10_30.dbx'
-			aSys.UpdFile		:= 0;
+		cycleCnt	:= 0;
+		IF _Nh_Log_Path(wh:=22,frm:=1,wh2:=2) THEN 							// insert path to yTx2 + suffix and write to dbx.wrk {'NH2/002/2025_01/25_1030.DBX' -> dbx.wrk}
+ 			rb:=_NhSysLogMsg(msg:='TRUE : Write to:  {'+yTx1+'}{'+yTx2+'}',debug:=true);
+			yTx1:=yTx2;																	// yTx1:='dbx.wrk', yTx2:=full path
 			fbCfgRW.exec:=1; fbCfgRW.mode:=1; fbCfgRW.FullFile:=0; fbCfgRW.Line:=0;;
 		ELSE
+ 			rb:=_NhSysLogMsg(msg:='FALSE: Write to:  {'+yTx1+'}{'+yTx2+'}',debug:=true);
 			done	:= true; err	:= true;
- 			yTx2 	:= CONCAT('Err write backup file {','IF _Nh_Log_Path(wh:=3,wrk:=true,write:=true) THEN}' );
+			Go		:= 201;
 		END_IF;				
-	ELSIF	_Nh_Log_Path(wh:=3, mem:=true, read:=TRUE) THEN		// load last backup file from dbx.mem into yTx2
-		fbCfgRW.exec:=1; fbCfgRW.mode:=0; fbCfgRW.FullFile := 1;
+	ELSIF	_Nh_Log_Path(wh:=21,frm:=2) THEN									// load last backup file from dbx.mem into yTx2
+		cycleCnt	:= 0;
+		rb:=_NhSysLogMsg(msg:='TRUE : Read from: {'+yTx1+'}{'+yTx2+'}',debug:=true);
+		fbCfgRW.exec:=1; fbCfgRW.mode:=0; fbCfgRW.FullFile:=1; fbCfgRW.Line:=0;;
 	ELSE
+		cycleCnt	:= 0;
+		rb:=_NhSysLogMsg(msg:='FALSE: Read from: {'+yTx1+'}{'+yTx2+'}',debug:=true);
 		done	:= true;  err	:= true;
-		yTx2 	:= CONCAT('Err read backup file {','ELSIF	_Nh_Log_Path(wh:=3, mem:=true, read:=TRUE) THEN}');
+		Go		:= 202;
 	END_IF;	
 	IF fbCfgRW.exec THEN
 		err		:= false;
@@ -979,11 +975,13 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 	END_IF;
 
 	fbCfgRW(fileName:=yTx1, busy=>busy, done=>done);		
+	cycleCnt	:= cycleCnt + 1;	
 
 	IF fbCfgRW.err THEN
 		done		:= true;
 		err		:= true;
 	   GetLastErrTxt(errCode:=fbCfgRW.errID, errMessage := _LangTxt);
+		rb:=_NhSysLogMsg(msg:='fbCfgRW.err:='+UDINT_TO_STRING(fbCfgRW.errID)+' txt: '+_LangTxt+', {'+yTx1+'}{'+yTx2+'},cyc: '+UINT_TO_STRING(cycleCnt),debug:=true);
 (*
 		IF fbCfgRW.errID < 1000 THEN
 		   GetLastErrTxt(errCode:=fbCfgRW.errID, errMessage := _LangTxt);
@@ -992,9 +990,6 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 
 		END_IF;
 *)
-		yTx2	:= CONCAT(
-						'err: {',UDINT_TO_STRING(fbCfgRW.errID),'} msg:{',_LangTxt,'} ',
-						'{',yTx1,'};{',yTx2,'}'); //{',USINT_TO_STRING(WhatDo),'}');
 	END_IF;
    IF done THEN
 		aSys.Ini			:= IniEnd;
@@ -1007,15 +1002,14 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 		IF err THEN
 			aSys.Ini			:= IniErr;
 		ELSIF toFile THEN
-			rb := _Nh_Log_Path(wh:=3,read:=TRUE);							// rename dbx.wrk -> dbx.mem, and load actual backup into yTx2 from .mem
+			rb := _Nh_Log_Path(wh:=21,frm:=3);							// rename dbx.wrk -> dbx.mem, and load actual backup into yTx2 from dbx.mem
  			yTx2 	:= CONCAT('New Bakup {',yTx3,'}->{',yTx2,'}' );
 		ELSE
-			rb 	:= _Nh_Log_Path(wh:=3, mem:=true,read:=TRUE);					     		
+			rb 	:= _Nh_Log_Path(wh:=21,frm:=2);						// read path from dbx.mem to yTx2
  			yTx2 	:= CONCAT('Restore {',yTx2,'}->{',yTx3,'}' );
 		END_IF;
 		IF logRst THEN
- 			yTx2 	:= CONCAT(yTx2,'{',UDINT_TO_STRING(fbCfgRW.adrVar),'}{',UDINT_TO_STRING(fbCfgRW.actSize),'}');		
-   		rb  	:= _Nh1RowTxt(logRst:=1,adTime:=3);
+			rb:=_NhSysLogMsg(msg:='->'+yTx2+' sz:{'+UDINT_TO_STRING(fbCfgRW.actSize)+'},cyc:'+UINT_TO_STRING(cycleCnt));
 		END_IF;	
 		Go 				:= 0;
 		IniEnd			:= 0;
@@ -1023,12 +1017,13 @@ FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> 
 		IniRun			:= 0;
 		logRst			:= true;	
 		err				:= 0;
-		SaveMem			:= 0;
 		fbCfgRW(fileName:=yTx1, busy=>busy, done=>done);				// len abu sa resertli busy,done
 	END_IF;
 END_FUNCTION_BLOCK
 
-
+VAR_GLOBAL
+	fb_Nh_Cfg_Backup		: _Nh_Cfg_Backup;
+END_VAR
 
 (*
 FUNCTION_BLOCK _Nh_Cfg_Backup		// backup MEM/RAM/DBX -> File or Restore File -> MEM/RAM/DBX
@@ -1187,8 +1182,8 @@ END_FUNCTION_BLOCK
 *)
 
 VAR_GLOBAL
-	fbCfgBck		      : _Nh_Cfg_Backup;
-	fb_RBx_To_File		: _Nh_Cfg_Backup;
+//	fbCfgBck		      : _Nh_Cfg_Backup;
+//	fb_RBx_To_File		: _Nh_Cfg_Backup;
 END_VAR		
 
 FUNCTION _NhSysUpd  : BOOL	
@@ -1198,6 +1193,7 @@ FUNCTION _NhSysUpd  : BOOL
 		dbx   : USINT;          // + mem
       file  : USINT;          // + file
    END_VAR
+	_NhSysUpd	:= TRUE;
 	IF aSys.UpdDbx < 255 THEN
 		aSys.UpdDbx 	:= aSys.UpdDbx 	+ dbx;
 	END_IF;
@@ -1205,23 +1201,25 @@ FUNCTION _NhSysUpd  : BOOL
 		aSys.UpdFile 	:= aSys.UpdFile	+ file;
 	END_IF;
 	IF aSys.UpdDbx > 0 OR fDbx THEN
-		IF fbCfgBck.busy = false THEN		
+		IF fb_Nh_Cfg_Backup.busy = false THEN		
 			_Nh_Go_MemToDBX();             													// vykona MEM->RAM
 		ELSE
 			aSys.UpdDbx := 100;
 		END_IF;
 	END_IF;	
 	IF aSys.UpdFile > 10 OR fFile THEN
-		IF fbCfgBck.busy = false THEN
+		IF fb_Nh_Cfg_Backup.busy = false THEN
 			IF aSys.IS_RBx THEN
-				fbCfgBck.Go := 2;
+				fb_Nh_Cfg_Backup.Go := 2;
 			ELSIF aSys.IS_DBx THEN
-				fbCfgBck.Go := 3;
+				fb_Nh_Cfg_Backup.Go := 3;
 			ELSE
-				fbCfgBck.Go := 1;		
+				fb_Nh_Cfg_Backup.Go := 1;		
 			END_IF;
 			// nastartuje RAM - > File
-			fbCfgBck.SaveMem:=true; fbCfgBck.IniEnd:=aSys.ini; fbCfgBck.IniErr:=0; fbCfgBck.IniRun:=0;
+			fb_Nh_Cfg_Backup.IniEnd:=aSys.ini; fb_Nh_Cfg_Backup.IniErr:=0; fb_Nh_Cfg_Backup.IniRun:=0;
+		ELSE
+			_NhSysUpd	:= FALSE;
 		END_IF;
 	END_IF;	
 (*
@@ -1554,45 +1552,6 @@ FUNCTION _Nh_Poi_Obr {HIDDEN} : INT // z POI vycita obrazok/interval/cas do najb
    END_IF;
 END_FUNCTION
 
-
-(*
-FUNCTION _Nh_EndDT   : DT      //
-   VAR_INPUT
-      wht         : USINT;                   // 0= 1=na konci dna
-      xTdt        : PTR_TO TTecoDateTime;
-      tMin        : UINT;                     // pocet minut na pripocitanie
-         x        : USINT;
-   END_VAR
-   CASE wht OF
-      0 :   // pripocitat HH:MM z TTecoDateTime
-(*
-            _Nh_EndDT := ADD_DT_TIME(in1 := aSys.NhDT, in2 := LREAL_TO_TIME(
-                   (  USINT_TO_LREAL(xTdt^.hour) * 60.0 +
-                     USINT_TO_LREAL(xTdt^.min)) * 60000.0 ));
-
-            _Nh_EndDT := ADD_DT_TIME(in1 := aSys.NhDT, in2 := T#1h * xTdt^.hour + T#1m * xTdt^.min);
-      1 :   // pripocitat DD:HH:MM z TTecoDateTime
-            _Nh_EndDT := ADD_DT_TIME(in1 := aSys.NhDT, in2 := T#1d * xTdt^.Day + T#1h * xTdt^.hour + T#1m * xTdt^.min);
-      2 :   // na konci dna
-            _Nh_EndDT := ADD_DT_TIME(in1 := DATE_TO_DT(aSys.NhDate), in2 := T#24h );      // DATE_TO_DT vytvpri dnesny datum, kde mudu HH:MM:SS = 0
-      3 :   // den v tyzdni
-            IF SYSTEM_S.COUNTER_DAYS_OF_WEEK < xTdt^.Day THEN
-               x := xTdt^.Day - SYSTEM_S.COUNTER_DAYS_OF_WEEK;
-               _Nh_EndDT := ADD_DT_TIME(in1 := DATE_TO_DT(aSys.NhDate), in2 := T#1d * x + T#1h * xTdt^.hour + T#1m * xTdt^.min);
-            ELSIF SYSTEM_S.COUNTER_DAYS_OF_WEEK = xTdt^.Day
-                  AND aSys.NhTime < T#1h * xTdt^.hour + T#1m * xTdt^.min
-                  THEN
-               _Nh_EndDT := ADD_DT_TIME(in1 := DATE_TO_DT(aSys.NhDate), in2 := T#1h * xTdt^.hour + T#1m * xTdt^.min);
-            ELSE
-               x := 7-SYSTEM_S.COUNTER_DAYS_OF_WEEK + xTdt^.Day ;   // (Ned-Stv) + Str := 7-4 + 3  =
-               _Nh_EndDT := ADD_DT_TIME(in1 := DATE_TO_DT(aSys.NhDate), in2 := T#1d * x + T#1h * xTdt^.hour + T#1m * xTdt^.min);
-//               _Nh_EndDT := ADD_DT_TIME(in1 := aSys.NhDT, in2 := SUB_TIME(T#24h,aSys.NhTime));
-            END_IF;
-     100:   // pripocitat tMin k aktualnemu casu
-            _Nh_EndDT := ADD_DT_TIME(in1 := aSys.NhDT, in2 := LREAL_TO_TIME( UINT_TO_LREAL(tMin) * 60000.0 ) );
-   END_CASE;
-END_FUNCTION
-*)
 
 FUNCTION _Nh_Fix_TME_TO_DT {HIDDEN}  : DT      //
    VAR_INPUT
@@ -2229,39 +2188,34 @@ END_FUNCTION
 FUNCTION _NhIsDBxCfgOk     : BOOL	 // Find CRC in RBx o DBX
 	VAR_INPUT
 		RBx		: BOOL;	// read from RamBox	
-		mess  	: BOOL := true;
+//		mess  	: BOOL := true;
 	END_VAR
 	_NhIsDBxCfgOk	:= false;
-	xDbx 	:= ADR(mObr);
-	IF RBx THEN
+	xDbx 	:= ADR(mObr);									// wrk memory
+	rb		:= FALSE;
+	IF RBx THEN												// read from RamBox
 		rb 		:= ReadFromRBx( ramBoxAddress  := 0, length := MIN(SIZEOF(mObr),SIZEOF(aDbx)), varAddress := PTR_TO_UDINT(xDbx) );
 		_LangTXT	:= 'RBx. ';
-	ELSIF aSys.IS_DBx THEN
+	ELSIF aSys.IS_DBx THEN								// read from DataBox
  		rb 		:= ReadFromDBx( dataBoxAddress := 0, length := SIZEOF(aDbx), varAddress := PTR_TO_UDINT(xDBx) );
 		_LangTXT	:= 'DBX. ';
 	END_IF;
-	IF rb AND aDbx.ver.CRC = xDbx^.ver.CRC THEN
+	IF rb = false THEN
+		_LangTXT			:= CONCAT(_LangTXT,'Error ReadFrom. ');	
+	ELSIF aDbx.ver.CRC = xDbx^.ver.CRC THEN	// RBx or DBx read and CRC ok
 		_NhIsDBxCfgOk	:= TRUE;
 		_LangTXT			:= CONCAT(_LangTXT,'Ok. ');	
 		IF RBx = false THEN
 			xDbx^.FromDBx128 := SizeOfDataBox() = 128;		// pri prechode z DBX na RBx zaznaci do DBX ze DBX mal je 128k a moze byt
  			rb 		:= WriteToDBx( dataBoxAddress := 0, length := SIZEOF(aDbx), varAddress := PTR_TO_UDINT(xDbx) );  // zapise spat do DBX oznacit
 		END_IF;
-	ELSIF rb = false THEN
-		_LangTXT			:= CONCAT(_LangTXT,'Error ReadFrom. ');	
 	ELSE
 		_LangTXT			:= CONCAT(_LangTXT,'Different versions. ');	
 	END_IF;
-	IF mess THEN
-		yTx2	:= CONCAT('.Search ',_LangTXT,'{',aDbx.ver.CRC,'}{',xDbx^.ver.CRC,'}');
-  		_Nh1RowTxt(logRst:=1);
-	END_IF;
+	rb:=_NhSysLogMsg(msg:='.Search '+_LangTXT+'{'+aDbx.ver.CRC+'}{'+xDbx^.ver.CRC+'}');
 	IF _NhIsDBxCfgOk = false THEN
-		aSys.CfgBckOk := _Nh_Log_Path(wh:=3, mem:=true, read:=TRUE);			// yTx1:=dbx.mem, yTx2 read from dbx.mem and check if backup file exists
-		IF mess THEN
-			yTx2 	:= CONCAT('..No: ',BOOL_TO_STRINGF(RBx,'%b{Rbx^DBX}'),'... Read dbx.mem: {',yTx1,'} CFG: {',yTx2,'}');
-			_Nh1RowTxt(logRst:=1);
-		END_IF;
+		aSys.CfgBckOk := _Nh_Log_Path(wh:=21,frm:=2);		// 1) if file NH2/dbx.mem exists 2) and there is also a backup file {USB/200/2025_10/29_hhmm.DBX} from dbx.mem
+		rb:=_NhSysLogMsg(msg:='..No: '+BOOL_TO_STRINGF(RBx,'%b{Rbx^DBX}')+'. Read: {'+yTx1+'} dbx: {'+yTx2+'}');
 	END_IF;
 END_FUNCTION
 

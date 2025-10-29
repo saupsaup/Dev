@@ -4,17 +4,29 @@
    END_FUNCTION
 { $ END_IF } 	
 
-VAR_GLOBAL
-  		fbImpCIB				: 	_Nh_Import_CIB;
-		fbCfgRST				: 	_Nh_Cfg_Restart;
-		fb_Nh_Create_DIR		: 	_Nh_Create_DIR_FB;
-END_VAR
+TYPE _Nh_Last_State_ON : STRUCT 		// last state PRG/CPU before restart
+		lastDT:		DT; (* Comment *)
+		Ini: 			USINT;
+		copy:		BOOL;
+		cfg:		BOOL;
 
+	END_STRUCT
+END_TYPE
+
+VAR_GLOBAL
+  	fb_Nh_Import_CIB		: _Nh_Import_CIB;
+	fb_Nh_Cfg_Restart		: _Nh_Cfg_Restart;
+	fb_Nh_Create_DIR		: _Nh_Create_DIR_FB;
+//	fb_Nh_Copy_DIR			: _Nh_Copy_DIR;
+	fb_Nh_Log_DBX_RW		: _Nh_Log_DBX_RW;		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
+END_VAR
+VAR_GLOBAL RETAIN
+	_NhLastPowerOffState		: _Nh_Last_State_ON; 		// last state PRG/CPU before Power OFF
+END_VAR
 	
 PROGRAM prgMain
    VAR
-   	fbCrHet			: _Nh_Create_HET;
-
+   	fbCrHet				: _Nh_Create_HET;
       { $ IFDEF __NH_WEB }
          fbWebControl   : _NhWebControl;
       { $ END_IF  } 	
@@ -30,22 +42,24 @@ PROGRAM prgMain
 		DeleteFilesLog : DeleteOldFilesLog;
 
    END_VAR
-   rb 						:= 1;
-	aSys.NhTime    		:= GetTime();
-   aSys.NhDate    		:= GetDate();
-   aSys.NhDT      		:= GetDateTime();						// skoro strojovy cas zaciatku cyklu, ked sa uz zapli vsetky vystupy
-   aSys.LogHed.logTime  := TIME_TO_STRINGF(aSys.NhTime,'%Thh:mm:ss.zz');
-   aSys.LogHed.logDate  := DATE_TO_STRINGF(aSys.NhDate,'%TYY-MM-DD');
+//	rb 							:= 1;
+	aSys.RWtoFileCycle		:= 0;																	// how many writes to all files in cyc
+	aSys.NhTime    			:= GetTime();
+  	aSys.NhDate    			:= GetDate();
+  	aSys.NhDT      			:= GetDateTime();													// skoro strojovy cas zaciatku cyklu, ked sa uz zapli vsetky vystupy
+  	aSys.LogHed.logTime  	:= TIME_TO_STRINGF(aSys.NhTime,'%Thh:mm:ss.zz');
+  	aSys.LogHed.logDate  	:= DATE_TO_STRINGF(aSys.NhDate,'%TYY-MM-DD');
 
-	aSys.RWtoFileCycle	:= 0;
 
 
 	// 1   SEC 	=  10000 SYSTEM_S.LAST_CYCLE_TIME_100US      1.0 * 10 000
 	// 0,7 SEC 	=  7000 SYSTEM_S.LAST_CYCLE_TIME_100US	   	0.7 * 10 000
 	// 0.001    =    10
-   aSys.dMin      := USINT_TO_INT(SYSTEM_S.COUNTER_HOURS) * 60 + USINT_TO_INT(SYSTEM_S.COUNTER_MINUTES);  // pocet minut v ramci dna
-	aSys.rSec	   := UINT_TO_REAL( SYSTEM_S.LAST_CYCLE_TIME_100US) /10.0 ;		// REAL: doba minuleho cyklu v mS (prevod zo 100 mikrosekund)							
+   	aSys.dMin      	:= USINT_TO_INT( SYSTEM_S.COUNTER_HOURS ) * 60 + USINT_TO_INT(SYSTEM_S.COUNTER_MINUTES);  // pocet minut v ramci dna
+	aSys.rSec	   	:= UINT_TO_REAL( SYSTEM_S.LAST_CYCLE_TIME_100US ) / 10.0 ;		// REAL: doba minuleho cyklu v mS (prevod zo 100 mikrosekund)							
 	aSys.mSec		:= REAL_TO_UINT( ROUND(  aSys.rSec ) );			            // UINT: doba minuleho cyklu v mS  (prevod zo 100 mikrosekund)							
+//	aSys.rTime     	:= TIME_TO_REAL(aSys.NhTime);				// REAL: cas v sekundach od polnoci
+	
 	IF System_S.F_EDGE_10SEC THEN	//System_S.F_EDGE_1MIN OR  System_S.R_EDGE_1MIN THEN				// kazdych 30sec
 		aSys.LogHed.Quite10Sec := aSys.LogHed.Quite10Sec + 1;
 		IF aSys.LogHed.Quite10Sec > 6 THEN														// ak nebol 1 min zapis, zavrie subor
@@ -89,36 +103,23 @@ PROGRAM prgMain
 		aSys.et200			:= 0;
 		aSys.PULSE_200MS 	:= NOT aSys.PULSE_200MS;
 	END_IF;
-
-
 	// USINT
 	aSys.n1Min     := BOOL_TO_USINT(SYSTEM_S.F_EDGE_1MIN);           // kazdu 1.Min bude = 1
 	aSys.n100ms    := BOOL_TO_USINT(SYSTEM_S.F_EDGE_100MS);     //;
 	aSys.n50ms     := BOOL_TO_USINT(SYSTEM_S.R_EDGE_100MS OR SYSTEM_S.F_EDGE_100MS);     //;
 	// UINT
-
 	aSys.u1Min     := BOOL_TO_UINT(SYSTEM_S.F_EDGE_1MIN);           // kazdu 1.Min bude = 1
-	aSys.i1Sec     := USINT_TO_INT(aSys.n1Sec);                     // kazdu 1.Sec bude = 1
-
-	aSys.RestCyc   := aSys.RestCyc + 1;
-
-	// INT
-   	aSys.i1Min     := USINT_TO_INT(aSys.n1Min);           // kazdu 1.Min bude = 1
-   	aSys.rTime     := TIME_TO_REAL(aSys.NhTime);
-
-	aSys.cyc     	:= NOT aSys.Cyc;
-
-
+  	aSys.i1Min     := USINT_TO_INT(aSys.n1Min);           			// MIN	: INT
 	// 1. sec	
 	IF SYSTEM_S.F_EDGE_1SEC THEN
-	   	aSys.n1Sec     := 1;           // kazdu 1.sec bude = 1	
-   		aSys.u1Sec     := 1;           // kazdu 1.sec bude = 1
+   	aSys.n1Sec     := 1;           								// SEC	: USINT
+  		aSys.u1Sec     := 1;           								// SEC	: UINT
 	ELSE
-	   	aSys.n1Sec     := 0;           // kazdu 1.sec bude = 1	
-   		aSys.u1Sec     := 0;           // kazdu 1.sec bude = 1
+   	aSys.n1Sec     := 0;           
+  		aSys.u1Sec     := 0;           
 	END_IF;
-
-
+	aSys.cyc     		:= NOT aSys.Cyc;							// kazdy cyklus sa prepne
+	aSys.RestCyc   	:= aSys.RestCyc + 1;
 
 
 
@@ -128,14 +129,14 @@ PROGRAM prgMain
 			// sekvencia 3 cyklov za sebou po prechode na novu minutu, alebo natvrdo zadanim aSys.RefCycNew := true
 			// 1 -> 2 -> 3 ->  0
 			CASE aSys.RefCyc OF
-			0:  IF aSys.RefCycNew THEN										// je zaradena nova poziadavka na restart sekvencie - zacne az ked skonci predchadzajuca sekvencia
-					aSys.RefCyc		:=	1;
-					aSys.RefCycNew	:= false;
-				END_IF;
-			3:  // obehlo 3x
-				aSys.RefCyc	:=	0;						
+				0:  IF aSys.RefCycNew THEN										// je zaradena nova poziadavka na restart sekvencie - zacne az ked skonci predchadzajuca sekvencia
+						aSys.RefCyc		:=	1;
+						aSys.RefCycNew	:= false;
+					END_IF;
+				3:	// obehlo 3x
+					aSys.RefCyc	:=	0;						
 			ELSE			
-				aSys.RefCyc := aSys.RefCyc + 1;                 // rucne sa moze nastartovat hocikde v programe na (1), tu sa prida na (2)
+					aSys.RefCyc := aSys.RefCyc + 1;                 // rucne sa moze nastartovat hocikde v programe na (1), tu sa prida na (2)
 			END_CASE;
 
 (*)
@@ -169,22 +170,17 @@ PROGRAM prgMain
                _NhDataWrk();
 			{ $ END_IF }
 
-            _NhDevControl();           // fyzicke nastavenie DEV, malo buy byt prve
-
-				fbNotify();
-				fbWebPush();
+         _NhDevControl();           // fyzicke nastavenie DEV, malo buy byt prve
+			fbNotify();
+			fbWebPush();
             
 			aSys.F_EDGE_1MIN		:= FALSE;		// vynuluje sa edge
 			aSys.F_EDGE_1DAY		:= FALSE;		// vynuluje sa edge			
 			aSys.F_EDGE_1MON		:= FALSE;		// vynuluje sa edge
-			aSys.Restart   			:= false;                     						// vynuluje sa restart, ale az ked sa prebehu prvykrat vsetky DEV
+			aSys.Restart  			:= false;                     						// vynuluje sa restart, ale az ked sa prebehu prvykrat vsetky DEV
 
-				IF aSys.RestartBck = false THEN										// este nebol urobeny backup po restarte		
-					IF  SUB_DT_DT(aSys.NhDT,aSys.LastRstDT) > T#1m THEN     // 1min after restart, create backup file
-						aSys.RestartBck 	:= true;
-						_NhSysUpd(fFile:=true);
-					END_IF;
-				END_IF;
+(*
+*)
 
 //				yTx2 := 'MSG;23.08.25;13:45:51; 1;       err;13:45:51;pohyb sss,dddd,ssss,sssssss';
 //    			rb		:= _Nh1RowTxt(logRst := 1);
@@ -336,34 +332,11 @@ PROGRAM prgMain
 *)
 
      	10:    ;  // nic
-            yTx2           := 'Check data: _Nh_DEV_RESTART ';
-            rb             := _Nh1RowTxt(logRst := 1);
+            rb             := _NhSysLogMsg(msg:='Check data: _Nh_DEV_RESTART');
 		     	_Nh_DEV_RESTART();
-            yTx2           := '*** KONIEC RESTARTU ***';
-//            rb             := _Nh1RowTxt(logRst := 1, adTime := 1);
-            rb       		:= _Nh1RowTxt(logRst:=1, adTime:=3);
-            yTx2           := '';
-            rb             := _Nh1RowTxt(logRst := 1);
+            rb       		:= _NhSysLogMsg(eRowAfter:=1,msg:='*** KONIEC RESTARTU ***');
             _NhCloseAllFiles();
             aSys.ini       := 0;
-
-				yTx1 				:= aSys.DiskHed.Disk[1].path + 'DEL.LOG' ;
-				FileDelete(fileName := yTx1);
-				DeleteFilesLog.LogName := yTx1;
-
-
-//				aSys.ClearDisk[0]	:= 1;				
-
-//				DeleteFilesLog.logName 		:= 'WWW/LOGS/DEL_20' + USINT_TO_STRING( System_S.COUNTER_YEARS) + '.LOG';
-
-
-//            DeleteFiles.dirName 			:= 'WWW/'; //'NH2/';
-//            DeleteFiles.fileMask   		:= '*';
-//				DeleteFiles.maxSpace   		:= 1024*1024;
-//				DeleteFiles.delEmptyDir 	:= true;
-
-//				DeleteFilesLog.logName 		:= 'WWW/LOGS/DEL_20' + USINT_TO_STRING( System_S.COUNTER_YEARS) + '.LOG';
-//				DeleteFilesLog.logName 		:= 'NH2/DEL_20' + USINT_TO_STRING( System_S.COUNTER_YEARS) + '.LOG';
 	
 		11:	// vytvori HET
 				fbCrHet();
@@ -390,9 +363,9 @@ PROGRAM prgMain
             fbCrDir();
 *)
      	40:    // Upload program
-            yTx2           := CONCAT('start LoadNewPackage2:',yTx4);
+				yTx2           := CONCAT('start LoadNewPackage2:',yTx4);
             rb             := _Nh1RowTxt(logRst := 1, adTime:=3, EmpRow:=1);
-				ok := LoadNewPackage2( rq := true, pckg := yTx4);
+				ok 				:= LoadNewPackage2( rq := true, pckg := yTx4);
             yTx2           := CONCAT('End LoadNewPackage2:',BOOL_TO_STRINGF(ok,'%b{Yes^No}' ));
             rb             := _Nh1RowTxt(logRst := 1, adTime:=3);
 				aSys.ini			:= 0;	
@@ -410,26 +383,26 @@ PROGRAM prgMain
 
 
 
-   180:    // export VAZ[1..4]
+   	180:    // export VAZ[1..4]
 				cf 		:= 1;
 				nd			:= 1;
 				_NhxVaz(cv:=cf,nd:=nd);
            	aSys.ini := 181;
-   181:    //
+   	181:    //
 		    	IF _Nh_Vaz_LOG_CV() THEN
 					cf 		:= 2;
 					nd			:= 1;
 					_NhxVaz(cv:=cf,nd:=nd);
 	            aSys.ini       := 182;
 		    	END_IF;
-   182:    //
+   	182:    //
 		    	IF _Nh_Vaz_LOG_CV() THEN
 					cf 		:= 3;
 					nd			:= 1;
 					_NhxVaz(cv:=cf,nd:=nd);
 	            aSys.ini       := 183;
 		    	END_IF;
-   183:    //
+   	183:    //
 		    	IF _Nh_Vaz_LOG_CV() THEN
 					cf 		:= 4;
 					nd			:= 1;
@@ -437,13 +410,13 @@ PROGRAM prgMain
             aSys.ini       := 184;
 //	            aSys.ini       := 100;
 		    	END_IF;
-   184:    //
+   	184:    //
 	            aSys.ini       := 100;
 		    	IF _Nh_Vaz_LOG_CV() THEN
 	            aSys.ini       := 100;
 		    	END_IF;
 
-	190:    // skontroluje a prida POI
+		190:    // skontroluje a prida POI
             _Nh_POI_INI();
 (*
 				IF _GoExp THEN
@@ -459,7 +432,7 @@ PROGRAM prgMain
 
 
 
-    200:    // otestuje vazby a ich parametre
+    	200:    // otestuje vazby a ich parametre
             { $IFDEF __NH_WRK }
                _NhDataWrk();
             { $END_IF }
@@ -468,20 +441,20 @@ PROGRAM prgMain
 
 
 (*
-    210:    // skontroluje konzistenciu ROM,SBJ ....., nastartuje parametre
+    	210:    // skontroluje konzistenciu ROM,SBJ ....., nastartuje parametre
             _Nh_Ini_DEV_Test();
            	aSys.ini       := 213;
 *)
 
-    213:    // otestuju sa postupne vsetky CFG prida parametre k DEV
+    	213:    // otestuju sa postupne vsetky CFG prida parametre k DEV
             _Nh_Ini_PAR_Test();
 
-    214:    // koniec testu parametrov
+    	214:    // koniec testu parametrov
             aSys.ini := 200;
 
 
 (*
-	 215:    // z Nh2.ADR vytvori/aktuaizuje MIESTNOSTI a DEV, alebo len aktualizuje HW-adresy
+	 	215:    // z Nh2.ADR vytvori/aktuaizuje MIESTNOSTI a DEV, alebo len aktualizuje HW-adresy
          { $IFDEF __NH_EXP }
             fb_Nh_EXP_ALL();
          { $ ELSE  } 	
@@ -489,7 +462,7 @@ PROGRAM prgMain
          { $ END_IF  } 	
 *)
 
-    217:    // len pre testovanie,
+    	217:    // len pre testovanie,
 // _NhIsObrOk(frm:=260);
 
             { $IFDEF __NH_WRK }
@@ -499,7 +472,7 @@ PROGRAM prgMain
 
 ////***********************
 
-    220:    // dorobi default vety + CAT,USR,FAV,HET ...,
+    	220:    // dorobi default vety + CAT,USR,FAV,HET ...,
             _Nh_Ini_DEFAUL_CFG();    							// dorobi default data					
 
 //				aSys.ini := 217;
@@ -510,25 +483,25 @@ PROGRAM prgMain
             _Nh_Go_MemToDBX();                           // ulozi aktualnu RAM do DBX
 				aSys.ini := 222;
 
-	 222:    // START Import dev+HW address CIB
+	 	222:    // START Import dev+HW address CIB
 				yTx2 		:= 'START Import CIB';
 				_Nh1RowTxt(logRst:=1); //,EmpRow:=1);
-				fbImpCIB(Go:=1);
+				fb_Nh_Import_CIB(Go:=1);
             { $IFDEF __NH_WRK }
                _NhDataWrk();
             { $END_IF }
 				aSys.Ini 		:= 223;
-	 223:    // Running Import CIB
-            fbImpCIB();
-				IF fbImpCIB.err THEN				
+	 	223:    // Running Import CIB
+            fb_Nh_Import_CIB();
+				IF fb_Nh_Import_CIB.err THEN				
 					aSys.Ini 	:= 217;
-				ELSIF fbImpCIB.done THEN
+				ELSIF fb_Nh_Import_CIB.done THEN
 					yTx2 	:= 'END Import CIB';
 					_Nh1RowTxt(logRst:=1);
 					aSys.Ini 	:= 225;
    			END_IF;
 
-    225:    // skontroluje konzistenciu ROM,SBJ ....., nastartuje parametre
+    	225:    // skontroluje konzistenciu ROM,SBJ ....., nastartuje parametre
 
 
 
@@ -536,250 +509,219 @@ PROGRAM prgMain
 				aSys.exp			:= 0;
            	aSys.ini       := 213;
 
-    229:    // Err section 22x
+    	229:    // Err section 22x
 				;
 
 (*	RESTART
 	250		skontroluje DBx,RBx
 				_Nh_CUST_RESTART()
 	251		_Nh_Create_DIR(Go:=1)
-	240-242	fbCrFRM	COPY NH2/200/FRM/*.* -> RAM/FRM/			
+	240-242	fb_Nh_Create_FRM	COPY NH2/200/FRM/*.* -> RAM/FRM/			
 	230		zisti ci mame MEM niekde zalohovanu v poradi
 				1.RBx .. _NhIsDBxCfgOk(RBx:=true)
 				2.File   aSys.CfgBckOk {oznaci_NhIsDBxCfgOk() }
 				3.DBx	   _NhIsDBxCfgOk(), ak sa najde prekopiruje sa do RBx: DBx->RBx
 	231-232	Load&Convert Old CFG->Mem (z: RBx alebo DBx)
 	220		_Nh_Ini_DEFAUL_CFG() - dorobi default data
-	222-223	fbImpCIB() :	Import dev+HW address CIB
+	222-223	fb_Nh_Import_CIB() :	Import dev+HW address CIB
 	225		_Nh_Ini_DEV_Test()	- zakladne testy konzistencie
 	213-214 	_Nh_Ini_PAR_Test();	- testy PAR + prida nove PAR
 	200		_NhIniVAZ(); 			- konzistenia vazieb
 	190		_Nh_POI_INI();      	- skontroluje a prida POI
 	100-50	 _Nh_Go_MemToDBX(); 	- 'Na zaver upravena  RAM->DBX';
 	10			_Nh_DEV_RESTART(),_NhCloseAllFiles();	- pozatvara vsetky subory na SDC a otvori _NhLangTxt
-*)
+*)            			
+		
 
-
-	 230:    // find CFG (aMem) in RamBox/DataBox/SDC, then copy to RamBox and then RBx->Mem
-
-
+	 	230:    // find CFG (aMem) in RamBox/DataBox/SDC, then copy to RamBox and then RBx->Mem
 			 	IF aSys.NewDBX THEN
 					aSys.CfgBckOk	:=	false;
 					aSys.UseRBx	   := aSys.IS_RBx;
-					yTx2 		      := 'NEW Cfg requested !';
-					rb             := _Nh1RowTxt(logRst := 1);
+					rb:=_NhSysLogMsg(msg:='NEW Cfg requested !');
 					aSys.Ini			:= 220;
 				ELSE
-					rmp 				:= 230;																		// default Next
-					ok2				:= false;
+					fb_Nh_Cfg_Backup.IniEnd:=230; fb_Nh_Cfg_Backup.IniErr:=239; fb_Nh_Cfg_Backup.IniRun:=255;	// predbezne
 					IF aSys.IS_RBx  THEN																			// from RamBox
-//						rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=aDbx.vRam, value := 0);                         	// clear
-//						rb	:= WriteToRBx      (ramBoxAddress:=0, length:=aDbx.vRam, varAddress := PTR_TO_UDINT(ADR(mRam))); // ok
-						fbCfgBck.IniEnd:=230; fbCfgBck.IniErr:=239; fbCfgBck.IniRun:=255;	// predbezne
 						IF _NhIsDBxCfgOk(RBx:=true) THEN                      						// v RBx je obraz mem
-    						yTx2  		:= 'RamBOX OK.';
+    						yTx2  		:= '->RamBOX OK.';
 							aSys.UseRBx	:= true;
 							aSys.Ini 	:= 231;				
 						ELSIF aSys.CfgBckOk THEN      															// na zaciatku je 0, potom nastavi
     						yTx2  			:= '...No-RBx,but File.Ok.{File->RBx}';
-							fbCfgBck.Go		:= 12; 																		// file->RAM, next back here
+							fb_Nh_Cfg_Backup.Go		:= 12; 																		// file->RAM, next back here
 						ELSIF _NhIsDBxCfgOk(RBx:=false) THEN                      					// v DBX je obraz mem
     						yTx2  		:= '..DBX-Ok.{DBX->File}';						
-							fbCfgBck.Go	:= 3;	   																// DBX->File
+							fb_Nh_Cfg_Backup.Go	:= 3;	   																// DBX->File
 						ELSE
    	 					yTx2  			:= '...No RBx/DBx/File -> {Go empty: NewDBX=true}';						
 							aSys.NewDBX    := true;
 						END_IF;
   					ELSIF aSys.CfgBckOk THEN																	// after
   						yTx2  := '...CPU has no RamBox,but File from DBx.Ok.{now File->Mem}';
-						fbCfgBck.Go:=11; fbCfgBck.IniEnd:=220;												// file->Mem
+						fb_Nh_Cfg_Backup.Go:=11; fb_Nh_Cfg_Backup.IniEnd:=220;												// file->Mem
 						aSys.UseRBx	:= false;
 					ELSIF _NhIsDBxCfgOk(RBx:=false) THEN                      						// v DBX je obraz mem
   						yTx2  		:= '..CPU has no RamBox,but DBX-Ok.{DBX->File}';						
-						fbCfgBck.Go	:= 3;	   																	// DBX->File, next back here
+						fb_Nh_Cfg_Backup.Go	:= 3;	   																	// DBX->File, next back here
 						aSys.UseRBx	:= true;
 					ELSE
 						yTx2 			:= 'CPU has no RamBox, and NOT DBX. {Go empty: NewDBX=true}';
 						aSys.NewDBX := true;
 					END_IF;
-					rb 		:= _Nh1RowTxt(logRst := 1);
-																							// default Next
-
-(*
-
-					IF ok2 THEN																// hladat v DBx
-
-//						rb:= WriteToDBx( dataBoxAddress := 0, length := aDbx.vRam , varAddress := PTR_TO_UDINT(ADR(mRam))+100 );	// clear
-//						rb:= WriteToDBx( dataBoxAddress := 0, length := aDbx.vRam , varAddress := PTR_TO_UDINT(ADR(mRam)) );     // ok
-
-						IF _NhIsDBxCfgOk() THEN											// preberie sa DBX
-							IF aSys.IS_RBx THEN
-	    						yTx2  := '..DBX-Ok.{DBX->File, next File->RBx}';						
-								fbCfgBck(WhatDo:=3, IniEnd:=aSys.Ini, IniErr:=239, IniRun:=255);	
-							ELSE
-	    						yTx2  := 'DataBOX OK.';						
-								aSys.UseRBx	:= false;
-							END_IF;
-   					ELSIF aSys.CfgBckOk THEN
-//						ELSIF Ok1 THEN
-   	 					yTx2  		:= '...No-DBX,but SDC-Ok.{SDC->DBX}';											
-							fbCfgBck(WhatDo:=13, IniEnd:=aSys.Ini, IniErr := 239, IniRun:=255);	
-//							fbCfgBck.WhatDo := 13; fbCfgBck.IniEnd := aSys.Ini; fbCfgBck.IniRun := 255;		// SDC->DataBox, vrati sa sem
-						ELSE
-							yTx2  := 'No RBx+SDC+DBX => NEW data created';												
-							aSys.Ini	:= 220;
-						END_IF;
-    					rb 	:= _Nh1RowTxt(logRst := 1);
-					END_IF;
-//					aSys.Ini := 231;
-*)
+					rb:=_NhSysLogMsg(msg:=yTx2);
 				END_IF;					
 //				aSys.Ini := 226;
 
-//aSys.ini := 217;
-//RETURN;
 
-
-	 231:    // START 1.Import CFG DBX->Mem
+	 	231:    // START 1.Import CFG DBX->Mem
 				yTx2 		:= CONCAT('START Load & Convert Old CFG: ',BOOL_TO_STRINGF(aSys.UseRBx,'%b{Rbx^DBX}'),'->Mem.',BOOL_TO_STRINGF(xDbx^.FromDBx128,' DBx128: %b{Y^N}') );
 				_Nh1RowTxt(logRst:=1); //,EmpRow:=1);
-	         fbCfgRST(init:=1, wh:=0, cx:=1);
+	         fb_Nh_Cfg_Restart(init:=1, wh:=0, cx:=1);
 				aSys.Ini 		:= 232;
 
-	 232:    // Running Load Old CFG
-            fbCfgRST();
-				IF fbCfgRST.done THEN
+	 	232:    // Running Load Old CFG
+            fb_Nh_Cfg_Restart();
+				IF fb_Nh_Cfg_Restart.done THEN
 					yTx2 	:= 'END Load Old CFG';
 					_Nh1RowTxt(logRst:=1);
 					aSys.Ini 	:= 220;
    			END_IF;
 
-	 239:    //Error section 230
+		238:    ;	//Error section 230
+		239:    ;	//Error section 230
 				;
 
 
 
-	 240:    // aktualne formulare -> NH2/200/FRM
+	 	240:    // aktualne formulare -> NH2/200/FRM
             { $ IFDEF __NH_FRM }
-					IF fbCrFRM.done THEN
+					IF fb_Nh_Create_FRM.done THEN
 						yTx2 		:= 'OK. New FRM';
   		 				rb 		:= _Nh1RowTxt(logRst := 1);
 		            aSys.ini := 241;
-
-//		            aSys.ini := 249;
-					ELSIF fbCrFRM.busy THEN ;
-					ELSE 	fbCrFRM(Go:=1,all:=true);
+					ELSIF fb_Nh_Create_FRM.busy THEN ;
+					ELSE 	fb_Nh_Create_FRM(Go:=1,all:=true);
 					END_IF;
-					fbCrFRM();
+					fb_Nh_Create_FRM();
             { $ ELSE }
 					aSys.ini := 241;
             { $ END_IF }
 
-	 241:    // COPY NH2/200/FRM/*.* -> RAM/FRM/
-            IF aSys.DiskHed.Disk[4].ready THEN
-   				_Nh_Log_Path(wh:=5, fN:='FRM');                                  // yTx3,yTx4
-	     			yTx2 		:= CONCAT('START Copy {',yTx3,'}->{',yTx4,'}');													// START Create Dir
-               rb      	:= _Nh1RowTxt(logRst := 1);
-               fbCopyDir(init:=TRUE,Go:= 2,IniRun:=255,IniEnd:=242,IniErr:=249);
-            ELSE
-               aSys.Ini := 230;
-            END_IF;
-	 242:    // End Copy
-				yTx2	:= CONCAT('END Copy. f: ',UINT_TO_STRING(fbCopyDir.files),' s: ',UDINT_TO_STRING(fbCopyDir.allSize) )  ;
-    			rb		:= _Nh1RowTxt(logRst := 1);
+		241:    // COPY NH2/200/FRM/*.* -> RAM/FRM/
+            	IF aSys.DiskHed.Disk[4].Exist THEN												// RAM exist, go copy
+   					_Nh_Log_Path(wh:=5, frm:=0);                                  // yTx3,yTx4
+	     				yTx2 		:= CONCAT('START Copy {',yTx3,'}->{',yTx4,'}');													// START Create Dir
+               	rb      	:= _Nh1RowTxt(logRst := 1);
+               	fb_Nh_Copy_Dir(init:=TRUE,Go:= 2,IniRun:=255,IniEnd:=242,IniErr:=249);
+            	ELSE
+               	aSys.Ini := 230;
+            	END_IF;
+	 	242:    // End Copy
+				yTx2		:= CONCAT('END   Copy  f: ',UINT_TO_STRING(fb_Nh_Copy_Dir.files),' s: ',UDINT_TO_STRING(fb_Nh_Copy_Dir.allSize) )  ;
+    			rb			:= _Nh1RowTxt(logRst := 1);
       		aSys.Ini := 230;
 
-
-	 249:    // Error of 240
-			;	
-	 	250:    // restart
+	 	249: 	// Err Copy Dir
+				;
+	 	250: 	// restart
   				//          aSys.prgChange    		:= PROGRAMISCHANGED();
-
-
-//	 			yTx2 := CONCAT(' *** RESTART: ', USINT_TO_STRING(aSys.LastRstTyp), ' *** ');
 				IF CPU_CODE >= 2000 THEN
-					rb 				:= ResizeRamBox( newSize := 16*1024);   	// 16MB*1024 = 16384 kByte
-					aSys.Size_RBx 	:= UINT_TO_UDINT( SizeOfRamBox() ) * 1024;   							// 128 kb   (128*1024=131072 Byte)
-					aSys.IS_RBx		:= aSys.Size_RBx >= 16777216;
+					rb 					:= ResizeRamBox( newSize := 16*1024);   	// 16MB*1024 = 16384 kByte
+					aSys.Size_RBx 		:= UINT_TO_UDINT( SizeOfRamBox() ) * 1024;   							// 128 kb   (128*1024=131072 Byte)
+					aSys.IS_RBx			:= aSys.Size_RBx >= 16777216;
 				ELSE
 					aSys.IS_RBx			:= false;
 					aSys.Size_RBx 		:= 0;
-					yTx1 					:= 'WWW/LOGS/';
-					rb						:= DirCreate(dirName := yTx1);
 			  	END_IF;
-
-	 			yTx2 					:= ' *** RESTART  *** ';
-				rb						:= _Nh1RowTxt(logRst := 1, adTime := 3, EmpRow := 1, write:=TRUE );
-
 				aSys.Restart      		:= true;
 				aSys.RefCyc				:=	1;
-				aSys.rst.In				:= true;
-            	aSys.LastRstDT   		:= aSys.NhDT;
+//				aSys.rst.In				:= true;
 				aSys.CfgBckOk			:=	false;																	// flag, that BckFile no-Exiat
 				aSys.Size_DBx 			:= UINT_TO_UDINT( SizeOfDataBox()) * 1024;   								// 128 kb   (128*1024=131072 Byte)
 				aSys.IS_DBX				:= aSys.Size_DBx >= 131072;
+				aSys.DiskHed.USB_Ready.In	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
+				aSys.DiskHed.USB_Ready.Q	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
+
+				IF IS_COLD_RESTART_PLC 		THEN	yTx2:='COLD';
+				ELSIF IS_HOT_RESTART_PLC   THEN  yTx2:='HOT';
+				ELSIF IS_RESTART_PLC       THEN  yTx2:='RST';
+				ELSE 						      	   yTx2:='UNKNOWN';
+				END_IF;
+
+				rb:=_NhSysLogMsg(write:=1,eRowBefore:=1,msg:=' *** '+yTx2+' RESTART ***   DBx: '+UINT_TO_STRING(SizeOfDataBox())+' kB, RBx: '+UINT_TO_STRING( SizeOfRamBox() )+BOOL_TO_STRINGF(SYSTEM_S.USB_DISK_READY, ' kB; USB:%b{Y^N}')+'   *** ');
+				rb:=_NhSysLogMsg(eRowAfter:=1,NoTime:=1,msg:=DT_TO_STRINGF(_NhLastPowerOffState.LastDt, '%TYY.MM.DD-hh:mm:ss.zzz ') +',Ini:='+USINT_TO_STRING(_NhLastPowerOffState.ini) );
+
+
 				CloseAllFiles();                                         	
 				aDbx.aCfx[0]   := _cfg0;
-			   	aDbx.aCfx[1]   := _par0;
-		   		aDbx.aCfx[2]   := _vaz0;
-			   	aDbx.vRam   	:= _Ram0;                                                         // volna ram
-		      	_NheRAM();                                                                    // vymaze virtualnu RAM od vRam (za CFG/PAR/VAZ...
-			   	FOR i := 2  TO _Nh_Cfg DO                                                     // offset default Empty vety
+		   	aDbx.aCfx[1]   := _par0;
+	   		aDbx.aCfx[2]   := _vaz0;
+		   	aDbx.vRam   	:= _Ram0;                                                         // volna ram
+	      	_NheRAM();                                                                    // vymaze virtualnu RAM od vRam (za CFG/PAR/VAZ...
+		   	FOR i := 2  TO _Nh_Cfg DO                                                     // offset default Empty vety
     				aCfg[i].ofs   := aCfg[i-1].ofs + aCfg[i-1].siz;
-  	   			END_FOR;
+	   		END_FOR;
      			FOR i := 2  TO _Nh_Par DO                                                     // offset default Empty vety
      				aPar[i].ofs   := aPar[i-1].ofs + aPar[i-1].siz ;
      			END_FOR;
 
 				RandomU(seed := _NhSeed, init:=true);
-				aSys.COUNTER_MONTHS := SYSTEM_S.COUNTER_MONTHS;											// aby sa po restarte znovu nespustilo vytvaranie adresarov		
 
-//			  rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=_NH_RAM, value := 0);
+
+			  rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=_NH_RAM, value := 0);
 
 				_Nh_CUST_RESTART();                          											// nejake vlasne veci po restarte
-				
-				SYSTEM_S.F_EDGE_1DAY := true;														// vynuluje sa edge		
-		
-				fb_Nh_Create_DIR.exec := TRUE;												// vynuluje sa vytvaranie adresarov
-            	aSys.Ini := 251;
 
+//				_Nh_Log_Dbx_ADD(ev:='AL1',src:='PIR',key:='Pir-1',val:='On',subj:=1,rom:=101);
 
+				SYSTEM_S.F_EDGE_1DAY 	:= true;												// simulate new day for refresh day in room/het	
+//				fb_Nh_Create_DIR.exec 	:= TRUE;												// vynuluje sa vytvaranie adresarov
+            aSys.Ini 				:= 241;
 
-    	251:    // Running createc Dir
-//            _Nh_Create_DIR(Go:=1);
-//				_Nh_Log_Evn_ADD(tsk := 251);
-//            aSys.Ini := 240;
+    	251:    // After create dir or Running createc Dir
+				;
 	 	252:    // test
             ;
 		254:    // Error
             ;
-		255:    // block all function except fbNhCrDir(),fbNhCfgfile()
+		255:    // running more like one cycle, block all function except fb_ ....
             ;
 	END_CASE;
 
-	// time events
+	// time events - change progtam date
 	IF SYSTEM_S.F_EDGE_1DAY  THEN				   											// novy den
 		aSys.F_EDGE_1DAY	:= true;														// NH event	
 		aSys.RefCycNew		:= true;														// v dalsom cykle nastartuje TypDay
-		IF aSys.COUNTER_MONTHS <> SYSTEM_S.COUNTER_MONTHS THEN								// new month
+		IF	aSys.MONTH 	<> SYSTEM_S.COUNTER_MONTHS OR
+			aSys.YEAR 	<> SYSTEM_S.COUNTER_YEARS	THEN							// new month OR Year
 			fb_Nh_Create_DIR.exec	:= true;												// vytvori nove adresare pre novy mesiac
 			aSys.F_EDGE_1MON 		:= true;												// NH event		
-			aSys.COUNTER_MONTHS 	:= SYSTEM_S.COUNTER_MONTHS;								// Nh month
 		END_IF
+		aSys.YEAR 		:= SYSTEM_S.COUNTER_YEARS;								// Nh month
+		aSys.MONTH 		:= SYSTEM_S.COUNTER_MONTHS;								// Nh month
+		aSys.DAY			:= SYSTEM_S.COUNTER_DAYS_OF_MONTH;						// Nh month
 	ELSIF  SYSTEM_S.F_EDGE_1MIN  THEN                   									// new min
 		aSys.F_EDGE_1MIN			:= true;												// NH event		
 		aSys.RefCycNew				:= true;												// v dalsom cykle nastartuje TypDay
-bb:=bb+1;			
-//			fb_Nh_Create_DIR.exec	:= true;												// vytvori nove adresare pre novy mesiac
-
+		// after xxx seconds of error-free operation, make a CFG backup
+	ELSIF aSys.RestartBck = false THEN										// este nebol urobeny backup po restarte		
+		IF  aSys.ini = 0 AND SYSTEM_S.COUNTER_1SEC > 4 THEN     						// 1min after restart, create backup file
+			IF _NhSysUpd(fFile:=true) THEN												// Mem->RBx, ked bude file > 10 aj RBx->file
+				aSys.RestartBck 	:= true;
+			END_IF;
+		END_IF
 	END_IF;
 
 
 	fb_Nh_Create_DIR();												// test and create directories
-
-//	fbCfgBck();      	// save from mRam[] to file, or restore to mRam[] from file
+	fb_Nh_Cfg_Backup();      	// save from mRam[] to file, or restore to mRam[] from file
 //	fbCopyDir();  		// copies/renames a file or the entire contents of a directory
+	fb_Nh_Copy_Dir();
+	fb_Nh_Log_DBX_RW();		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
 
-
+	_NhLastPowerOffState.LastDt	:= aSys.NhDT;
+	_NhLastPowerOffState.ini 	:= aSys.ini;
+//	_NhLastStateON.ini 		:= aSys.ini;
+	
 END_PROGRAM
 

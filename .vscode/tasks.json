@@ -1,49 +1,144 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Mosaic: Map M:",
-      "type": "shell",
-      "command": "prlctl",
-      "args": [
-        "exec",
-        "${config:mosaic.vmName}",
-        "cmd",
-        "/c",
-        "net use M: /delete /y >NUL 2>&1 & net use M: ${config:mosaic.shareRoot} /persistent:no"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Mosaic: Build",
-      "type": "shell",
-      "dependsOn": "Mosaic: Map M:",
-      "command": "prlctl",
-      "args": [
-        "exec",
-        "${config:mosaic.vmName}",
-        "cmd",
-        "/c",
-        "cd /d \"${config:mosaic.mosaicBin}\" && \"MosaicL.exe\" -ttr -lnk -sg+ -sr- -log- -pub -olc- -psw- -plcpsw- -sc- -sl- -exml- -epub- -eexp+ \"${config:mosaic.makPathWin}\""
-      ],
-      "problemMatcher": [],
-      "group": { "kind": "build", "isDefault": true }
-    },
-	{
-  "label": "Mosaic: Upload (latest .TTR)",
-  "type": "shell",
-  "dependsOn": "Mosaic: Map M:",
-  "command": "prlctl",
-  "args": [
-    "exec",
-    "${config:mosaic.vmName}",
-    "cmd",
-    "/c",
-    "for /f \"delims=\" %F in ('dir /b /a:-d /o:-d \"M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200\\\\*.TTR\"') do ( set TTR=%F & goto doUpload ) & echo No .TTR found & exit /b 1 & :doUpload & \"C:\\\\Program Files (x86)\\\\Teco\\\\Mosaic 2025.1\\\\Application\\\\VSC2m.exe\" ${config:mosaic.plcHost} upload-ttr \"M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200\\\\%TTR%\""
-  ],
-  "problemMatcher": []
-}
+	"version": "2.0.0",
+	"tasks": [
+		// ------------------------------------------------------------
+		// Mapovanie M: v Parallels Windows VM na \\Mac\Mosaic
+		// ------------------------------------------------------------
+		{
+			"label": "Mosaic: Map M:",
+			"type": "shell",
+			"command": "prlctl",
+			"args": [
+				"exec",
+				"${config:mosaic.vmName}",
+				"cmd",
+				"/c",
+				"net use M: /delete /y >NUL 2>&1 & net use M: ${config:mosaic.shareRoot} /persistent:no"
+			],
+			"problemMatcher": []
+		},
 
-	
-  ]
+		// ------------------------------------------------------------
+		// BUILD (.mak) – generuje ST hlášky -> zachytí ich problemMatcher
+		// ------------------------------------------------------------
+		{
+			"label": "Mosaic: Build",
+			"type": "shell",
+			"dependsOn": "Mosaic: Map M:",
+			"command": "prlctl",
+			"args": [
+				"exec",
+				"${config:mosaic.vmName}",
+				"cmd",
+				"/c",
+				"cd /d \"${config:mosaic.mosaicBin}\" && \"MosaicL.exe\" -ttr -lnk -sg+ -sr- -log- -pub -olc- -psw- -plcpsw- -sc- -sl- -exml- -epub- -eexp+ \"${config:mosaic.makPathWin}\""
+			],
+			// DÔLEŽITÉ: base path je workspace/Dev_V200/200/ (Mac strana)
+			// Regex chytá aj podpriečinky (FRM\NH_*.ST alebo FRM/NH_*.ST)
+			"problemMatcher": {
+				"owner": "st",
+				"fileLocation": [
+					"relative",
+					"${workspaceFolder}/Dev_V200/200/"
+				],
+				"pattern": {
+					"regexp": "^\\[ST:(Warning|Error)\\]\\s+(.+?)\\s*\\((\\d+),\\s*(\\d+)\\):\\s+(.*)$",
+					"severity": 1,
+					"file": 2,
+					"line": 3,
+					"column": 4,
+					"message": 5
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+
+		// ------------------------------------------------------------
+		// PLC: HALT
+		// ------------------------------------------------------------
+		{
+			"label": "Mosaic: PLC HALT",
+			"type": "shell",
+			"dependsOn": "Mosaic: Map M:",
+			"command": "prlctl",
+			"args": [
+				"exec",
+				"${config:mosaic.vmName}",
+				"cmd",
+				"/c",
+				"cd /d \"${config:mosaic.mosaicBin}\" && VSC2m.exe ${config:mosaic.plcHost} halt"
+			]
+		},
+
+		// ------------------------------------------------------------
+		// PLC: UPLOAD
+		// ------------------------------------------------------------
+		{
+			"label": "Mosaic: PLC Upload",
+			"type": "shell",
+			"dependsOn": [
+				"Mosaic: Map M:",
+				"Mosaic: Build"
+			],
+			"command": "prlctl",
+			"args": [
+				"exec",
+				"${config:mosaic.vmName}",
+				"cmd",
+				"/c",
+				"cd /d \"${config:mosaic.mosaicBin}\" && VSC2m.exe ${config:mosaic.plcHost} upload"
+			]
+		},
+
+		// ------------------------------------------------------------
+		// PLC: RUN
+		// ------------------------------------------------------------
+		{
+			"label": "Mosaic: PLC Run",
+			"type": "shell",
+			"dependsOn": "Mosaic: Map M:",
+			"command": "prlctl",
+			"args": [
+				"exec",
+				"${config:mosaic.vmName}",
+				"cmd",
+				"/c",
+				"cd /d \"${config:mosaic.mosaicBin}\" && VSC2m.exe ${config:mosaic.plcHost} run"
+			]
+		},
+
+		// ------------------------------------------------------------
+		// PLC: BUILD → HALT → UPLOAD → RUN (full pipeline)
+		// ------------------------------------------------------------
+		{
+			"label": "Mosaic: Build+Upload+Run",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Mosaic: Build",
+				"Mosaic: PLC HALT",
+				"Mosaic: PLC Upload",
+				"Mosaic: PLC Run"
+			]
+		},
+
+		// ------------------------------------------------------------
+		// Otvor GUI Mosaic (ak potrebuješ manuálne zásahy)
+		// ------------------------------------------------------------
+		{
+			"label": "Mosaic: Open GUI",
+			"type": "shell",
+			"dependsOn": "Mosaic: Map M:",
+			"command": "prlctl",
+			"args": [
+				"exec",
+				"${config:mosaic.vmName}",
+				"cmd",
+				"/c",
+				"cd /d \"${config:mosaic.mosaicBin}\" && start Mosaic.exe"
+			]
+		}
+	]
 }
