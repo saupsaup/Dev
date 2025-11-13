@@ -5,18 +5,18 @@
 		// 1️⃣  MAPOVANIE DISKU M: (Mac → Windows VM)
 		// ============================================================
 		{
-			"label": "Mosaic: Map M:",
-			"type": "shell",
-			"command": "prlctl",
-			"args": [
-				"exec",
-				"${config:mosaic.vmName}",
-				"cmd",
-				"/c",
-				"if not exist M: net use M: \\\\Mac\\\\Mosaic /persistent:yes"
-			],
-			"problemMatcher": []
-		},
+  "label": "Mosaic: Map M:",
+  "type": "shell",
+  "command": "prlctl",
+  "args": [
+    "exec",
+    "ae0a527c-1a74-4e39-9845-1622f6a3c782",
+    "cmd",
+    "/c",
+    "net use M: /delete /y >nul 2>&1 & net use M: \\\\Mac\\Mosaic /persistent:yes"
+  ],
+  "problemMatcher": []
+},
 
 		// ============================================================
 		// 2️⃣  BUILD PROJEKTU VO WINDOWS (MosaicL)
