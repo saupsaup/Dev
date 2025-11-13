@@ -1,9 +1,10 @@
 ﻿FUNCTION _Nh_CUST_RESTART  {HIDDEN} : BOOL
 
 END_FUNCTION
+
 VAR_GLOBAL
-	_rom_		{HIDDEN}				AT mObr	: USINT;		// pouzita len pre mapovanie rom koli exportu
-//	_rom_		{HIDDEN}				:BOOL;
+//	_rom_		{HIDDEN}				AT mObr	: USINT;		// pouzita len pre mapovanie rom koli exportu
+	_rom_		{HIDDEN}				:BOOL;
    ROM_101	{HIDDEN}{PUBLIC} 	AT _rom_;            //Pepo;1
    ROM_102	{HIDDEN}{PUBLIC} 	AT _rom_;            //Spalna;1
    ROM_000	{HIDDEN}{PUBLIC} 	AT _rom_;            //System;0

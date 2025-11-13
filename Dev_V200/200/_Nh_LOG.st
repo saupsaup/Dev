@@ -79,11 +79,11 @@ END_FUNCTION
 
 FUNCTION_BLOCK	_Nh_Log_DBX_RW		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
 	VAR_INPUT
-		write:				BOOL;		
-		Pi:					BOOL;
-		DatagramLen:		INT := 1200;	
-		DbxBeginAdr: 		UDINT := 0; // zaciatok dat logu
-		DbxEndAdr: 			UDINT;
+//		write:				BOOL;		
+//		Pi:					BOOL;
+//		DatagramLen:		INT := 1200;	
+//		DbxBeginAdr: 		UDINT := 0; // zaciatok dat logu
+//		DbxEndAdr: 			UDINT;
 	//		DataBeginAdr: 		UDINT ; // zaciatok dat logu		
 	END_VAR	
 

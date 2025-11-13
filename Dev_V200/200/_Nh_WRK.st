@@ -172,7 +172,7 @@ END_VAR
       IF Yes = false THEN
          RETURN;
       END_IF;
-
+		_NhDataWrk :=  TRUE;
       { $ IF CPU_CODE > 1999  } 	
          { $IFDEF yGlb }
             _DevDataX(aNh := VOID(aCfg[25]), dst := VOID(yGlb), n :=1);

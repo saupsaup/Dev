@@ -1,101 +1,114 @@
 {
 	// ============================================================
-	// ⭐ FAVORITES (ponechané z tvojho pôvodného súboru)
+	// ⭐ FAVORITES (ponechané; rozšírenie Favorites)
 	// ============================================================
 	"favorites.groups": [
 		"Default",
 		"Dev_V200/200 "
 	],
 	"favorites.currentGroup": "Dev_V200/200 ",
-
 	// ============================================================
 	// ⚙️ MOSAIC / VM KONFIGURÁCIA
 	// ============================================================
 	// IP a port PLC (pre VSC2m.exe)
 	"mosaic.plcHost": "192.168.33.200:61682",
-
-	// Hlavný adresár projektu – zostane rovnaký aj pri Dev ako root
-	"mosaic.projectDir": "M:\\NachHouseApp\\Dev\\Dev_V200\\200",
+	// Hlavný adresár projektu
+	"mosaic.projectDir": "M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200",
 	// Cesta k .mak súboru pre kompiláciu
-	"mosaic.makPathWin": "M:\\NachHouseApp\\Dev\\Dev_V200\\200\\200.mak",
+	"mosaic.makPathWin": "M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200\\\\200.mak",
 	// Cesta ku Mosaic binárkam vo Windows VM
-	"mosaic.mosaicBin": "C:\\Program Files (x86)\\Teco\\Mosaic 2025.1\\Application",
+	"mosaic.mosaicBin": "C:\\\\Program Files (x86)\\\\Teco\\\\Mosaic 2025.1\\\\Application",
 	// Zdieľaný priečinok medzi Mac ↔ Windows
-	"mosaic.shareRoot": "\\\\Mac\\Mosaic",
+	"mosaic.shareRoot": "\\\\Mac\\\\Mosaic",
 	// VM názov (alebo UUID)
 	"mosaic.vmName": "ae0a527c-1a74-4e39-9845-1622f6a3c782",
+	// ============================================================
+	// 🔖 NUMBERED BOOKMARKS (rozšírenie Alessandro Fragnani)
+	// ============================================================
+	"numberedBookmarks.experimental.enableNewStickyEngine": true,
+	"numberedBookmarks.keepBookmarksOnLineDelete": true,
+	"numberedBookmarks.showLineNumbers": true,
+	"numberedBookmarks.showInExplorer": true,
+	"numberedBookmarks.navigateThroughAllFiles": "replace",
+	"numberedBookmarks.saveBookmarksInProject": true,
+
+	"editor.stickyScroll.enabled": true,
+"editor.stickyScroll.showOutline": true,
+"editor.stickyScroll.maxLineCount": 4,
 
 	// ============================================================
-	// 🧱 EDITOR – odsadenie, formátovanie
+	// 🧱 EDITOR – odsadenie, formátovanie, ST asociácie
 	// ============================================================
-
-
 	"files.associations": {
-		"*.st": "structured-text"
+		"*.st.ST.bak.BAK": "structured-text",
+		//	"*.ST": "structured-text"
 	},
+	"search.seedWithSelection": "always",
+	"editor.find.seedSearchStringFromSelection": "selection",
+	"search.globalFindClipboard": true,
+	// Quick suggestions & snippets (užitočné pre ST)
 	"editor.quickSuggestions": {
 		"other": true,
 		"comments": true,
 		"strings": true
 	},
+	// bežná veľkosť
+	"editor.fontSize": 14,
 	"editor.suggestOnTriggerCharacters": true,
 	"editor.snippetSuggestions": "top",
 	"editor.tabCompletion": "on",
 	"editor.suggest.showWords": true,
 	"editor.suggest.snippetsPreventQuickSuggestions": false,
+	// Word-based suggestions vypnuté (aby neplietli ST premenné)
 	"editor.wordBasedSuggestions": "off",
-
-
-
 	// Globálne: TAB (nie medzery), veľkosť tabu = 3
 	"editor.insertSpaces": false,
 	"editor.tabSize": 3,
 	"editor.detectIndentation": false,
 	"editor.formatOnSave": false,
-
-	// Jednotné nastavenie aj pre JSON a JSONC súbory
+	// zobrazovat 20 suborov v exploreri vlavo
+	//	"explorer.openEditors.visible": 20,
+	//	"workbench.editor.showTabs": true,
+	// Jednotné nastavenie aj pre JSON/JSONC súbory (tab = 3)
 	"[json]": {
 		"editor.insertSpaces": false,
-		"editor.tabSize": 3
+		"editor.tabSize": 2
 	},
 	"[jsonc]": {
 		"editor.insertSpaces": false,
-		"editor.tabSize": 3
+		"editor.tabSize": 2
 	},
-
-	// (voliteľné) Ak chceš, aby sa JSON súbory s komentármi zobrazovali ako jsonc
-	// "files.associations": {
-	// 	"*.json": "jsonc"
-	// },
-
+	// Ak chceš zobrazovať .json s komentármi ako JSONC, odkomentuj:
+	// "files.associations": { "*.json": "jsonc" },
 	// ============================================================
-	// 👁️ EXPLORER & SEARCH (len ST + .vscode)
+	// 👁️ EXPLORER & SEARCH
 	// ============================================================
-	// vyhľadávať len v ST súboroch
+	// Explorer zohľadňuje .gitignore
+	"explorer.excludeGitIgnore": true,
+	// POZN.: VS Code nemá trvalé "search.include".
+	// Vzory na zahrnutie nastavuj priamo v Search paneli podľa potreby.
 	"search.include": [
 		"**/*.st",
 		"**/*.ST"
 	],
-	// Explorer zohľadňuje .gitignore (len *.st, *.ST a .vscode)
-	"explorer.excludeGitIgnore": true,
-
-	// Vyhľadávanie rešpektuje .gitignore / .ignore
-	"search.useIgnoreFiles": true,
-	"search.useGlobalIgnoreFiles": true,
-	"search.seedWithSelection": "always",
-
-	// Doplnkové vylúčenia pre istotu
+	// Doplnkové vylúčenia pre vyhľadávanie
 	"search.exclude": {
-		"**/.git": true,
-		"**/node_modules": true,
+		"**/.vscode/**": true,
+		"**/.git/**": true,
+		"**/node_modules/**": true,
 		"**/.DS_Store": true,
-		"**/.Trash": true,
+		"**/.Trash/**": true,
 		"**/Thumbs.db": true
 	},
-
-	// .vscode nech je stále viditeľný + ostatné väčšie priečinky skryté
+	// Vyhľadávanie rešpektuje ignore súbory
+	"search.useIgnoreFiles": true,
+	"search.useGlobalIgnoreFiles": true,
+	"search.followSymlinks": false,
+	// Skryté priečinky/súbory v Exploreri (čistejší strom)
 	"files.exclude": {
 		".vscode/**": false,
+		"**/*.bak": true,
+		"**/*.st.bak": true,
 		"**/Backup.st/**": true,
 		"**/Backup/**": true,
 		"**/DATA_SIM/**": true,
@@ -111,26 +124,26 @@
 		"**/PLCnet/**": true,
 		"**/Root/**": true,
 		"**/SendBackup/**": true,
-		// "**/SendRoot/WWW/**": true,
 		"**/SendRoot/**": true,
 		"**/WebMaker/**": true,
-		// "Dev_V200/200/.vscode": true,
-
-		"**/*.mpr": true,
-		"**/*.cfg": true,
-		"**/*.cfgx": true,
-
+		"**/200_Lib/**": true,
+		// --- systémové a pomocné ---
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/.Trash/**": true,
+		"**/.git/**": true,
+		"**/.gitignore": true,
 		"**/Dev.code-workspace": true,
 		"**/moj backup": true
 	},
-
-	// Prehľadný strom (nie zbalené priečinky)
+	// Prehľadný strom (nezbalené priečinky)
 	"explorer.compactFolders": false,
-
-	// Sleduj len potrebné zmeny
+	// Watcher: sleduj len potrebné zmeny
 	"files.watcherExclude": {
 		"**/.git/**": true,
 		"**/node_modules/**": true,
 		"**/.Trash/**": true
-	}
+	},
+
+
 }

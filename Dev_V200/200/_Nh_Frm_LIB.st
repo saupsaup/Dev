@@ -1318,7 +1318,7 @@ FUNCTION _Nh_Fix_FRM  {HIDDEN}  : BOOL
 						xFix^.tme.Min	:= 0;
 					END_IF;
 				END_IF;
-				xR^.o.ob[1].wh := 0;			
+				xR^.o.ob[1].wh := 0;	 		
 				xR^.o.ob[2].wh := 0;			
 				xR^.o.ob[3].wh := 0;			
 

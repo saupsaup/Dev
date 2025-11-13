@@ -45,6 +45,7 @@
 #usefile "PanelMaker\DeklarPT.mos", 'auto'
 #usefile "IOConfigurator\CONFIG.ST", 'auto'
 #usefile "IOConfigurator\CONFIG.HWC", 'auto'
+#usefile "200.st"
 #usefile "_Nh_SYS.st", 'lib'
 #usefile "_Nh_TYP.st", 'lib'
 #usefile "_Nh_CFG.st", 'lib'
@@ -70,7 +71,6 @@
 #usefile "_Nh_WEB.st", 'lib'
 #usefile "_Nh_Ini.st", 'lib'
 #usefile "_Nh_UTIL.st", 'lib'
-#usefile "200.st"
 #usefile "prgMain.ST", 'lib'
 #usefile "200.mos"
 #usefile "PanelMaker\r0_p0_CP_2000.mos", 'auto'

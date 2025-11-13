@@ -29,7 +29,7 @@ Dev_V200/200_Lib/
 #*.png
 #*.PNG
 
-
+*.DSK
 *.mpr_
 *.OEM
 *.mos
@@ -53,7 +53,6 @@ Dev_V200/200_Lib/
 *.mso
 *.bak
 *.log
-*.DSK
 *.PLC
 *.MWB
 *.nex

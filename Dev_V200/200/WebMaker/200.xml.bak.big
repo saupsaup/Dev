@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="windows-1250" ?>
-<web version="8.1" propfont="true" foot="" dwMode="0" MaxUid="28140" height="1219" width="610" menu="false" title="false" border="false" top="0" left="0" iniScale="100" maxScale="100" useIniScale="false" useMaxScale="false" userScale="true" webApp="true" bgdupl="true" bgcolor="16777215" icon="" id18="0" author="© Au Media, s.r.o." encoding="windows-1250">
+<web version="8.1" propfont="true" foot="" dwMode="0" MaxUid="28283" height="1219" width="610" menu="false" title="false" border="false" top="0" left="0" iniScale="100" maxScale="100" useIniScale="false" useMaxScale="false" userScale="true" webApp="true" bgdupl="true" bgcolor="16777215" icon="FAVICON.ICO" id18="0" author="© Au Media, s.r.o." encoding="windows-1250" flat="false" flatcolor="16771043">
 	<panels></panels>
 	<Grid Enable="1" X="5" Y="5" />
-	<globalset newdim="1" pvstyle="1" />
+	<globalset newdim="1" pvstyle="1" maxvar="0" />
 	<group caption="Index" level="1" locked="0" altdim="false" notforid="true" Uid="27919">
 		<page notification="true" caption="Redir" name="REDIR.XML" background="" bgcolor="3548178" repeat="false" hidden="true" ajax="true" pause="1000" level="1" default="true" ucid="1695538966" width="420" height="178" Uid="27918">
 			<object caption="" X="4" Y="11" xoff="6" yoff="5" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="30" transparent="false" visneg="false" Uid="27712">
-				<edit variable="targetPage" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="20" global="true" border="true" width="390" height="42" tabindex="1" format="%s" />
+				<edit variable="targetPage" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="20" global="true" border="true" width="390" height="43" tabindex="1" />
 			</object>
 			<object caption="Submit" X="5" Y="19" xoff="3" yoff="6" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visneg="false" Uid="27713">
 				<submit width="136" height="28" border="true" tabindex="2" />
@@ -14,6 +14,14 @@
 		</page>
 	</group>
 	<group caption="Frame-920" level="1" locked="0" altdim="true" notforid="true" width="585" height="800" dwMode="0" useIniScale="false" useMaxScale="false" userScale="false" iniScale="100" maxScale="100" Uid="28140">
+		<page notification="true" caption="Notify" name="NOTIFY.XML" background="" bgcolor="16777215" repeat="false" hidden="true" ajax="true" pause="1000" level="0" ucid="1731946370" width="511" height="326" Uid="28159">
+			<object caption="Povolit Notifikacie" X="25" Y="33" xoff="3" yoff="4" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="25" transparent="true" visneg="false" Uid="28142">
+				<label />
+			</object>
+			<object caption="stlacenim Zvonceka vpravo dolu" X="14" Y="37" xoff="1" yoff="7" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="25" transparent="true" visneg="false" Uid="28143">
+				<label />
+			</object>
+		</page>
 		<placeholders>
 			<alias name="usr" type="" description="">yUsr</alias>
 		</placeholders>
@@ -25,52 +33,52 @@
 				<label />
 			</object>
 			<object caption="" X="61" Y="15" xoff="0" yoff="3" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27748">
-				<image optcap="" variable="yUsr.cx.LoginHome" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.LoginHome" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="61" Y="24" xoff="0" yoff="1" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27749">
-				<image optcap="" variable="yUsr.cx.DshSet" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.DshSet" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="Povolit konfigurátor" X="5" Y="33" xoff="3" yoff="4" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="true" size="28" transparent="true" visneg="false" Uid="27750">
 				<label />
 			</object>
 			<object caption="" X="61" Y="32" xoff="0" yoff="7" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27751">
-				<image optcap="" variable="yUsr.cx.set" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.set" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="Povolené zóny [1=Home ... 11]" X="5" Y="42" xoff="3" yoff="2" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="true" size="28" transparent="true" visneg="false" Uid="27854">
 				<label />
 			</object>
 			<object caption="" X="4" Y="47" xoff="6" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27855">
-				<image optcap="" variable="yUsr.cx.ZonList[1]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[1]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="10" Y="47" xoff="3" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27856">
-				<image optcap="" variable="yUsr.cx.ZonList[2]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[2]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="16" Y="47" xoff="0" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27857">
-				<image optcap="" variable="yUsr.cx.ZonList[3]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[3]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="21" Y="47" xoff="5" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27858">
-				<image optcap="" variable="yUsr.cx.ZonList[4]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[4]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="27" Y="47" xoff="2" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27859">
-				<image optcap="" variable="yUsr.cx.ZonList[5]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[5]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="32" Y="47" xoff="7" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27860">
-				<image optcap="" variable="yUsr.cx.ZonList[6]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[6]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="38" Y="47" xoff="4" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27861">
-				<image optcap="" variable="yUsr.cx.ZonList[7]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[7]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="44" Y="47" xoff="1" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27862">
-				<image optcap="" variable="yUsr.cx.ZonList[8]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[8]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="49" Y="47" xoff="6" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27863">
-				<image optcap="" variable="yUsr.cx.ZonList[9]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[9]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="55" Y="47" xoff="3" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27864">
-				<image optcap="" variable="yUsr.cx.ZonList[10]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[10]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="61" Y="47" xoff="0" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27865">
-				<image optcap="" variable="yUsr.cx.ZonList[11]" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cx.ZonList[11]" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="66" Y="92" xoff="5" yoff="7" level="0" readonly="false" front="0" back="33023" strong="false" italic="false" size="10" transparent="true" visneg="false" Uid="28139">
 				<submit width="55" height="60" border="false" variable="yUsr.ok.ref" type="BOOL" value="1" tabindex="1" />
@@ -78,7 +86,7 @@
 		</page>
 		<page caption="User" name="USR_NHF.XML" background="" bgcolor="3548178" repeat="false" hidden="true" ajax="true" pause="1000" level="1" ucid="1728810383" width="580" height="795" Uid="27781">
 			<object caption="" X="5" Y="9" xoff="3" yoff="6" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27756">
-				<edit variable="{usr}.cf.Name" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="20" global="true" border="false" width="508" height="52" tabindex="1" format="%s" />
+				<edit variable="{usr}.cf.Name" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="20" global="true" border="false" width="508" height="52" tabindex="1" />
 			</object>
 			<object caption="Meno" X="5" Y="3" xoff="3" yoff="4" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="true" size="28" transparent="true" visneg="false" Uid="27758">
 				<label />
@@ -87,7 +95,7 @@
 				<label />
 			</object>
 			<object caption="" X="4" Y="23" xoff="6" yoff="4" level="1" readonly="false" front="3548178" back="8453888" strong="false" italic="true" size="30" transparent="false" visneg="false" Uid="27760">
-				<dropdown global="false" variable="yUsr.cx.UsrRight" type="USINT" size="15" border="false" format="%u">
+				<dropdown global="false" variable="yUsr.cx.UsrRight" type="USINT" size="15" border="false">
 					<option value="0">Návšteva</option>
 					<option value="1">Uzivatel</option>
 					<option value="2">Spravca</option>
@@ -95,7 +103,7 @@
 				</dropdown>
 			</object>
 			<object caption="" X="43" Y="23" xoff="4" yoff="4" level="1" readonly="false" front="0" back="8453888" strong="false" italic="false" size="30" transparent="false" visneg="false" Uid="27761">
-				<dropdown global="false" variable="yUsr.cx.Sbj" type="USINT" size="10" border="false" format="%u">
+				<dropdown global="false" variable="yUsr.cx.Sbj" type="USINT" size="10" border="false">
 					<option value="0">Vsetky</option>
 					<option value="5">Byt-1</option>
 					<option value="6">Byt-2</option>
@@ -109,10 +117,10 @@
 				<label />
 			</object>
 			<object caption="" X="5" Y="37" xoff="3" yoff="2" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27764">
-				<edit variable="{usr}.cx.KeyPas" type="STRING[6]" intf="0" timf="" align="left" zero="false" prec="-1" size="6" global="true" border="false" width="158" height="52" tabindex="10" format="%s" />
+				<edit variable="{usr}.cx.KeyPas" type="STRING[6]" intf="0" timf="" align="left" zero="false" prec="-1" size="6" global="true" border="false" width="158" height="52" tabindex="10" />
 			</object>
 			<object caption="" X="30" Y="37" xoff="3" yoff="2" level="1" readonly="true" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27765">
-				<edit variable="{usr}.cx.RFID" type="BYTE" intf="0" timf="" align="left" zero="false" prec="-1" size="12" global="true" border="false" width="308" height="52" tabindex="11" format="%X" />
+				<edit variable="{usr}.cx.RFID" type="BYTE" intf="0" timf="" align="left" zero="false" prec="-1" size="12" global="true" border="false" width="308" height="52" tabindex="11" />
 			</object>
 			<object caption="RFID" X="30" Y="32" xoff="3" yoff="2" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="true" size="28" transparent="true" visneg="false" Uid="27766">
 				<label />
@@ -121,34 +129,34 @@
 				<label />
 			</object>
 			<object caption="" X="5" Y="50" xoff="3" yoff="3" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27768">
-				<edit variable="{usr}.cx.Gsm" type="STRING[15]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="2" format="%s" />
+				<edit variable="{usr}.cx.Gsm" type="STRING[15]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="2" />
 			</object>
 			<object caption="Mail" X="5" Y="58" xoff="3" yoff="4" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="true" size="28" transparent="true" visneg="false" Uid="27769">
 				<label />
 			</object>
 			<object caption="" X="5" Y="63" xoff="3" yoff="4" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27770">
-				<edit variable="{usr}.cx.mail" type="STRING[50]" intf="0" timf="" align="left" zero="false" prec="-1" size="20" global="true" border="false" width="508" height="52" tabindex="3" format="%s" />
+				<edit variable="{usr}.cx.mail" type="STRING[50]" intf="0" timf="" align="left" zero="false" prec="-1" size="20" global="true" border="false" width="508" height="52" tabindex="3" />
 			</object>
 			<object caption="Auto login z IP adresy" X="6" Y="72" xoff="0" yoff="2" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="true" size="28" transparent="true" visneg="false" Uid="27771">
 				<label />
 			</object>
 			<object caption="" X="6" Y="77" xoff="0" yoff="2" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27772">
-				<edit variable="{usr}.cx.IP[1].IP" type="STRING[16]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="4" format="%s" />
+				<edit variable="{usr}.cx.IP[1].IP" type="STRING[16]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="4" />
 			</object>
 			<object caption="" X="6" Y="84" xoff="0" yoff="6" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27773">
-				<edit variable="{usr}.cx.IP[2].IP" type="STRING[16]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="8" format="%s" />
+				<edit variable="{usr}.cx.IP[2].IP" type="STRING[16]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="8" />
 			</object>
 			<object caption="" X="6" Y="92" xoff="0" yoff="2" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27774">
-				<edit variable="{usr}.cx.IP[3].IP" type="STRING[16]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="9" format="%s" />
+				<edit variable="{usr}.cx.IP[3].IP" type="STRING[16]" intf="0" timf="" align="left" zero="false" prec="-1" size="15" global="true" border="false" width="383" height="52" tabindex="9" />
 			</object>
 			<object caption="" X="55" Y="77" xoff="3" yoff="2" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27775">
-				<edit variable="{usr}.cx.IP[1].y" type="REAL" intf="0" timf="" align="right" zero="false" prec="2" size="4" global="true" border="false" width="108" height="52" tabindex="5" format="%.2f" />
+				<edit variable="{usr}.cx.IP[1].y" type="REAL" intf="0" timf="" align="right" zero="false" prec="2" size="4" global="true" border="false" width="108" height="52" tabindex="5" />
 			</object>
 			<object caption="" X="55" Y="84" xoff="3" yoff="6" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27776">
-				<edit variable="{usr}.cx.IP[2].y" type="REAL" intf="0" timf="" align="right" zero="false" prec="2" size="4" global="true" border="false" width="108" height="52" tabindex="6" format="%.2f" />
+				<edit variable="{usr}.cx.IP[2].y" type="REAL" intf="0" timf="" align="right" zero="false" prec="2" size="4" global="true" border="false" width="108" height="52" tabindex="6" />
 			</object>
 			<object caption="" X="55" Y="92" xoff="3" yoff="2" level="1" readonly="false" front="0" back="8453888" strong="false" italic="true" size="40" transparent="false" visneg="false" Uid="27777">
-				<edit variable="{usr}.cx.IP[3].y" type="REAL" intf="0" timf="" align="right" zero="false" prec="2" size="4" global="true" border="false" width="108" height="52" tabindex="7" format="%.2f" />
+				<edit variable="{usr}.cx.IP[3].y" type="REAL" intf="0" timf="" align="right" zero="false" prec="2" size="4" global="true" border="false" width="108" height="52" tabindex="7" />
 			</object>
 			<object caption="Y-kor." X="57" Y="72" xoff="7" yoff="2" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="true" size="28" transparent="true" visneg="false" Uid="27778">
 				<label />
@@ -157,119 +165,266 @@
 				<label />
 			</object>
 			<object caption="" X="63" Y="2" xoff="4" yoff="2" level="1" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27780">
-				<image optcap="" variable="yUsr.cf.blk" type="BOOL" on="STOP1.PNG" off="OK1.PNG" format="%i" />
+				<image optcap="" variable="yUsr.cf.blk" type="BOOL" on="STOP1.PNG" off="OK1.PNG" />
 			</object>
 			<object caption="" X="69" Y="95" xoff="1" yoff="3" level="0" readonly="false" front="0" back="33023" strong="false" italic="false" size="10" transparent="true" visneg="false" Uid="28138">
 				<submit width="35" height="40" border="false" variable="yUsr.ok.ref" type="BOOL" value="1" tabindex="12" />
 			</object>
 		</page>
 	</group>
-	<group caption="DEV" level="0" locked="0" altdim="false" notforid="false" Uid="28073">
-		<page caption="DALI" name="DALI.XML" background="" bgcolor="3548178" repeat="false" hidden="true" ajax="true" pause="100" level="9" ucid="1706783405" width="520" height="653" Uid="28071">
-			<placeholders>
-				<alias name="DLM" type="NH_DALI" description="">aDali[1]</alias>
-			</placeholders>
-			<object caption="Submit" X="6" Y="79" xoff="0" yoff="1" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visneg="false" Uid="28032">
+	<group caption="Service" level="9" locked="0" altdim="true" notforid="true" width="585" height="800" dwMode="0" useIniScale="false" useMaxScale="false" userScale="true" iniScale="100" maxScale="100" Uid="28163">
+		<page caption="CrDir" name="CRDIR.XML" background="" bgcolor="3548178" repeat="false" hidden="false" ajax="true" pause="1000" level="0" Uid="28199" ucid="1762879653" width="585" height="768">
+			<object caption="" X="62" Y="4" xoff="2" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28186">
+				<image optcap="" variable="fb_Nh_Create_DIR.exec" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="Start check DIR+Create" X="32" Y="6" xoff="7" yoff="5" level="0" readonly="false" front="16776960" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28188" hint="fb_Nh_Create_DIR.exec">
+				<label />
+			</object>
+			<object caption="" X="64" Y="34" xoff="1" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28190">
+				<image optcap="" variable="fb_Nh_Create_DIR.rqClean" type="BOOL R_EDGE" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="Start CLEAN disks" X="42" Y="36" xoff="2" yoff="0" level="0" readonly="false" front="16776960" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28191">
+				<label />
+			</object>
+			<object caption="Submit" X="48" Y="68" xoff="4" yoff="4" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visneg="false" Uid="28192">
 				<submit width="136" height="28" border="true" tabindex="1" />
 			</object>
-			<object caption="" X="15" Y="7" xoff="3" yoff="7" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28037">
-				<image optcap="" variable="{DLM}.lvl.Enable" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+			<object caption="" X="27" Y="53" xoff="7" yoff="4" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28193">
+				<edit variable="fb_Nh_Create_DIR.DeleteFiles.dirName" type="STRING[80]" intf="0" timf="" align="left" zero="false" prec="-1" size="30" global="true" border="true" width="370" height="28" tabindex="2" />
 			</object>
-			<object caption="Enable" X="4" Y="9" xoff="6" yoff="6" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28038">
+			<object caption="Dir" X="4" Y="54" xoff="6" yoff="1" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28194">
 				<label />
 			</object>
-			<object caption="" X="15" Y="14" xoff="3" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28039">
-				<edit variable="{DLM}.lvl.Power" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="2" format="%u" />
+			<object caption="" X="27" Y="61" xoff="7" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28195">
+				<edit variable="fb_Nh_Create_DIR.DeleteFiles.lifeTime" type="UDINT" intf="0" timf="" align="left" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="28" />
 			</object>
-			<object caption="Power" X="5" Y="14" xoff="3" yoff="6" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28040">
+			<object caption="Life Time Old Files" X="4" Y="61" xoff="6" yoff="0" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28196">
 				<label />
 			</object>
-			<object caption="" X="15" Y="19" xoff="3" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28041">
-				<edit variable="{DLM}.lvl.Address" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="9" format="%u" />
+			<object caption="" X="27" Y="57" xoff="7" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28197">
+				<edit variable="fb_Nh_Create_DIR.DeleteFiles.fileMask" type="STRING[80]" intf="0" timf="" align="left" zero="false" prec="-1" size="30" global="true" border="true" width="370" height="28" tabindex="27" />
 			</object>
-			<object caption="SHA" X="6" Y="19" xoff="5" yoff="6" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28042">
+			<object caption="File Mask" X="4" Y="57" xoff="6" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28198">
 				<label />
 			</object>
-			<object caption="" X="15" Y="24" xoff="3" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28043">
-				<edit variable="{DLM}.lvl.ErrID" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="11" format="%u" />
+			<object caption="" X="64" Y="40" xoff="1" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28200">
+				<image optcap="" variable="fb_Nh_Create_DIR.DeleteFiles.testOnly" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
-			<object caption="ErrID" X="5" Y="24" xoff="3" yoff="6" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28044">
+			<object caption="Test Only" X="51" Y="42" xoff="5" yoff="2" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28201">
 				<label />
 			</object>
-			<object caption="" X="21" Y="7" xoff="5" yoff="7" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28045">
-				<image optcap="" variable="{DLM}.lvl.Busy" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
+			<object caption="" X="64" Y="46" xoff="1" yoff="5" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28203">
+				<image optcap="" variable="fb_Nh_Create_DIR.DeleteFiles.delEmptyDir" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
-			<object caption="" X="22" Y="23" xoff="2" yoff="4" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28046">
-				<image optcap="" variable="{DLM}.lvl.Err" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
-			</object>
-			<object caption="" X="46" Y="8" xoff="0" yoff="4" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28049">
-				<image optcap="" variable="{DLM}.rgbwa.set" type="BOOL R_EDGE" on="OK1.PNG" off="OK0.PNG" format="%i" />
-			</object>
-			<object caption="Set" X="35" Y="10" xoff="3" yoff="3" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28050">
+			<object caption="DelEmptyDir" X="47" Y="48" xoff="2" yoff="4" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28204">
 				<label />
 			</object>
-			<object caption="" X="46" Y="14" xoff="0" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28051">
-				<edit variable="{DLM}.rgbwa.Power" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="3" format="%u" />
+			<object caption="" X="7" Y="16" xoff="2" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28218">
+				<edit variable="aSys.DiskHed.disk[1].path" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="3" />
 			</object>
-			<object caption="Power" X="36" Y="15" xoff="0" yoff="3" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28052">
+			<object caption="SYS" X="1" Y="16" xoff="5" yoff="5" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28219" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="" X="46" Y="19" xoff="0" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28053">
-				<edit variable="{DLM}.rgbwa.Address" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="10" format="%u" />
+			<object caption="" X="38" Y="16" xoff="4" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28220">
+				<edit variable="aSys.DiskHed.disk[1].Info.TotalNumberOfKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="7" />
 			</object>
-			<object caption="SHA" X="37" Y="20" xoff="2" yoff="3" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28054">
+			<object caption="" X="22" Y="16" xoff="7" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28221">
+				<edit variable="aSys.DiskHed.disk[1].Info.TotalNumberOfFreeKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="23" />
+			</object>
+			<object caption="" X="54" Y="16" xoff="1" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28222">
+				<edit variable="aSys.DiskHed.disk[1].freeSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="11" />
+			</object>
+			<object caption="" X="60" Y="16" xoff="3" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28224">
+				<edit variable="aSys.DiskHed.disk[1].minSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="15" />
+			</object>
+			<object caption="free space [B]" X="22" Y="12" xoff="2" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28225" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="" X="46" Y="24" xoff="0" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28055">
-				<edit variable="{DLM}.rgbwa.ErrID" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="12" format="%u" />
-			</object>
-			<object caption="ErrID" X="36" Y="25" xoff="0" yoff="3" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28056">
+			<object caption="Total Space" X="39" Y="12" xoff="6" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28226" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="" X="52" Y="8" xoff="2" yoff="4" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28057">
-				<image optcap="" variable="{DLM}.rgbwa.Busy" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
-			</object>
-			<object caption="" X="53" Y="24" xoff="4" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28058">
-				<image optcap="" variable="{DLM}.rgbwa.Err" type="BOOL" on="OK1.PNG" off="OK0.PNG" format="%i" />
-			</object>
-			<object caption="" X="46" Y="30" xoff="0" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28061">
-				<edit variable="{DLM}.rgbwa.red" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="4" format="%u" />
-			</object>
-			<object caption="Red" X="36" Y="31" xoff="5" yoff="0" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28062">
+			<object caption="free" X="54" Y="12" xoff="6" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28227" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="" X="46" Y="34" xoff="0" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28063">
-				<edit variable="{DLM}.rgbwa.Green" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="8" format="%u" />
-			</object>
-			<object caption="" X="46" Y="39" xoff="0" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28064">
-				<edit variable="{DLM}.rgbwa.blue" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="7" format="%u" />
-			</object>
-			<object caption="" X="46" Y="43" xoff="0" yoff="4" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28065">
-				<edit variable="{DLM}.rgbwa.white" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="6" format="%u" />
-			</object>
-			<object caption="" X="46" Y="47" xoff="0" yoff="7" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="20" transparent="false" visneg="false" Uid="28066">
-				<edit variable="{DLM}.rgbwa.amber" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="49" height="31" tabindex="5" format="%u" />
-			</object>
-			<object caption="Green" X="36" Y="34" xoff="5" yoff="6" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28067">
+			<object caption="min" X="60" Y="12" xoff="3" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28228" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="Blue" X="36" Y="39" xoff="5" yoff="6" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28068">
+			<object caption="[%]" X="58" Y="10" xoff="4" yoff="3" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28229" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="White" X="36" Y="44" xoff="5" yoff="1" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28069">
+			<object caption="" X="7" Y="20" xoff="2" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28230">
+				<edit variable="aSys.DiskHed.disk[2].path" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="4" />
+			</object>
+			<object caption="USB" X="1" Y="21" xoff="5" yoff="0" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28231" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="Amber" X="36" Y="48" xoff="0" yoff="4" level="0" readonly="false" front="16777215" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28070">
+			<object caption="" X="38" Y="20" xoff="4" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28232">
+				<edit variable="aSys.DiskHed.disk[2].Info.TotalNumberOfKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="8" />
+			</object>
+			<object caption="" X="22" Y="20" xoff="7" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28233">
+				<edit variable="aSys.DiskHed.disk[2].Info.TotalNumberOfFreeKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="24" />
+			</object>
+			<object caption="" X="54" Y="20" xoff="1" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28234">
+				<edit variable="aSys.DiskHed.disk[2].freeSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="12" />
+			</object>
+			<object caption="" X="60" Y="20" xoff="3" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28235">
+				<edit variable="aSys.DiskHed.disk[2].minSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="20" />
+			</object>
+			<object caption="" X="7" Y="24" xoff="2" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28237">
+				<edit variable="aSys.DiskHed.disk[3].path" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="5" />
+			</object>
+			<object caption="SDC" X="1" Y="25" xoff="5" yoff="3" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28238" hint="fb_Nh_Create_DIR.exec">
 				<label />
 			</object>
-			<object caption="" X="3" Y="54" xoff="4" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28081">
-				<imagebtn variable="fbNotify.go" value="1" timeout="500" type="USINT" on="OK1.PNG" off="OK0.PNG" format="%u" />
+			<object caption="" X="38" Y="24" xoff="4" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28239">
+				<edit variable="aSys.DiskHed.disk[3].Info.TotalNumberOfKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="9" />
 			</object>
-			<object caption="" X="4" Y="62" xoff="6" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="false" visneg="false" Uid="28083">
-				<edit variable="_Nh_MSG_TXT" type="STRING" intf="0" timf="" align="left" zero="false" prec="-1" size="60" global="true" border="true" width="490" height="22" tabindex="13" format="%s" />
+			<object caption="" X="22" Y="24" xoff="7" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28240">
+				<edit variable="aSys.DiskHed.disk[3].Info.TotalNumberOfFreeKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="25" />
+			</object>
+			<object caption="" X="54" Y="24" xoff="1" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28241">
+				<edit variable="aSys.DiskHed.disk[3].freeSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="13" />
+			</object>
+			<object caption="" X="60" Y="24" xoff="3" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28242">
+				<edit variable="aSys.DiskHed.disk[3].minSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="21" />
+			</object>
+			<object caption="" X="7" Y="29" xoff="2" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28244">
+				<edit variable="aSys.DiskHed.disk[4].path" type="STRING[20]" intf="0" timf="" align="left" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="6" />
+			</object>
+			<object caption="RAM" X="1" Y="29" xoff="5" yoff="6" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28245" hint="fb_Nh_Create_DIR.exec">
+				<label />
+			</object>
+			<object caption="" X="38" Y="29" xoff="4" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28246">
+				<edit variable="aSys.DiskHed.disk[4].Info.TotalNumberOfKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="10" />
+			</object>
+			<object caption="" X="22" Y="29" xoff="7" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28247">
+				<edit variable="aSys.DiskHed.disk[4].Info.TotalNumberOfFreeKBytes" type="UDINT" intf="0" timf="" align="right" zero="false" prec="-1" size="10" global="true" border="true" width="130" height="28" tabindex="26" />
+			</object>
+			<object caption="" X="54" Y="29" xoff="1" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28248">
+				<edit variable="aSys.DiskHed.disk[4].freeSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="14" />
+			</object>
+			<object caption="" X="60" Y="29" xoff="3" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28249">
+				<edit variable="aSys.DiskHed.disk[4].minSpace" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="22" />
+			</object>
+			<object caption="[Bytes]" X="34" Y="10" xoff="1" yoff="3" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28252" hint="fb_Nh_Create_DIR.exec">
+				<label />
+			</object>
+			<object caption="" X="66" Y="16" xoff="0" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28253">
+				<edit variable="aSys.DiskHed.disk[1].fileDeleted" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="16" />
+			</object>
+			<object caption="" X="66" Y="20" xoff="0" yoff="3" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28254">
+				<edit variable="aSys.DiskHed.disk[2].fileDeleted" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="17" />
+			</object>
+			<object caption="" X="66" Y="24" xoff="0" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28255">
+				<edit variable="aSys.DiskHed.disk[3].fileDeleted" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="18" />
+			</object>
+			<object caption="" X="66" Y="29" xoff="0" yoff="1" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28256">
+				<edit variable="aSys.DiskHed.disk[4].fileDeleted" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="19" />
+			</object>
+			<object caption="" X="64" Y="61" xoff="1" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28257">
+				<image optcap="" variable="fb_Nh_Create_DIR.busyClean" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="Pause (BusyClean)" X="41" Y="62" xoff="0" yoff="7" level="0" readonly="false" front="16776960" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28258">
+				<label />
+			</object>
+			<object caption="" X="12" Y="82" xoff="2" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28261">
+				<edit variable="fb_Nh_List_DIR_PLC.go" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="true" width="46" height="28" tabindex="29" />
+			</object>
+			<object caption="go" X="5" Y="82" xoff="3" yoff="2" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28262">
+				<label />
+			</object>
+			<object caption="fb_Nh_List_File_PLC." X="4" Y="77" xoff="6" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28265">
+				<label />
+			</object>
+			<object caption="" X="12" Y="87" xoff="2" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28266">
+				<edit variable="fb_Nh_List_DIR_PLC.dirName" type="STRING[40]" intf="0" timf="" align="left" zero="false" prec="-1" size="30" global="true" border="true" width="370" height="28" tabindex="32" />
+			</object>
+			<object caption="Path" X="4" Y="87" xoff="6" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28267">
+				<label />
+			</object>
+			<object caption="" X="41" Y="81" xoff="5" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28268">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.busy" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="47" Y="81" xoff="7" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28272">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.cancel" type="BOOL" on="ERROR.PNG" off="ERROR.PNG" />
+			</object>
+			<object caption="" X="11" Y="91" xoff="5" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28273">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.exec" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="31" Y="91" xoff="0" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28274" hint="CheckDel">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.CheckDel" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="37" Y="91" xoff="7" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28276" hint="testOnly">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.testOnly" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="56" Y="92" xoff="5" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28277">
+				<edit variable="fb_Nh_List_DIR_PLC.lifeTime" type="UINT" intf="0" timf="" align="left" zero="false" prec="-1" size="5" global="true" border="true" width="70" height="28" tabindex="31" />
+			</object>
+			<object caption="" X="35" Y="81" xoff="3" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28278" hint="Cancel">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.cancel" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="43" Y="91" xoff="4" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28279" hint="testOnly">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.testOnly" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="49" Y="91" xoff="1" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28280" hint="delEmptyDir">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.delEmptyDir" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="56" Y="87" xoff="5" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28281">
+				<edit variable="fb_Nh_List_DIR_PLC.timeExec" type="UINT" intf="0" timf="" align="left" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="30" />
+			</object>
+			<object caption="" X="17" Y="91" xoff="2" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28282" hint="noSubdir">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.noSubdir" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+		</page>
+		<page caption="RBx" name="RAMBOX.XML" background="" bgcolor="3548178" repeat="false" hidden="false" ajax="true" pause="1000" level="0" ucid="1762670918" width="585" height="453" Uid="28162">
+			<object caption="" X="6" Y="6" xoff="0" yoff="5" level="0" readonly="false" front="16744448" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28161">
+				<postfile variable="yTx4" type="STRING[255]" border="true" />
+			</object>
+			<object caption="" X="45" Y="11" xoff="3" yoff="5" level="0" readonly="false" front="8453888" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28167">
+				<imagebtn variable="aSys.ini" value="40" timeout="500" type="USINT" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="45" Y="24" xoff="3" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28169">
+				<image optcap="" variable="fb_Nh_Create_DIR.exec" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="1" Y="19" xoff="5" yoff="1" level="0" readonly="false" front="3548178" back="16777215" strong="false" italic="false" size="11" transparent="false" visneg="false" Uid="28171">
+				<edit variable="yTx4" type="STRING[255]" intf="0" timf="" align="left" zero="false" prec="-1" size="80" global="true" border="true" width="570" height="19" tabindex="1" />
+			</object>
+			<object caption="fb_Nh_Create_DIR.exec" X="4" Y="26" xoff="6" yoff="0" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28173">
+				<label />
+			</object>
+			<object caption="aSys.Ini:=40" X="24" Y="12" xoff="6" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28174">
+				<label />
+			</object>
+			<object caption="" X="45" Y="32" xoff="3" yoff="7" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28175">
+				<image optcap="" variable="fb_Nh_Create_DIR.rqClean" type="BOOL R_EDGE" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="fb_Nh_Create_DIR.rqClean" X="4" Y="34" xoff="6" yoff="6" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28176">
+				<label />
+			</object>
+			<object caption="Submit" X="47" Y="54" xoff="2" yoff="1" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visneg="false" Uid="28177">
+				<submit width="136" height="28" border="true" tabindex="2" />
+			</object>
+			<object caption="" X="27" Y="39" xoff="7" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28178">
+				<edit variable="fb_Nh_Create_DIR.DeleteFiles.dirName" type="STRING[80]" intf="0" timf="" align="left" zero="false" prec="-1" size="30" global="true" border="true" width="370" height="28" tabindex="3" />
+			</object>
+			<object caption="Dir" X="4" Y="40" xoff="6" yoff="3" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28179">
+				<label />
+			</object>
+			<object caption="" X="27" Y="47" xoff="7" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28180">
+				<edit variable="fb_Nh_Create_DIR.DeleteFiles.lifeTime" type="UDINT" intf="0" timf="" align="left" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="5" />
+			</object>
+			<object caption="Life Time Old Files" X="4" Y="47" xoff="6" yoff="2" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28181">
+				<label />
+			</object>
+			<object caption="" X="27" Y="43" xoff="7" yoff="4" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28182">
+				<edit variable="fb_Nh_Create_DIR.DeleteFiles.fileMask" type="STRING[80]" intf="0" timf="" align="left" zero="false" prec="-1" size="30" global="true" border="true" width="370" height="28" tabindex="4" />
+			</object>
+			<object caption="File Mask" X="4" Y="44" xoff="6" yoff="1" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28183">
+				<label />
 			</object>
 		</page>
 	</group>
+	<group caption="DEV" level="0" locked="0" altdim="false" notforid="false" Uid="28073"></group>
 	<group caption="LOG" level="1" locked="0" altdim="false" notforid="false" Uid="28107">
 		<page caption="LOGHET" name="LOGHET.XML" background="" bgcolor="3548178" repeat="false" hidden="true" ajax="true" pause="1000" level="1" ucid="1711349357" width="580" height="795" Uid="28106">
 			<object caption="" X="70" Y="98" xoff="3" yoff="4" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28090">
@@ -281,7 +436,7 @@
 		</page>
 	</group>
 	<group caption="M" level="1" locked="0" altdim="false" notforid="true" Uid="27814">
-		<page caption="003_NHM" name="003_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1728823225" width="590" height="1199" Uid="27969">
+		<page caption="003_NHM" name="003_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1762670918" width="590" height="1199" Uid="27969">
 			<placeholders>
 				<alias name="web" type="NH_M" description="">aWeb.M[3]</alias>
 				<alias name="can" type="NH_CAN" description="">aWeb.A[3].can</alias>
@@ -671,7 +826,7 @@
 				<image optcap="" variable="SYSTEM_S.S2_2" type="BOOL" on="OK1.PNG" off="ERROR.PNG" />
 			</object>
 		</page>
-		<page caption="002_NHM" name="002_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1728823207" width="590" height="1199" Uid="27931">
+		<page caption="002_NHM" name="002_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1762670921" width="590" height="1199" Uid="27931">
 			<placeholders>
 				<alias name="web" type="NH_M" description="">aWeb.M[2]</alias>
 				<alias name="can" type="NH_CAN" description="">aWeb.A[2].can</alias>
@@ -1048,20 +1203,20 @@
 					<img longname="STOP1.PNG" />
 				</canvas>
 			</object>
-			<object caption="" X="11" Y="4" xoff="6" yoff="6" level="1" readonly="false" front="4259584" back="3548178" strong="false" italic="true" size="32" transparent="false" visvar="{web}.edt" vistype="BOOL" visneg="false" Uid="27818" layer="1" format="%i">
-				<edit variable="{web}.naz" type="STRING[20]" intf="0" timf="ss.zzz" align="center" zero="false" prec="-1" size="20" global="true" border="true" width="410" height="44" tabindex="1" format="%s" />
+			<object caption="" X="11" Y="4" xoff="6" yoff="6" level="1" readonly="false" front="4259584" back="3548178" strong="false" italic="true" size="32" transparent="false" visvar="{web}.edt" vistype="BOOL" visneg="false" Uid="27818" layer="1">
+				<edit variable="{web}.naz" type="STRING[20]" intf="0" timf="ss.zzz" align="center" zero="false" prec="-1" size="20" global="true" border="true" width="410" height="44" tabindex="1" />
 			</object>
-			<object caption="" X="1" Y="14" xoff="0" yoff="1" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visvar="{web}.frm" vistype="BOOL" visneg="false" Uid="27819" layer="2" format="%i">
+			<object caption="" X="1" Y="14" xoff="0" yoff="1" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visvar="{web}.frm" vistype="BOOL" visneg="false" Uid="27819" layer="2">
 				<iframe variable="{web}.htt" type="STRING" width="590" height="800" href="" noscroll="1"></iframe>
 			</object>
 			<object caption="" X="61" Y="141" xoff="5" yoff="5" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="27820" layer="3">
 				<submit width="95" height="30" border="false" tabindex="2" />
 			</object>
-			<object caption="" X="3" Y="4" xoff="4" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visvar="SYSTEM_S.S2_2" vistype="BOOL" visneg="true" Uid="27821" format="%i">
-				<image optcap="" variable="SYSTEM_S.S2_2" type="BOOL" on="OK1.PNG" off="ERROR.PNG" format="%i" />
+			<object caption="" X="3" Y="4" xoff="4" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visvar="SYSTEM_S.S2_2" vistype="BOOL" visneg="true" Uid="27821">
+				<image optcap="" variable="SYSTEM_S.S2_2" type="BOOL" on="OK1.PNG" off="ERROR.PNG" />
 			</object>
 		</page>
-		<page caption="001_NHM" name="001_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1728823171" width="590" height="1199" Uid="28128">
+		<page caption="001_NHM" name="001_NHM.XML" background="" bgcolor="3548178" repeat="false" hidden="true" jsonmap="true" ajax="true" pause="100" level="1" ucid="1762670921" width="590" height="1199" Uid="28128">
 			<placeholders>
 				<alias name="web" type="NH_M" description="">aWeb.M[1]</alias>
 				<alias name="can" type="NH_CAN" description="">aWeb.A[1].can</alias>
@@ -1438,62 +1593,59 @@
 					<img longname="STOP1.PNG" />
 				</canvas>
 			</object>
-			<object caption="" X="11" Y="4" xoff="6" yoff="6" level="1" readonly="false" front="4259584" back="3548178" strong="false" italic="true" size="32" transparent="false" visvar="{web}.edt" vistype="BOOL" visneg="false" Uid="28109" layer="1" format="%i">
-				<edit variable="{web}.naz" type="STRING[20]" intf="0" timf="ss.zzz" align="center" zero="false" prec="-1" size="20" global="true" border="true" width="410" height="44" tabindex="1" format="%s" />
+			<object caption="" X="11" Y="5" xoff="6" yoff="3" level="1" readonly="false" front="4259584" back="3548178" strong="false" italic="true" size="32" transparent="false" visvar="{web}.edt" vistype="BOOL" visneg="false" Uid="28109" layer="1">
+				<edit variable="{web}.naz" type="STRING[20]" intf="0" timf="ss.zzz" align="center" zero="false" prec="-1" size="20" global="true" border="true" width="410" height="44" tabindex="1" />
 			</object>
-			<object caption="" X="1" Y="14" xoff="0" yoff="1" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visvar="{web}.frm" vistype="BOOL" visneg="false" Uid="28110" layer="2" format="%i">
+			<object caption="" X="1" Y="14" xoff="0" yoff="1" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="false" visvar="{web}.frm" vistype="BOOL" visneg="false" Uid="28110" layer="2">
 				<iframe variable="{web}.htt" type="STRING" width="590" height="800" href="" noscroll="1"></iframe>
 			</object>
 			<object caption="" X="61" Y="141" xoff="5" yoff="5" level="0" readonly="false" front="0" back="15790320" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28111" layer="3">
 				<submit width="95" height="30" border="false" tabindex="2" />
 			</object>
-			<object caption="" X="3" Y="4" xoff="4" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visvar="SYSTEM_S.S2_2" vistype="BOOL" visneg="true" Uid="28112" format="%i">
-				<image optcap="" variable="SYSTEM_S.S2_2" type="BOOL" on="OK1.PNG" off="ERROR.PNG" format="%i" />
+			<object caption="" X="3" Y="4" xoff="4" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visvar="SYSTEM_S.S2_2" vistype="BOOL" visneg="true" Uid="28112">
+				<image optcap="" variable="SYSTEM_S.S2_2" type="BOOL" on="OK1.PNG" off="ERROR.PNG" />
 			</object>
-			<object caption="" X="11" Y="11" xoff="5" yoff="0" level="0" readonly="false" front="65280" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28113" format="%i">
-				<edit variable="aSys.mSec" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="3" format="%u" />
+			<object caption="" X="1" Y="11" xoff="5" yoff="1" level="0" readonly="false" front="65280" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28113">
+				<edit variable="aSys.mSec" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="3" />
 			</object>
-			<object caption="" X="17" Y="11" xoff="7" yoff="0" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28114" format="%i">
-				<edit variable="aWeb.nRf" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="16" format="%u" />
+			<object caption="" X="16" Y="11" xoff="0" yoff="1" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28114">
+				<edit variable="aWeb.nRf" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="16" />
 			</object>
-			<object caption="" X="41" Y="10" xoff="0" yoff="3" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="20" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28115" format="%i">
-				<edit variable="xx" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="78" height="29" tabindex="5" format="%.0f" />
+			<object caption="" X="41" Y="11" xoff="0" yoff="1" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28115">
+				<edit variable="xx" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="73" height="26" tabindex="5" />
 			</object>
-			<object caption="" X="52" Y="10" xoff="7" yoff="3" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="20" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28116" format="%i">
-				<edit variable="yy" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="78" height="29" tabindex="14" format="%.0f" />
+			<object caption="" X="52" Y="11" xoff="7" yoff="1" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28116">
+				<edit variable="yy" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="73" height="26" tabindex="14" />
 			</object>
-			<object caption="" X="63" Y="10" xoff="4" yoff="3" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="20" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28117" format="%i">
-				<edit variable="zz" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="78" height="29" tabindex="11" format="%.0f" />
+			<object caption="" X="63" Y="11" xoff="4" yoff="1" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28117">
+				<edit variable="zz" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="73" height="26" tabindex="11" />
 			</object>
-			<object caption="" X="24" Y="11" xoff="1" yoff="0" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28118" format="%i">
-				<edit variable="aSys.ini" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="7" format="%u" />
+			<object caption="" X="1" Y="1" xoff="5" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28118">
+				<edit variable="aSys.ini" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="7" />
 			</object>
-			<object caption="" X="41" Y="1" xoff="0" yoff="0" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="20" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28119" format="%i">
-				<edit variable="aa" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="78" height="29" tabindex="15" format="%.0f" />
+			<object caption="" X="41" Y="1" xoff="0" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28119">
+				<edit variable="aa" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="73" height="26" tabindex="15" />
 			</object>
-			<object caption="" X="52" Y="1" xoff="2" yoff="0" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="20" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28120" format="%i">
-				<edit variable="bb" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="78" height="29" tabindex="12" format="%.0f" />
+			<object caption="" X="52" Y="1" xoff="2" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28120">
+				<edit variable="bb" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="73" height="26" tabindex="12" />
 			</object>
-			<object caption="" X="16" Y="1" xoff="0" yoff="5" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28121">
-				<edit variable="aWeb.A[1].tch.cm" type="USINT" intf="0" timf="" align="left" zero="false" prec="-1" size="3" global="true" border="false" width="32" height="20" tabindex="17" format="%u" />
+			<object caption="" X="12" Y="1" xoff="2" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28122">
+				<edit variable="aWeb.A[1].tch.cm" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="8" />
 			</object>
-			<object caption="" X="11" Y="1" xoff="5" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28122" format="%i">
-				<edit variable="aWeb.A[1].tch.cm" type="USINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="8" format="%u" />
+			<object caption="" X="63" Y="1" xoff="4" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28123">
+				<edit variable="cc" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="73" height="26" tabindex="13" />
 			</object>
-			<object caption="" X="63" Y="1" xoff="4" yoff="0" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="20" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28123" format="%i">
-				<edit variable="cc" type="REAL" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="78" height="29" tabindex="13" format="%.0f" />
+			<object caption="" X="18" Y="1" xoff="4" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28124">
+				<edit variable="aWeb.A[1].tch.row" type="SINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="9" />
 			</object>
-			<object caption="" X="17" Y="1" xoff="7" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28124" format="%i">
-				<edit variable="aWeb.A[1].tch.row" type="SINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="9" format="%d" />
+			<object caption="" X="24" Y="1" xoff="6" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28125">
+				<edit variable="aWeb.A[1].tch.obj" type="SINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="10" />
 			</object>
-			<object caption="" X="24" Y="1" xoff="1" yoff="5" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28125" format="%i">
-				<edit variable="aWeb.A[1].tch.obj" type="SINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="10" format="%d" />
+			<object caption="" X="26" Y="11" xoff="0" yoff="1" level="0" readonly="false" front="65535" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28126">
+				<edit variable="aSys.ErrPt" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="73" height="26" tabindex="6" />
 			</object>
-			<object caption="" X="30" Y="10" xoff="3" yoff="3" level="0" readonly="false" front="65535" back="16777215" strong="true" italic="false" size="20" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28126" format="%i">
-				<edit variable="aSys.ErrPt" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="5" global="true" border="false" width="78" height="29" tabindex="6" format="%u" />
-			</object>
-			<object caption="" X="1" Y="11" xoff="0" yoff="0" level="0" readonly="false" front="16777215" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28127" format="%i">
-				<edit variable="aSys.mSecMax" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="4" format="%u" />
+			<object caption="" X="8" Y="11" xoff="4" yoff="1" level="0" readonly="false" front="8454143" back="16777215" strong="true" italic="false" size="18" transparent="true" visvar="aWeb.M[1].set" vistype="BOOL" visneg="false" Uid="28127">
+				<edit variable="aSys.mSecMax" type="UINT" intf="0" timf="" align="right" zero="false" prec="-1" size="3" global="true" border="false" width="47" height="26" tabindex="4" />
 			</object>
 		</page>
 	</group>

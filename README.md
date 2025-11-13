@@ -52,6 +52,11 @@ cd ~/Mosaic/NachHouseApp/Dev
 chmod +x SH/reset_dev_repo.sh
 
 ```
+## Rýchly formát JSON
+označ celý obsah (alebo nič – formátuje sa celý súbor)
+stlač:
+⇧ + ⌥ + F (Shift + Option + F)
+→ automaticky zarovná odsadenie, čiarky, zátvorky atď.
 
 # Ovladanie Magic Keyboard Home/End dokumenu
 Legend: macOS (⌘ Cmd, ⌥ Option, ⌃ Ctrl, ⇧ Shift) · Windows/Linux (Ctrl, Alt, Shift)
@@ -65,6 +70,7 @@ Hľadať v súbore								⌘ F		Ctrl F
 Hľadať v celom projekte						⌥ F		Ctrl ⇧ F
 Nahradiť v súbore								⌥ ⌘ F
 Nahradiť v celom projekte					⌘ ⇧ H	Ctrl ⇧ H
+Prejs na zaciatok definicie (VAR) 		⌥ F3
 Hľadať 				FUNCTION [clipb]		Ctrl ⌥ F
 nastavit previos	FUNCTION [clipb]		⌥ PgUp	- skok na predchadzajucie blok zaciankuci FUNCTION
 nastavit Next	 	FUNCTION [clipb]		⌥ PgDn	- skok na nasledujuci blok zaciankuci FUNCTION
@@ -79,12 +85,11 @@ Koniec riadka 									↓
 ## VS Code – Bookmarks (klávesové skratky)
 | Akcia | macOS | Windows / Linux |
 |---|---|---|
-| Toggle bookmark (zap./vyp.) 			| ⌥ ⌘ K | Ctrl Alt K |
-| Ďalšia záložka 						| ⌥ ⌘ L | Ctrl Alt L |
-| Predchádzajúca záložka 				| ⌥ ⌘ J | Ctrl Alt J |
-| Zoznam záložiek v súbore 				| Command Palette → `Bookmarks: List` | Command Palette → `Bookmarks: List` |
-| Zoznam zo všetkých súborov 			| Command Palette → `Bookmarks: List from All Files` | Command Palette → `Bookmarks: List from All Files` |
-| Zmazať záložky v súbore 				| Command Palette → `Bookmarks: Clear` | Command Palette → `Bookmarks: Clear` |
+| Toggle bookmark (zap./vyp.) 		⌥ ⌘ K 
+| Vypis vsetkuch zaloziek				⌥ ⌘ L  
+| //Predchádzajúca záložka 			⌥ ⌘ J | Zoznam záložiek v súbore 			| Command Palette → `Bookmarks: List` | Command Palette → `Bookmarks: List` |
+| Zoznam zo všetkých súborov 			⌥ ⌘ L  Command Palette → `Bookmarks: List from All Files` | Command Palette → `Bookmarks: List from All Files` |
+| Zmazať záložky v súbore 				⌥ ⌘ L | Command Palette → `Bookmarks: Clear` | Command Palette → `Bookmarks: Clear` |
 | Zmazať záložky vo všetkých súboroch 	| Command Palette → `Bookmarks: Clear from All Files` | Command Palette → `Bookmarks: Clear from All Files` |
 
 > Pozn.: Skutočné skratky si môžeš skontrolovať/prenastaviť v **Keyboard Shortcuts** (⌘K ⌘S / Ctrl K Ctrl S) a vyhľadať „Bookmarks“. :contentReference[oaicite:0]{index=0}
@@ -95,7 +100,7 @@ Legend: macOS (⌘ Cmd, ⌥ Option, ⌃ Ctrl, ⇧ Shift) · Windows/Linux (Ctrl,
 
 Akcia										macOS	Windows / Linux
 Build Mosacic							⌥ B
-Paleta príkazov						⌘ P		Ctrl ⇧ P
+Paleta príkazov						shift +⌘ P		Ctrl ⇧ P
 
 Rýchlo otvoriť súbor					⌘ P		Ctrl P
 Prejsť na symbol v súbore			⌘ ⇧ O	Ctrl ⇧ O

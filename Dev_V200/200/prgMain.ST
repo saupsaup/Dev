@@ -14,9 +14,12 @@ TYPE _Nh_Last_State_ON : STRUCT 		// last state PRG/CPU before restart
 END_TYPE
 
 VAR_GLOBAL
+//DeleteFiles : DeleteSurplusFilesEx := ( delEmptyDir := true ); // delete surplus files in  given  directory
+
+
   	fb_Nh_Import_CIB		: _Nh_Import_CIB;
 	fb_Nh_Cfg_Restart		: _Nh_Cfg_Restart;
-	fb_Nh_Create_DIR		: _Nh_Create_DIR_FB;
+//	fb_Nh_Create_DIR		: _Nh_Create_DIR_FB;
 //	fb_Nh_Copy_DIR			: _Nh_Copy_DIR;
 	fb_Nh_Log_DBX_RW		: _Nh_Log_DBX_RW;		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
 END_VAR
@@ -34,13 +37,6 @@ PROGRAM prgMain
 //    	notification 	: TWebPushNotif;
 //    	webPush      	: fbWebPushService;
 
-// 		DeleteFiles    : DeleteSurplusFiles := (delEmptyDir:=true );
-//		DeleteFilesLog : DeleteSurplusFilesLog;
-
-// 		DeleteFiles    : DeleteOldFiles := 		(delEmptyDir:=true, lifeTime := 0, fileMask:='*' );
-//		DeleteFilesLog : DeleteOldFilesLog:=(logName := aSys.DiskInfo[1].path + 'del.log');
-		DeleteFilesLog : DeleteOldFilesLog;
-
    END_VAR
 //	rb 							:= 1;
 	aSys.RWtoFileCycle		:= 0;																	// how many writes to all files in cyc
@@ -55,9 +51,9 @@ PROGRAM prgMain
 	// 1   SEC 	=  10000 SYSTEM_S.LAST_CYCLE_TIME_100US      1.0 * 10 000
 	// 0,7 SEC 	=  7000 SYSTEM_S.LAST_CYCLE_TIME_100US	   	0.7 * 10 000
 	// 0.001    =    10
-   	aSys.dMin      	:= USINT_TO_INT( SYSTEM_S.COUNTER_HOURS ) * 60 + USINT_TO_INT(SYSTEM_S.COUNTER_MINUTES);  // pocet minut v ramci dna
+   aSys.dMin      	:= USINT_TO_INT( SYSTEM_S.COUNTER_HOURS ) * 60 + USINT_TO_INT(SYSTEM_S.COUNTER_MINUTES);  // pocet minut v ramci dna
 	aSys.rSec	   	:= UINT_TO_REAL( SYSTEM_S.LAST_CYCLE_TIME_100US ) / 10.0 ;		// REAL: doba minuleho cyklu v mS (prevod zo 100 mikrosekund)							
-	aSys.mSec		:= REAL_TO_UINT( ROUND(  aSys.rSec ) );			            // UINT: doba minuleho cyklu v mS  (prevod zo 100 mikrosekund)							
+	aSys.mSec			:= REAL_TO_UINT( ROUND(  aSys.rSec ) );			            // UINT: doba minuleho cyklu v mS  (prevod zo 100 mikrosekund)							
 //	aSys.rTime     	:= TIME_TO_REAL(aSys.NhTime);				// REAL: cas v sekundach od polnoci
 	
 	IF System_S.F_EDGE_10SEC THEN	//System_S.F_EDGE_1MIN OR  System_S.R_EDGE_1MIN THEN				// kazdych 30sec
@@ -179,157 +175,6 @@ PROGRAM prgMain
 			aSys.F_EDGE_1MON		:= FALSE;		// vynuluje sa edge
 			aSys.Restart  			:= false;                     						// vynuluje sa restart, ale az ked sa prebehu prvykrat vsetky DEV
 
-(*
-*)
-
-//				yTx2 := 'MSG;23.08.25;13:45:51; 1;       err;13:45:51;pohyb sss,dddd,ssss,sssssss';
-//    			rb		:= _Nh1RowTxt(logRst := 1);
-
-
-
-
-
-				// check file space and delete old files if space > ...
-
-(*
-				yTx2 := CONCAT('a ',
-									BOOL_TO_STRINGF(rqDelete,'%b{Y^N} '),	
-									BOOL_TO_STRINGF(DeleteFiles.exec,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.busy,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.done,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.err ,'%b{Y^N} ') );
-				_Nh1RowTxt(logRst:=1);
-*)
-
-//				DeleteFiles(exec := aSys.DiskHed.exec);
-//				DeleteFilesLog( append := 1, fbDeleteOldFiles := DeleteFiles);				
-
-//	fbDskMan.disk[1].Ready := true;
-
-(*
-				yTx2 := CONCAT('  ',
-									BOOL_TO_STRINGF(rqDelete,'%b{Y^N} '),					
-									BOOL_TO_STRINGF(DeleteFiles.exec,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.busy,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.done,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.err ,'%b{Y^N} ') );
-				_Nh1RowTxt(logRst:=1);
-*)
-(*
-				IF aSys.DiskHed.Run THEN
-
- 					IF DeleteFiles.done OR DeleteFiles.err THEN
-						i										:= aSys.DiskHed.i;
-						aSys.DiskHed.Exec 				:= false;							// exec -> reset fb
-						aSys.DiskHed.Disk[i].Clear 	:= false;
-						aSys.DiskHed.Disk[i].busy 		:= false;
-						aSys.DiskHed.Disk[i].done 		:= true;
-						_Nh_Create_DIR(go:=0);
-
-						yTx2 := CONCAT('   ',
-									DeleteFiles.dirName, ' ', DeleteFiles.fileMask, ' ',
-									UDINT_TO_STRINGF(DeleteFiles.lifeTime,'%5d '),
-									BOOL_TO_STRINGF(aSys.DiskHed.exec,'%b{Y^N} '),					
-									BOOL_TO_STRINGF(DeleteFiles.exec,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.busy,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.done,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.err ,'%b{Y^N} ') );
-						_Nh1RowTxt(logRst:=1);
-
-
- 					ELSIF DeleteFiles.busy THEN
-						aSys.DiskHed.Disk[aSys.DiskHed.i].cyc 	:= aSys.DiskHed.Disk[aSys.DiskHed.i].cyc + 1;									
-					ELSE
-							aSys.DiskHed.Exec 	:= false;
-							aSys.DiskHed.run		:= false;
-							aSys.DiskHed.i 		:= 0;
-							
-							FOR i := 1  TO 4  DO
-				      		IF aSys.DiskHed.Disk[i].Clear AND (aSys.DiskHed.Disk[i].done = false  OR DeleteFiles.lifeTime >= 7) THEN
-									aSys.DiskHed.i					:= i;
-									aSys.DiskHed.run				:= true;
-									aSys.DiskHed.Exec 			:= true;
-
-                           IF aSys.DiskHed.Disk[i].done THEN
-										DeleteFiles.lifeTime	:= DeleteFiles.lifeTime / 2;
-									ELSE
-										DeleteFiles.lifeTime	:= 14;	//2*365;									
-                           END_IF;
-
-
-									aSys.DiskHed.Disk[i].cyc 	:= 0;									
-									aSys.DiskHed.Disk[i].busy 	:= true;
-									aSys.DiskHed.Disk[i].done 	:= false;
-
-
-									DeleteFiles.testOnly 		:= true;
-									DeleteFiles.dirName			:= aSys.DiskHed.Disk[i].path;
-									DeleteFiles.fileMask			:='*';
-//									DeleteFilesLog.LogName := aSys.DiskHed.Disk[i].path + DT_TO_STRINGF(aSys.NhDT,'%TMMDDhhmm')+'.log' ;
-//									DeleteFilesLog.LogName := aSys.DiskHed.Disk[i].path + 'DEL.LOG' ;
-
-						yTx2 := CONCAT(USINT_TO_STRINGF(i,'%2d '),
-									DeleteFiles.dirName, ' ', DeleteFiles.fileMask, ' ',
-									UDINT_TO_STRINGF(DeleteFiles.lifeTime,'%5d '),
-									BOOL_TO_STRINGF(aSys.DiskHed.exec,'%b{Y^N} '),					
-									BOOL_TO_STRINGF(DeleteFiles.exec,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.busy,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.done,'%b{Y^N} '),
-									BOOL_TO_STRINGF(DeleteFiles.err ,'%b{Y^N} ') );
-						_Nh1RowTxt(logRst:=1);
-
-
-									EXIT;
-				      		END_IF;
-                  	END_FOR;			
-					END_IF;
-				END_IF;
-
-*)
-
-(*
-				CASE aSys.DeleteFileMode OF
-              0:	// start
-						IF SYSTEM_S.COUNTER_SECONDS = 1 THEN
-//						IF SYSTEM_S.COUNTER_HOURS = 1 THEN
-							_Nh_Create_DIR(Go:=0);
-
-							aSys.r1 := UDINT_TO_REAL(aSys.Size_ROT_DISK.TotalNumberOfFreeKBytes)/ UDINT_TO_REAL(aSys.Size_ROT_DISK.TotalNumberOfKBytes);
-							aSys.r2 := UDINT_TO_REAL(aSys.Size_ROT_DISK.TotalNumberOfKBytes) / UDINT_TO_REAL(aSys.Size_ROT_DISK.TotalNumberOfFreeKBytes);
-
-
-							aSys.DeleteFileMode 		:= 1;
-            			DeleteFiles.dirName 			:= 'NH2/';
-            			DeleteFiles.fileMask   		:= '*.dbx';					
-							DeleteFiles.lifeTime 		:= 14;
-							rqDelete	:= true;
-
-						END_IF;
-              4:  // koniec
-						IF SYSTEM_S.COUNTER_SECONDS > 1 THEN
-//						IF SYSTEM_S.COUNTER_HOURS > 1 THEN
-							aSys.DeleteFileMode := 0;
-						END_IF;
-            ELSE
-						rqDelete := true;
-						IF DeleteFiles.done OR DeleteFiles.err THEN
-                  	rqDelete := false;
-							aSys.DeleteFileMode	:= aSys.DeleteFileMode + 1;
-						ELSIF aSys.DeleteFileMode = 2 THEN
-   						DeleteFiles.fileMask := '*.PNG';					
-//							rqDelete	:= true;
-							aSys.DeleteFileMode := 3;
-						ELSIF aSys.DeleteFileMode = 3 THEN
-							;
-						END_IF;
-
-						DeleteFiles(exec:=rqDelete);
-						// log soubor se zaznamy o vymazanych souborech
-						DeleteFilesLog( append := 1, fbDeleteOldFiles := DeleteFiles);
-
-
-            END_CASE;
-*)
 
      	10:    ;  // nic
             rb             := _NhSysLogMsg(msg:='Check data: _Nh_DEV_RESTART');
@@ -467,8 +312,8 @@ PROGRAM prgMain
 
             { $IFDEF __NH_WRK }
                _NhDataWrk();
-            { $END_IF }
 
+            { $END_IF }
 
 ////***********************
 
@@ -632,8 +477,11 @@ PROGRAM prgMain
 				ELSE
 					aSys.IS_RBx			:= false;
 					aSys.Size_RBx 		:= 0;
+					yTx1					:= 'WWW/LOGS/';
 			  	END_IF;
-				aSys.Restart      		:= true;
+//				yTx1		:= 'WWW/NH2/';
+//				rb:=DirCreate( dirName := yTx1 );																	// create default LOG adr
+				aSys.Restart     		:= true;
 				aSys.RefCyc				:=	1;
 //				aSys.rst.In				:= true;
 				aSys.CfgBckOk			:=	false;																	// flag, that BckFile no-Exiat
@@ -718,7 +566,8 @@ PROGRAM prgMain
 //	fbCopyDir();  		// copies/renames a file or the entire contents of a directory
 	fb_Nh_Copy_Dir();
 	fb_Nh_Log_DBX_RW();		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
-
+	fb_Nh_PLC_DIR();
+	
 	_NhLastPowerOffState.LastDt	:= aSys.NhDT;
 	_NhLastPowerOffState.ini 	:= aSys.ini;
 //	_NhLastStateON.ini 		:= aSys.ini;

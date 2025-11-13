@@ -5,6 +5,16 @@
 		}
 	],
 	"settings": {
-		"explorer.compactFolders": false
+		"explorer.compactFolders": false,
+		"favorites.resources": [
+			{
+				"filePath": "Dev_V200/200/_Nh_SYS.st",
+				"group": "Default"
+			},
+			{
+				"filePath": "Dev_V200/200/prgMain.ST",
+				"group": "Default"
+			}
+		]
 	}
 }
