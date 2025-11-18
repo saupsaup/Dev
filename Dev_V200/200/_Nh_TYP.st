@@ -2165,14 +2165,6 @@ END_VAR
 
 
 TYPE
-   NH_FRM_HED {HIDDEN}   : STRUCT      				// HLAVNA RIADIACA PREMENNA
-      name     : STRING[5] :='_END';
-		desc		: STRING[20];
-      wht      : USINT;       	// 0=log/230... 1-brw,2-FRM,3-MNU,4- HOME-PG - ALL
-		row		: USINT:=1;       // numbrer of Rows
-		sld		: USINT;    		// number of sliders
-		siz		: UDINT;
-	END_STRUCT;
    NH_FAV {HIDDEN} :  STRUCT 					// zoznam oblubenych
  		ok				: NH_REC_OK;
       cf          : NH_CFG_ALL;

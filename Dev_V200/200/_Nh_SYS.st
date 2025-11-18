@@ -301,15 +301,20 @@ TYPE
 		LogHed					: NH_LOG_HED;
 		DiskHed					: NH_DISK_HED;
 		ADR_DBX					: STRING[25] := 'NH2/200/DBX/25032423/'; // hlavny adresar konfiguracie
+		YYYY_MM					: STRING[8] 		:= '2025_01/';
+
 //		IS_USB_DISK: aTrgQx;
 
 		// these variables are one cycle behind the system,
 		YEAR			         : USINT;				   // actual YEAR (next cycle after change in  system)
 		MONTH			         : USINT;				   // actual MONTH
 		DAY			         : USINT;				   // actual DAY
-		F_EDGE_1MON				: BOOL;					// new month
-		F_EDGE_1DAY				: BOOL;					// new day
 		F_EDGE_1MIN				: BOOL;					// new minute
+		F_EDGE_1HOUR			: BOOL;					// 
+		F_EDGE_1DAY				: BOOL;					// new day
+		F_EDGE_1MON				: BOOL;					// new month
+		F_EDGE_1YEAR			: BOOL;					// new Year
+
 
 		NewDbx					: BOOL;					// natvrdo sa po restarte vytvaraju vsetky nove dat1
 		UpdDbx					: USINT;				// sumarny pocet zatial neulozenych modifikacii vo vsetkych suboroch
@@ -1141,22 +1146,28 @@ FUNCTION _Nh_Sys_Log_Path: BOOL 	// SysLog path: WWW/NH2/NH2_YYMM.log; ADR "RRMM
 //		del:		BOOL; 			// delete old log file at start
 		ram:		BOOL; 			// use RAM disk
 		rrmm:		BOOL:=TRUE; 	// use rrmm in file name
-		wh:		USINT; 			// use whole path from aSys.DiskHed.disk[2].path
+//		wh:		USINT; 			// use whole path from aSys.DiskHed.disk[2].path
 	END_VAR
 	VAR_IN_OUT
 		Path:		STRING;
 	END_VAR
 	_Nh_Sys_Log_Path	:= TRUE;
-	IF ram AND aSys.DiskHed.Disk[3].Exist THEN
-		Path := aSys.DiskHed.Disk[3].Path;
+	IF ram AND aSys.DiskHed.Disk[4].Exist THEN
+		Path := aSys.DiskHed.Disk[4].Path;
 	ELSE
 //		Path := 'WWW/NH2/';		
-		path	:=	aSys.DiskHed.Disk[2].path;
+//		path	:=	aSys.DiskHed.Disk[2].path;
+//		rb		:=	_Nh_Log_PATH(wh := 22, frm := 2, wh2:=0);		// USB/LOG/
+//		path	:= yTx1;
+		path	:=	CONCAT(aSys.DiskHed.Disk[2].path,'LOG/');
 	END_IF;
+(*
 	CASE wh OF
 		0: Path := CONCAT(path,'NH2_');
 		1: Path := CONCAT(path,'DEL_');
 	END_CASE;
+*)	
+	Path := CONCAT(path,'NH2_');
 	IF rrmm THEN
 		Path := CONCAT(path, DT_TO_STRINGF(aSys.NhDT, '%TYYMM.log') );
 	ELSE
@@ -1174,8 +1185,12 @@ FUNCTION _NhSysLogMsg: BOOL // nacita 1.riadok zo suboru yTx1 do yTx2, alebo zap
 		eRowAfter:	BOOL;				// prida prazdny riadok pred a za
 		NoTime:		BOOL; 			// nezapisovat cas
 		spcLeft:		BOOL;				// Only IF lenMsg>0; TRUE:=add spaces from the Left to the length lenMsg; FLSE:=from the Right
+//		noClose:		BOOL;				// no close file at the End
+		
 		lenMsg:		USINT; 			// length of message	
 		msg:	 		STRING[255]; 	// message to log without datetime
+		maxSize:		UINT:=1000;		// maxSize [kB]	
+		openfH:		HANDLE;		
 	END_VAR
 	VAR_TEMP
 		fH: 			HANDLE;
@@ -1185,23 +1200,31 @@ FUNCTION _NhSysLogMsg: BOOL // nacita 1.riadok zo suboru yTx1 do yTx2, alebo zap
 	IF noLog OR (debug AND aSys.Debug = FALSE) THEN					// log only in debug mode
 		RETURN;
 	ELSE
-//		logFile	:= CONCAT(aSys.DiskHed.disk[2].path, 'nh_', DT_TO_STRINGF(aSys.NhDT, '%TYYMM.log') );
-		rb:=_Nh_Sys_Log_Path(Path:=logFile);
-//		logFile	:= CONCAT('WWW/NH2/NH_', DT_TO_STRINGF(aSys.NhDT, '%TYYMM.log') );
-	   IF write THEN
-   	   fH := FileOpen(fileName := logFile, mode := F_WRITE);
-	   ELSE
-   	   fH := FileOpen(fileName := logFile, mode := F_APPEND);
-	   END_IF;
+		IF openfH <> INVALID_HANDLE_VALUE THEN 						// uz otvoreny subor, kde s bude zapisovat na nastavene miesto
+xx:=xx+1;
+			fH	:= openfH;
+//			noClose := TRUE;
+		ELSE
+//			logFile	:= CONCAT(aSys.DiskHed.disk[2].path, 'nh_', DT_TO_STRINGF(aSys.NhDT, '%TYYMM.log') );
+			rb:=_Nh_Sys_Log_Path(Path:=logFile);
+//			logFile	:= CONCAT('WWW/NH2/NH_', DT_TO_STRINGF(aSys.NhDT, '%TYYMM.log') );
+		   IF write THEN
+   		   fH := FileOpen(fileName := logFile, mode := F_WRITE);
+		   ELSE
+   		   fH := FileOpen(fileName := logFile, mode := F_APPEND);
+	   	END_IF;
+		END_IF;
    	IF fH <> INVALID_HANDLE_VALUE THEN 	// nenajdeny subor alebo zla cesta
-			IF FileSize(hFile := fH) < 500000 THEN						// obmedzenie logu na 0.5mb
-				IF NoTime = false THEN
-					IF ini THEN
-		         	msg := CONCAT(DT_TO_STRINGF(GetRtc(), '%TYY.MM.DD-hh:mm:ss.zzz '), USINT_TO_STRINGF(aSys.ini, '[%3u:] '),msg);
-					ELSE
-      		   	msg := CONCAT(DT_TO_STRINGF(GetRtc(), '%TYY.MM.DD-hh:mm:ss.zzz '),msg) ;
-					END_IF;				
+			IF maxSize =0 OR FileSize(hFile := fH) < UINT_TO_UDINT(maxSize*100) THEN						// obmedzenie logu na 0.5mb
+				IF NoTime THEN
+					logFile	:= '';	
+	         ELSE	
+					logFile := DT_TO_STRINGF(GetRtc(), '%TYY.MM.DD-hh:mm:ss.zzz ');
 				END_IF;
+				IF ini THEN
+		        	logFile := CONCAT(logFile, USINT_TO_STRINGF(aSys.ini, '[%3u:] '));
+				END_IF
+  		   	msg := CONCAT(logFile,msg) ;
 				IF FIND(msg,_NH_CRLF) = 0 THEN
       		   msg := CONCAT(msg, _NH_CRLF );
 				END_IF;	
@@ -1215,13 +1238,14 @@ FUNCTION _NhSysLogMsg: BOOL // nacita 1.riadok zo suboru yTx1 do yTx2, alebo zap
 					aBlank(	lft := spcLeft, txt := ADR(msg), n := lenMsg );
 				END_IF;
 				fRW	:= FileWrite(hFile := fH, adrBuf := PTR_TO_UDINT(ADR(msg)), size := INT_TO_UDINT(LEN(msg)));
-				_NhSysLogMsg:= TRUE;
+				_NhSysLogMsg:= fRW = INT_TO_UDINT(LEN(msg)) ;
 			END_IF;
-			rb	:= FileClose(hFile := fH);
+			IF openfH = INVALID_HANDLE_VALUE THEN 		
+				rb	:= FileClose(hFile := fH);
+			END_IF;
 		END_IF;	
 	END_IF;
 END_FUNCTION
-
 
 FUNCTION _Nh1RowTxt: BOOL // nacita 1.riadok zo suboru yTx1 do yTx2, alebo zapise to co je v yTx2 do suboru yTx1
    VAR_INPUT
@@ -1490,6 +1514,43 @@ FUNCTION _NhFdelete {HIDDEN}: BOOL // deletes the file if it exists, first close
 		_NhFdelete := _NhFopen( fH:=fH, fN:=fN, mode:=mode, close:=FALSE );		
 	END_IF;
 END_FUNCTION
+
+FUNCTION _NhFread {HIDDEN}: BOOL
+   VAR_INPUT
+		adrVar:	PTR_TO UDINT; 
+		fS:		UDINT;	
+	END_VAR
+   VAR_IN_OUT
+      fH: 		HANDLE;
+      fN: 		STRING;
+   END_VAR
+	fRW:=0;
+ 	IF _NhFOpen(fN:=fN, fH:=fH, close:=FALSE, mode:=0 ) THEN
+  		fRW 	:= FileRead  (hFile := fH, adrBuf := PTR_TO_UDINT(adrVar), size := fS );
+		rb		:= _NhFClose(fH:=fH);
+	END_IF;
+	_NhFread := fRW = fS;
+END_FUNCTION
+
+FUNCTION _NhFwrite {HIDDEN}: BOOL
+   VAR_INPUT
+		adrVar:	PTR_TO UDINT; 
+		fS:		UDINT;	
+//      mode: 	TF_MODE := F_WRITE;
+	END_VAR
+   VAR_IN_OUT
+      fH: 		HANDLE;
+      fN: 		STRING;
+   END_VAR
+	fRW:=0;
+ 	IF _NhFOpen(fN:=fN, fH:=fH, mode:=F_WRITE ) THEN
+  		fRW 	:= FileWrite  (hFile := fH, adrBuf := PTR_TO_UDINT(adrVar), size := fS );
+		rb		:= _NhFClose(fH:=fH);
+	END_IF;
+	_NhFwrite := fRW = fS;
+END_FUNCTION
+
+
 
 (*
 FUNCTION _Nh.hDirExists {HIDDEN}: BOOL   // test if directory exists
@@ -2310,6 +2371,7 @@ FUNCTION _Nh_Log_PATH: BOOL 	// all paths for files, rename, copy, log
 					END_CASE;
 				2:	// log FILE
 					CASE wh2 OF
+						0:	yTx1 	:= CONCAT(yTx1, 'LOG/');						
 						1:	yTx1 	:= CONCAT(yTx1, 'LOG/MSG/');						
 						2:	yTx1 	:= CONCAT(yTx1, 'LOG/ALA/');						
 						3:	yTx1 	:= CONCAT(yTx1, 'LOG/EVN/');						
@@ -2327,27 +2389,34 @@ FUNCTION _Nh_Log_PATH: BOOL 	// all paths for files, rename, copy, log
 
 	 	24:	// RAM
 				yTx1 	:= aSys.DiskHed.Disk[4].path;					                  // FRM copy for faster run
+				yTx2 	:= CONCAT(yTx1, 'USR/',USINT_TO_STRINGF(wh2,'%02d/'));	// user wrk dir		
+(*
 				IF wh2 < 90 THEN
 					yTx2 	:= CONCAT(yTx1, 'USR/',USINT_TO_STRINGF(wh2,'%02d/'));	// user wrk dir		
 				ELSE
 					yTx2 	:= CONCAT(yTx1, 'SYS/');											// system wrk dir
 				END_IF;
+*)
 				CASE frm OF
 					1: yTx1 	:= CONCAT(yTx1, 'FRM/');					              	// FRM copy for faster run
+						CASE wh2 OF
+							1:	;
+						END_CASE;
+						
 					2:	// usr LOG or WRK FILE
 						yTx1 	:= yTx2;
 					3:	// usr DIR LOG
-//						yTx1 	:= CONCAT(yTx2,'PLC_DIR.log');
-						yTx1 	:= CONCAT(aSys.DiskHed.Disk[2].path,'PLC_DIR.log');
+						yTx1 	:= CONCAT(yTx2,'PLC_DIR.log');
+//						yTx1 	:= CONCAT(aSys.DiskHed.Disk[2].path,'PLC_DIR.log');
 //						yTx1 	:= CONCAT(aSys.DiskHed.Disk[1].path,'PLC_DIR.log');
 					4:	// usr FILE LOG 
+						yTx1 	:= CONCAT(yTx2,'PLC_FILE.log');
 //						yTx1 	:= CONCAT(aSys.DiskHed.Disk[1].path,'PLC_FILE.log');
-						yTx1 	:= CONCAT(aSys.DiskHed.Disk[2].path,'PLC_FILE.log');
-//						yTx1 	:= CONCAT(yTx2,'PLC_FILE.log');
+//						yTx1 	:= CONCAT(aSys.DiskHed.Disk[2].path,'PLC_FILE.log');
 					5:	// usr FILE LOG 
 //						yTx1 	:= CONCAT(aSys.DiskHed.Disk[2].path,'PLC_FILE.log');
-//						yTx2 	:= CONCAT(aSys.DiskHed.Disk[1].path, 'SYS/');		
-						yTx2 	:= aSys.DiskHed.Disk[2].path;		
+						yTx2 	:= CONCAT(aSys.DiskHed.Disk[2].path, 'LOG/');		
+//						yTx2 	:= aSys.DiskHed.Disk[2].path;		
 						CASE wh2 OF
 							99: 	yTx2 	:= CONCAT(yTx2,'DEL_');
 						ELSE		yTx2 	:= CONCAT(yTx2,'TST_');
@@ -2364,7 +2433,8 @@ FUNCTION _Nh_Log_PATH: BOOL 	// all paths for files, rename, copy, log
 	END_IF;
  *)
 	IF month THEN						// add month dir
-		txt	:= CONCAT(USINT_TO_STRINGF(aSys.YEAR, '20%02d'),'_',USINT_TO_STRINGF(aSys.MONTH, '%02d'),'/');
+//		txt	:= CONCAT(USINT_TO_STRINGF(aSys.YEAR, '20%02d'),'_',USINT_TO_STRINGF(aSys.MONTH, '%02d'),'/');
+		txt := aSys.YYYY_MM;	//CONCAT(USINT_TO_STRINGF(aSys.DAY, '%02d'),'_',DT_TO_STRINGF(aSys.NhDT, '%Thhmm'));
 		IF fDhhTx2 THEN						// add day+time file	
 			yTx2 	:= CONCAT(yTx2, txt); // data kazdeho CFG);									// formulare			
 		ELSE		//ELSIF fDhh THEN
@@ -2372,7 +2442,9 @@ FUNCTION _Nh_Log_PATH: BOOL 	// all paths for files, rename, copy, log
 		END_IF;
 	END_IF
 	IF fDhh OR fDhhTx2 THEN						// add day+time file	
+
 		txt := CONCAT(USINT_TO_STRINGF(aSys.DAY, '%02d'),'_',DT_TO_STRINGF(aSys.NhDT, '%Thhmm'));
+
 		IF fDhhTx2 THEN						// add day+time file	
 			yTx2 	:= CONCAT(yTx2,txt ); 	
 		ELSE
@@ -2450,68 +2522,51 @@ END_FUNCTION
 FUNCTION_BLOCK _Nh_Create_DIR  // Check disks/space/DIRs,create DIRs in the entire path. At specied Hour o Manualy start Clean disks space
 	VAR_INPUT
 		exec:   			BOOL; 			//  start new check disks/space/DIRs and create DIRs in the entire path
-		rqClean: 		BOOL R_EDGE; 	// leading edge start clean all disks
-//		Go: 				USINT; 			// 1=NH2,2=USB,3=SDC,4=RAM	
+		refrClean:		BOOL;
+//		rqClean: 		BOOL R_EDGE; 	// leading edge start clean all disks
 	END_VAR
 	VAR_OUTPUT
-		execClean: 		BOOL;			
-		doneClean: 		BOOL;			
-		busyClean: 		BOOL;			
-		refrClean: 		BOOL;
+
 	END_VAR
+
 	VAR
-//		IO.hDir: 			HANDLE;
-//		_NhFileInfo: 	TFileInfo;
-		nDaysOld: 		LONGTIME; 			// log text length
-		diskClean: 		USINT; 			// actual disk for clean	
-(*
-		DeleteFiles: 	DeleteSurplusFilesEx := ( delEmptyDir:=TRUE,  // delete surplus files in  given  directory
-                    fileMask    := '*.DBX;*.cib,*.PNG');  
-		DeleteFilesLog : DeleteSurplusFilesExLog;
-*)
-//		DeleteFiles: 	DeleteOldFiles := ( delEmptyDir := TRUE, testOnly := FALSE, fileMask := '*.DBX;*.cib,*.PNG,*.log,*.TTR', lifeTime := 2*365);
-		DeleteFiles: 	DeleteOldFiles := ( delEmptyDir := TRUE, testOnly := TRUE, fileMask := '*.*', lifeTime := 2);
-		DeleteFilesLog : DeleteOldFilesLog := (append:=TRUE);
 	END_VAR
 	VAR_TEMP
-		i: 				USINT;
+
 	END_VAR;	
-
 	aSys.DiskHed.USB_Ready(In:=SYSTEM_S.USB_DISK_READY);
-	IF aSys.DiskHed.USB_Ready.Qx  THEN
- 		IF aSys.DiskHed.USB_Ready.Qr THEN
-   			yTx2 	:= 'USB Inserted';													// START Create Dir
-        ELSE
-   			yTx2 	:= 'USB REmoved';													// START Create Dir
-	 	END_IF;
-   	yTx2 	:= CONCAT(yTx2, ' !!! Re-Create Dir..');
-		rb:=_NhSysLogMsg(msg:=yTx2);
-//		IF fb_Nh_Copy_Dir.busy = FALSE THEN
-			exec	:= true;
-//		END_IF;
-	END_IF;
-
-	IF SYSTEM_S.F_EDGE_1HOUR OR rqClean THEN
-		IF SYSTEM_S.COUNTER_HOURS = aSys.DiskHed.HourClean Or rqClean THEN
-			FOR i:=1 TO 4 DO
-				aSys.DiskHed.disk[i].GoClean := aSys.DiskHed.disk[i].Exist;	
-			END_FOR;
-			exec			:= TRUE;															// check disks space
-			refrClean	:= TRUE;															// refresh Clean process
-			execClean	:= FALSE;														// reset old exec
-			BusyClean	:= TRUE;															// alow Run Clean
-		  	rb:=_NhSysLogMsg(msg:='+ Start ALL Disk Clean');
-		END_IF
-	END_IF;
-
-	IF exec OR refrClean THEN												// start
+	refrClean	:= aSys.Restart;
+	CASE aSys.Ini OF
+		0: 	// normal RUN
+				IF aSys.DiskHed.USB_Ready.Qx  THEN
+			 		IF aSys.DiskHed.USB_Ready.Qr THEN
+   					yTx2 	:= 'USB Inserted';													// START Create Dir
+		        ELSE
+   					yTx2 	:= 'USB REmoved';													// START Create Dir
+	 				END_IF;
+					rb:=_NhSysLogMsg(msg:=yTx2+' !!! Re-Create Dir..');
+//					IF fb_Nh_Copy_Dir.busy = FALSE THEN
+						exec	:= true;
+	//				END_IF;
+				END_IF;
+				IF aSys.F_EDGE_1HOUR THEN
+					IF SYSTEM_S.COUNTER_HOURS = aSys.DiskHed.HourClean  THEN
+						FOR i:=1 TO 4 DO
+							
+						END_FOR;
+						exec			:= TRUE;															// check disks space
+					  	rb	:=	_NhSysLogMsg(msg:='+ Start ALL Disk Clean');
+					END_IF
+				END_IF;
+	END_CASE;
+	IF exec  THEN												// start
       err		:= FALSE;
       exec     := FALSE;
    	_NhDT    := GetRTC();      
-		aSys.DiskHed.Disk[1].path	:= '';
-		aSys.DiskHed.Disk[2].path	:= 'USB/';
-		aSys.DiskHed.Disk[3].path	:= 'SDC/';
-		aSys.DiskHed.Disk[4].path	:= 'RAM/';
+		aSys.DiskHed.Disk[1].path	:= '/';							// native PLC journaled disk ''= for diskinfo
+		aSys.DiskHed.Disk[2].path	:= 'USB/';						// externeal insert/remove
+		aSys.DiskHed.Disk[3].path	:= 'SDC/';						// internal 
+		aSys.DiskHed.Disk[4].path	:= 'RAM/';						// internal FOXTROT-2
       FOR i := 1 TO 4 DO
          rb	:= DiskInfo(diskName          := aSys.DiskHed.Disk[i].path, diskDesc := aSys.DiskHed.Disk[i].info); // bytes
          aSys.DiskHed.Disk[i].errCrDir    := FALSE;      
@@ -2523,14 +2578,14 @@ FUNCTION_BLOCK _Nh_Create_DIR  // Check disks/space/DIRs,create DIRs in the enti
                                                                UDINT_TO_REAL(aSys.DiskHed.disk[i].Info.TotalNumberOfKBytes) ); 
 			END_IF;
       END_FOR;
-//		IF rqClean = FALSE THEN
-	      // base dir NH2/ od native journaled disk
+      // base dir NH2/ od native journaled disk
+		IF true THEN
 			aSys.DiskHed.Disk[1].path	:= 'NH2/';
 			err := _Nh_Create_DIR_PATH( disk:=1, wh := 21, frm := 1,NoLog:=refrClean) = FALSE; 	// create
 				//	aSys.DiskHed.Disk[3].Exist :=false;
 			// test if exist real USB/ next substitute USB/ to SDC/ or NH2/
 
-//aSys.DiskHed.Disk[3].Exist:=FALSE; //XXX disable SDC check
+aSys.DiskHed.Disk[3].Exist:=FALSE; //XXX disable SDC check
 
    	   IF aSys.DiskHed.Disk[2].Exist THEN												// disk USB NOT inserted
       	   ;
@@ -2565,7 +2620,7 @@ FUNCTION_BLOCK _Nh_Create_DIR  // Check disks/space/DIRs,create DIRs in the enti
 				err := err OR _Nh_Create_DIR_PATH( disk := 4, wh := 24, wh2 := i, frm := 2, NoLog:=refrClean) = FALSE; 								
 			END_FOR;
 			aSys.DiskHed.timeExec   := TIME_TO_UINT ( SUB_DT_DT( GetRTC() , _NhDT ) );
-//		END_IF;
+		END_IF;
       FOR i := 1 TO 4 DO
          IF aSys.DiskHed.Disk[i].Exist THEN
 				IF aSys.DiskHed.Disk[i].freeSpace < aSys.DiskHed.Disk[i].minSpace THEN
@@ -2581,125 +2636,6 @@ FUNCTION_BLOCK _Nh_Create_DIR  // Check disks/space/DIRs,create DIRs in the enti
 				END_IF;
          END_IF
       END_FOR;
-		refrClean := FALSE;
-	END_IF;
-(*
-	IF BusyClean THEN																					// Run Clear (delete)
-		ok1:= FALSE;
-xx:=xx+1;
-		CASE go OF
-			0:		
-yy:=yy+1;
-					rb:=_NhSysLogMsg(msg:='  + Start OpenDir: ' + aSys.DiskHed.disk[1].path);
-					IO.hDir		:= DirOpen(dirName := aSys.DiskHed.disk[1].path, dirInfo := _NhFileInfo);           // open DIR for read
-					IF IO.hDir = INVALID_HANDLE_VALUE THEN                                     // open error
-						Go		:= 80;
-					ELSE
-						ok1	:= TRUE;
-						Go		:= 2;
-					END_IF;
-
-			2:	
-zz:=zz+1;
-					IF DirRead(IO.hDir := IO.hDir, dirInfo := _NhFileInfo) = TRUE THEN               // read DIR
-						ok1:= TRUE;
-					ELSE
-						Go		:= 80;															// end DIR
-					END_IF;
-			80:	
-aa:=aa+1;
-					DirClose(IO.hDir := IO.hDir);                                               // close DIR
-					BusyClean	:= FALSE;															// alow Run Clean
-					Go		:= 0;
-		END_CASE;
-		If ok1 THEN
-			rb:=_NhSysLogMsg(msg:='  +  ' + _NhFileInfo.fileName
-				+ '  ' + UDINT_TO_STRING(_NhFileInfo.fileSize)
-				+ '  ' + BYTE_TO_STRING(_NhFileInfo.empty);			
-			
-			);
-		END_IF;
-
-	END_IF;
-*)
-
-
-
-IF BusyClean THEN																					// Run Clear (delete)
-		DeleteFiles( exec := ExecClean);
-//  		DeleteFilesLog( append := 1, fbDeleteSurplusFilesEx := DeleteFiles);
-//		DeleteFiles.isDeleted := DeleteFiles.isDeleted + 1;
-		DeleteFilesLog(fbDeleteOldFiles := DeleteFiles);
-//		IF DeleteFiles.isDeleted THEN
-//		IF SUB_DT_DT(aSys.NhDT  DeleteFiles.ListDir.fileInfo.creationTime) TIME_TO_  THEN
-		IF DoneClean THEN												// done all
-			DoneClean	:= FALSE;
-			BusyClean	:= FALSE;
-			refrClean 	:= TRUE;
-			exec			:= TRUE;
-		  	rb:=_NhSysLogMsg(msg:='->End ALL Disk Clean');
-
-		ELSIF DeleteFiles.done OR DeleteFiles.err THEN		// done or error current
-			IF DeleteFiles.done	 THEN
-			  	rb:=_NhSysLogMsg(msg:='  ->End   Clean Disk: ' + DeleteFiles.dirName);
-			ELSE
-			  	rb:=_NhSysLogMsg(msg:='  ! Err   Clean Disk: ' + DeleteFiles.dirName);
-			END_IF;
-			execClean		:= FALSE;								// reset exec for next disk
-			aSys.DiskHed.disk[diskClean].GoClean 	:= FALSE;	// reset go reques disk
-		ELSIF DeleteFiles.busy = FALSE THEN
-			FOR diskClean := 1 TO 1 DO
-				IF diskClean = 1 THEN
-					aSys.DiskHed.Disk[diskClean].fileDeleted	:= 0;		
-					aSys.DiskHed.Disk[diskClean].sizeDeleted	:= 0;		
-
-//					DeleteFiles.lifeTime	:= 20; // in days		
-//					DeleteFiles.testOnly := 0;	//TRUE;
-//					DeleteFiles.fileMask := '*.*'
-// 					DeleteFilesLog.append 	:= TRUE;
-					rb:=_Nh_Sys_Log_Path(path:=DeleteFilesLog.logName,wh:=1); 	// insert log file for delete
-				END_IF;
-				IF aSys.DiskHed.disk[diskClean].GoClean	THEN
-					IF i = 55 THEN
-						DeleteFiles.dirName	:='/';	
-					ELSE
-						DeleteFiles.dirName	:= aSys.DiskHed.disk[diskClean].path;	
-					END_IF;
-(*	
-					DeleteFiles.maxSpace	:= UDINT_TO_LREAL(aSys.DiskHed.disk[i].Info.TotalNumberOfKBytes)
-											* 	USINT_TO_LREAL(aSys.DiskHed.disk[i].minSpace) * 0.01; // in bytes
-*)
-			  		rb:=_NhSysLogMsg(msg:='  + Start Clean Disk: ' + DeleteFiles.dirName +' log: ' + DeleteFilesLog.logName+ '; FileMask: '+ DeleteFiles.fileMask);
-					ExecClean := TRUE;
-					RETURN;
-				END_IF;
-			END_FOR;
-			ExecClean := FALSE;
-			DoneClean := TRUE;
-//			diskClean := 0;
-		ELSE
-			nDaysOld := SUB_DT_DT_LONG(aSys.NhDT,DeleteFiles.ListDir.fileInfo.creationTime);
-			IF true THEN //oldDay > 1  THEN
-
-			aSys.DiskHed.Disk[diskClean].fileDeleted	:= aSys.DiskHed.Disk[diskClean].fileDeleted + 1;		
-			aSys.DiskHed.Disk[diskClean].sizeDeleted	:= aSys.DiskHed.Disk[diskClean].sizeDeleted + UDINT_TO_UINT(DeleteFiles.fileInfo.fileSize/1024);		
-			yTx2:=DeleteFiles.ListDir.fileInfo.pathName + DeleteFiles.ListDir.fileInfo.fileName;
-			rb:=aBlank(txt:=ADR(yTx2),n:=20);
-	  		rb:=_NhSysLogMsg(msg:=yTx2
-										+ BOOL_TO_STRINGF(DeleteFiles.ListDir.found,'  %b{found^     }')
-										+ BOOL_TO_STRINGF(DeleteFiles.ListDir.isDir,'; %b{isDir^     }')
-										+ BOOL_TO_STRINGF(DeleteFiles.isDeleted    ,'; %b{ Del ^  N  }')
-										+ DT_TO_STRINGF(aSys.NhDT,'; %TDD.MM.YYYY - ')
-										+ DT_TO_STRINGF(DeleteFiles.ListDir.fileInfo.creationTime,'%TDD.MM.YYYY  ')
-//										+ TIME_TO_STRING(oldTime)
-//										+ LREAL_TO_STRINGF(oldDay,' Days: %10.2f')
-										+ DINT_TO_STRINGF(nDaysOld.Days,' Days: %10d')
-										+ UDINT_TO_STRINGF(DeleteFiles.ListDir.fileInfo.fileSize/1024,' fS: %d'));
-			END_IF;
- 
-
-
-  		END_IF;
 	END_IF;
 END_FUNCTION_BLOCK
   
@@ -2710,15 +2646,18 @@ END_VAR
 { $DEFINE __NH_LIST_PLC_STRING }
 
 TYPE
-	NH_PLC_DIR_PATH       : STRUCT   	// dir   
-		hed: 				STRING[18]; 	//	:= 'NH_PLC_DIR_PATH';
-//		crlf:				STRING[2]:=16#0a0d
-		exlSysDir: 		STRING[100];	// := '/IMAGES/;/JS/;/JSN/;/LOGS/;/NOTIFY/;/FRM/;';				// no-Delete DIRs
-		exclFileDir:	STRING[100];	// := '/;/WWW/;';							// no-Delete Files
-		exclFileMask:	STRING[100];	// := '*.FRM;*.XML;*.XLS;*.JS;*.ICO;*.CSS;';							// no-Delete Files
-		dummy:			STRING[100];	// := '*.FRM;*.XML;*.XLS;*.JS;*.ICO;*.CSS;';							// no-Delete Files
+   NH_FRM_HED {HIDDEN}   : STRUCT      				// HLAVNA RIADIACA PREMENNA
+      name     : STRING[5] :='_END';
+		desc		: STRING[20];
+      wht      : USINT;       	// 1-brw,2-FRM,3-MNU,4- HOME-PG - ALL, 0=read All file (log/230...) 
+		row		: USINT:=1;       // numbrer of Rows
+		sld		: USINT;    		// number of sliders
+		siz		: UDINT;				// size all file (NH_FRM_HED+data)
 	END_STRUCT;
-
+	NH_PLC_DIR_PATH_CRC       : STRUCT   	// dir   	
+		crc		: STRING[5];
+		mask		: STRING[80];				// no-Delete DIRs
+	END_STRUCT;
 	NH_PLC_DIR_DHED       : STRUCT   	// dir   
 //      eTime   	: STRING[11] :='00:00:00.00'; stim 	: BYTE := 16#3b;
       dUp   	: STRING[1] :=' ';
@@ -2731,18 +2670,19 @@ TYPE
 	{ $IFDEF __NH_LIST_PLC_STRING }
 		NH_PLC_DIR_FHED       : STRUCT   // struktura EVN-log
    	   fLen   	: STRING[3] :='   ';
-			fS			: STRING[10]:='          ';
+			DaysOld	: STRING[5] :='     ';
+			fS			: STRING[6] :='      ';
 	      fDT   	: STRING[19]:='                   ';
 		END_STRUCT;
 	{ $ELSE }
 		NH_PLC_DIR_FHED       : STRUCT   // struktura EVN-log
    	   fLen   	: UDINT;	//STRING[3] :='   ';
+			oldDays	: UINT;
 			fS			: UDINT;	//STRING[10]:='          ';
 	      fDT   	: DT;	//STRING[19];	//:='                   ';
 		END_STRUCT;
 	{ $END_IF }
 	NH_PLC_DIR_DATA       : STRUCT   // struktura EVN-log
-		path		: NH_PLC_DIR_PATH;
 		dHed		: NH_PLC_DIR_DHED;			// DIR info
 		dName		: STRING[100];	//:='                                                                           ';
 		fHed		: NH_PLC_DIR_FHED;		// hed of file
@@ -2750,7 +2690,7 @@ TYPE
 	END_STRUCT;
 
 	NH_PLC_DIR_IO 	     : STRUCT   	// dir   
-//		lenDir:			USINT:=100;
+		lenRow:			USINT:=100;		// line length in file dir
 //		lenPath:			USINT:=100;
 		fPdir:			UDINT;	 		// DIR-file position for return back
 		fSdir:			UDINT;			// DIR-file size
@@ -2758,16 +2698,71 @@ TYPE
 		hLsD: 			HANDLE;
 		hLsF: 			HANDLE;
 		Info: 			TFileInfo;
+		DaysOld: 		LONGTIME; 			// log text length
 		filesInDir:		UINT;
 		sizeInDir:		UDINT;	
-	END_STRUCT;
+ 	END_STRUCT;
 
+	NH_PLC_DIR_MASK	: STRUCT   	// exluse/include/mask dir or filre
+		exclDirs				:	STRING[36]	:= 'JS/;JSN/;LOGS/;NOTIFY/;IMAGES/;FRM/;';	// DIRs in which files are not deleted (Mosaic and NachHouse templates)
+		exclRootFiles		:	STRING[17]	:= '//;//WWW/;//NH2/;';								// roor DIRS where files in not deleted
+		exclSufixFile		:	STRING[10]	:= '.NH2;.FRM;';										// .TXT;.XML;.XLS;.JS;.ICO;.CSS; fufix files to exclude
+//		exclEmptDir			:	STRING[13]	:=	'/USR/;/SYS/;';										// list of empty DIRs that will not be deleted
+	END_STRUCT;
 END_TYPE
 
+FUNCTION _Nh_Chk_Mask {HIDDEN}: BOOL		// check if the file/dir matches the mask
+	VAR_INPUT
+		what:		SINT;	
+	END_VAR
+	VAR_IN_OUT
+		path: 	STRING;
+	END_VAR
+	VAR_TEMP
+		mask: 	NH_PLC_DIR_MASK;
+//		wrk:		STRING[5];	
+	END_VAR
+	_Nh_Chk_Mask := FALSE;
+	CASE what OF
+		1: // exlcude Suffix
+			yTx0			:= MID(path,4,FIND(path,'.'));
+			yTx0			:= CONCAT(yTx0,';');
+			_Nh_Chk_Mask 	:= FIND(mask.exclSufixFile, yTx0) > 0 ;
+		2: // no-delete dir 
+			yTx0				:= CONCAT(path,';');
+			_Nh_Chk_Mask 	:= FIND(mask.exclDirs, yTx0) > 0 ;	// find p
+		3: // sys dir mask - exlclude when chceck only SYS disk
+			yTx0				:= CONCAT(path,';');
+			_Nh_Chk_Mask 	:= FIND(mask.exclRootFiles, yTx0) > 0 ;
+(*
+		4: // dir from list found in path - Excl Empty Dir
+			yTx0 := mask.exclEmptDir;
+			del 	:= FIND(yTx0,';');
+			WHILE del > 0 DO
+				wrk := LEFT(yTx0,del-1);	
+				IF FIND(path,wrk)	> 0 THEN
+					_Nh_Chk_Mask := TRUE;
+					EXIT;
+				ELSE	
+					yTx0	:= DELETE(yTx0,del,1);	
+					del 	:= FIND(yTx0,';');
+				END_IF;
+			END_WHILE;
+*)	
+	ELSE _Nh_Chk_Mask := TRUE;
+	END_CASE;
+END_FUNCTION
+
+
 VAR_GLOBAL
+//		llllDir:				ListDirectories;	
 	_Nh_Dir_Data	AT mObr 			{HIDDEN}: NH_PLC_DIR_DATA ;						// before yTx6
-//	_Nh_Dir_Data				{HIDDEN}: NH_LIST_DIR_PLC_INFO ;						// before yTx6
+//	_Nh_Dir_Path	AT mObr[3548]	{HIDDEN}: NH_PLC_DIR_PATH;
+//	_Nh_Dir_Path		{HIDDEN}: NH_PLC_DIR_PATH;
+
 END_VAR
+
+
 
 FUNCTION	_Nh_FIX_STRING_CRLF {HIDDEN}: BOOL	// fix end string and add spaces to lenngth
 	VAR_INPUT
@@ -2785,33 +2780,6 @@ FUNCTION	_Nh_FIX_STRING_CRLF {HIDDEN}: BOOL	// fix end string and add spaces to 
 										OffDest 	:= INT_TO_UDINT(lenTxt)-2 ); // + CRLF
 END_FUNCTION
 
-FUNCTION _Nh_Chk_File_Mask {HIDDEN}: BOOL		// check if the file/dir matches the mask
-	VAR_INPUT
-		Dir: 		BOOL; 			// check DIR
-		file:		BOOL;				// check file
-//		exclude:	BOOL;
-	END_VAR
-	VAR_IN_OUT
-		mask:		STRING[80];		// '*', '*.log;*.LOG;XyZ*.*;'
-		path: 	STRING[80];		// path DIR or filename
-	END_VAR
-	VAR_TEMP
-		wrk:	STRING[12];	
-	END_VAR
-	_Nh_Chk_File_Mask := TRUE;
-	IF dir THEN
-		_Nh_Chk_File_Mask := FIND(mask,path) > 0 ;
-	END_IF;
-	IF file THEN
-		// vybrat z file priponu, zacinajuci nazov ...
-		wrk	:= LEFT(mask,2);
-		IF	wrk  = '*' THEN
-			_Nh_Chk_File_Mask := TRUE;
-		END_IF;	 	
-
-	END_IF;
-END_FUNCTION
-
 
 FUNCTION _Nh_PLC_DIR_Data_ADD {HIDDEN}: BOOL
 	VAR_INPUT
@@ -2825,29 +2793,30 @@ FUNCTION _Nh_PLC_DIR_Data_ADD {HIDDEN}: BOOL
 	IF file THEN
 		{ $IFDEF __NH_LIST_PLC_STRING }
 			_Nh_Dir_Data.fHed.fDT		:= DT_TO_STRINGF(IO.Info.modifyTime,'%TYYYY-MM-DD-hh:mm:ss');
-			_Nh_Dir_Data.fHed.fS			:= UDINT_TO_STRINGF(IO.info.fileSize,'%10d');
+			_Nh_Dir_Data.fHed.fS			:= UDINT_TO_STRINGF(MAX(1,IO.info.fileSize / 1024),'%6d');
 			sp									:= INT_TO_UDINT(LEN(_Nh_Dir_Data.fName)) + SIZEOF(_Nh_Dir_Data.fHed);
-			_Nh_Dir_Data.fHed.fLen		:= INT_TO_STRINGF( del,'%3u' );
+			_Nh_Dir_Data.fHed.fLen		:= UDINT_TO_STRINGF( sp,'%3u' );
+			_Nh_Dir_Data.fHed.DaysOld	:= DINT_TO_STRINGF(IO.DaysOld.Days,'%5d');
 		{ $ELSE }
-			_Nh_Dir_Data.fHed.fDT		:= IO.Info.creationTime;
-			_Nh_Dir_Data.fHed.fS			:= IO.info.fileSize;
+			_Nh_Dir_Data.fHed.fDT		:= IO.Info.modifyTime;
+			_Nh_Dir_Data.fHed.fS			:= MAX(1,IO.info.fileSize / 1024);
 			_Nh_Dir_Data.fHed.fLen		:= INT_TO_UDINT(LEN(_Nh_Dir_Data.fName) + SIZEOF(_Nh_Dir_Data.fHed));
 			sp									:= _Nh_Dir_Data.fHed.fLen;
 		{ $END_IF }
 		fRW	:= FileWrite(hFile:=IO.hLsF ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.fHed)), size:=sp );
 
 	ELSIF FileSetPos( hFile := IO.hLsD, offset := IO.fSdir) THEN
-		_Nh_Dir_Data.dHed.dUp := ' ';													// flag for new DIR
+		_Nh_Dir_Data.dHed.dUp 	:= ' ';													// flag for new DIR
 		_Nh_Dir_Data.dHed.dDT	:= DT_TO_STRINGF(IO.Info.modifyTime,'%TYYYY-MM-DD-hh:mm:ss');
-//		_Nh_Dir_Data.dName		:= Name;				
-		_Nh_FIX_STRING_CRLF(txt	:=	_Nh_Dir_Data.dName, lenTxt	:= 100 - SIZEOF(_Nh_Dir_Data.dHed));
-		fRW	:= FileWrite( hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=100 );					
+		_Nh_FIX_STRING_CRLF(txt	:=	_Nh_Dir_Data.dName, lenTxt	:= USINT_TO_INT(IO.lenRow) - SIZEOF(_Nh_Dir_Data.dHed));
+		sp		:= USINT_TO_UDINT(IO.lenRow);
+		fRW	:= FileWrite( hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=sp );					
 		IO.fSdir := IO.fSdir + fRW;
 		IO.fPdir	:= IO.fSdir;
 	ELSE
 		rb	:=	_NhSysLogMsg(ini:=0, msg:=' ! Err:_Nh_Dir_Data_ADD-1; fN={'+ _Nh_Dir_Data.dName + '}; fSdir='+UDINT_TO_STRING(IO.fSdir) );											
 	END_IF;	
-	IF fRW < 100 THEN
+	IF fRW <> sp THEN
 		rb		:=	_NhSysLogMsg(ini:=0, msg:=' ! Err:_Nh_Dir_Data_ADD-2; fN={'+ _Nh_Dir_Data.dName + '}; fRW: '+UDINT_TO_STRING(fRW));					
 		_Nh_PLC_DIR_Data_ADD	:= FALSE;	
 	END_IF;
@@ -2855,81 +2824,56 @@ END_FUNCTION
 
 FUNCTION_BLOCK _Nh_PLC_DIR  // list DIR and save to file in RAM
 	VAR_INPUT
-		exec:				BOOL;			// start tasks
-		sysOnly:			BOOL;			// scan only disk[1] (defaul SYS)		
+		Go: 				USINT; 			// 1=start list DIR, 2=next entry, 0=stop
+		dirName:    	STRING[40]; // DIR path is first condition, then Case disk
+		usr:     		USINT;   	// make list to user work Dir (only when GoDelete=FALSE)
+		lifeTime: 		UINT:=730; 	// how many days older files will be deleted/tested
 		noSubDir:		BOOL;			//	Not go to Sudirectories			
-		cancel:			BOOL;			// interrupts the task
+		checkFile:		BOOL:=TRUE;	// first create list DIRs and check and writes files
+		emptyDir:		BOOL:=TRUE;	// second check empty Dirs in list ONLY !! Empty DIRs (AND delete  IF GoDelete:=TRUE)
 		// parameters Only for delete/test
-		GoDelete:		BOOL;			// TRUE=deletete/test, FALSE=only list
+		GoDelete:		BOOL:=TRUE;	// list DIRs without excludeDirs (files will remain) and net DELETE/TEST 
 		testOnly: 		BOOL:=TRUE; // only tests, does not delete (only when GoDelete:=TRUE)
 		append:			BOOL;			// append to DEL_RRMM.log (only if ) 
-		delEmptyDir:	BOOL;			// delete Empty DIRs
-		lifeTime: 		UINT:=730; 	// how many days older files will be deleted/tested
-		// parameters for ALL
-		dirName:    	STRING[40]; // DIR path is first condition, then Case disk
-//		exludeMask:		STRING[80]:		
-//		disk:    		USINT;  		// what disk test/delete
-		usr:     		USINT;   	// make list to user work Dir (only when GoDelete=FALSE)
 	END_VAR	
 	VAR_OUTPUT
 		busy: 			BOOL; 
 		done: 			BOOL; 
+		tree:				BOOL;			// 1.cycle = create DIR tree
 		errID:			USINT;
-		timeExec:		UINT;
+		nCyc:				UINT;
 	END_VAR
 	VAR
-		go: 				USINT; 			// 1=start list DIR, 2=next entry, 0=stop
-		GoNext: 			USINT;			// jump control
 		IO:				NH_PLC_DIR_IO;
 	END_VAR
 	VAR_TEMP
-//n		_NH2_SYS_DIR 		{HIDDEN}:	STRING[80] := 'W/IMAGES/;W/JS/;W/JSN/;W/LOGS/;W/NOTIFY/;FRM/';				// no-Delete DIRs
+		ok1:				BOOL;		
+//		mask: 			NH_PLC_DIR_MASK;
 	END_VAR
-
 	done	:= FALSE;
 	CASE go OF
-		0: 	IF exec THEN	;
-//					exec		:= FALSE;
-					Go	:=	3; GoNext	:=	10;
-					IF GoDelete OR usr = 0 	THEN	
-						usr	:= 100;	
-					END_IF;
-					busy		:= TRUE;
-					errID		:= 0;
-					IO.fPdir	:= 0; IO.fSdir	:= 0;
-					timeExec	:= SYSTEM_S.COUNTER_1SEC;
-					yTx0 := MID(dirName,1,LEN(dirName));									// last char in dirName for DIR/file
-					IF dirName = '' 	THEN	
-						dirName := '/';	
-					ELSIF yTx0 <> '/' THEN					// DIR
-						dirName := CONCAT(dirName,'/');
-					END_IF;
-					yTx0 := MID(dirName,1,1);									// last char in dirName for DIR/file
-					IF yTx0 <> '/' THEN					// DIR
-						dirName := CONCAT('/',dirName);
-					END_IF;
-					rb:=_NhSysLogMsg(msg:='->Start scan DIRs: {'+dirName+'}'); 
-				END_IF;
-				RETURN;
-
+		0: RETURN;
 		1:		// start list DIR with disk
-	
-
-		2:		// close DIR 
-				Go	:=	GoNext;
-				rb := _NhFclose(fH:=IO.hDir, dir:=TRUE);
-				rb := _NhFclose(fH:=IO.hLsD);
-				rb := _NhFclose(fH:=IO.hLsF);
-
-		3:		// open DIRs 
-				Go := GoNext;	yTx0	:=	'';
+				Go	:=	10; busy	:= TRUE;	errID	:= 0; IO.fPdir	:= 0; IO.fSdir	:= 0; nCyc := 0; tree:=TRUE;
+				IF GoDelete THEN usr	:= 0;	END_IF;				// system DIR
+				yTx0 := MID(dirName,1,1);	
+				IF dirName = '' OR yTx0 <> '/' THEN										
+					dirName := '//';															// root
+				END_IF;
+				yTx0	:= MID(dirName,1,LEN(dirName));									// last char in dirName for DIR/file
+				IF	yTx0 <> '/' THEN													
+					dirName := CONCAT(dirName,'/');										// add at the End DIR
+				END_IF;
+				rb:=_NhSysLogMsg(msg:='->Start scan DIRs: {'+dirName+'}'); 
+				// DIR log
 				rb	:=	_Nh_Log_Path(wh := 24, frm := 3, wh2:=usr);	// yTx1	:=	'/RAM/USR/{usr}/PLC_DIR.log', if wh2:=0 '/RAM/SYS/PLC_DIR.log'
 				IF _NhFdelete( fN:=yTx1, fH:=IO.hLsD, open:=TRUE, mode:=F_READ_PLUS  ) = FALSE THEN 
 					errID	:=	2; yTx0 	:= CONCAT('IO.hLsD:{',yTx1,'}');
 				END_IF;
-				IF GoDelete = FALSE 	THEN	rb	:=	_Nh_Log_PATH(wh := 24, frm := 4, wh2:=usr);	// list only PLC_FILE.log		
-				ELSIF testOnly 		THEN	rb	:=	_Nh_Log_PATH(wh := 24, frm := 5, wh2:=98);	// list of test-delete file TST_RRMM.log
-				ELSE								rb	:=	_Nh_Log_PATH(wh := 24, frm := 5,	wh2:=99);	// list of deleted filed DEL_RRMM.log
+				// FILES log
+				IF GoDelete = FALSE 	THEN	rb	:=	_Nh_Log_PATH(wh := 24, frm := 4, wh2:=usr);	// list only all files			-> PLC_FILE.log		
+				ELSIF testOnly 		THEN	rb	:=	_Nh_Log_PATH(wh := 24, frm := 5, wh2:=98);	// list of test-delete file 	-> TST_RRMM.log
+				ELSE								rb	:=	_Nh_Log_PATH(wh := 24, frm := 5,	wh2:=99);	// list of deleted filed 		-> DEL_RRMM.log
 				END_IF;
 				IF GoDelete AND append  THEN
 					IF _NhFopen( fN:=yTx1, fH:=IO.hLsF, mode:=F_APPEND, close:=TRUE ) = FALSE THEN 
@@ -2939,12 +2883,212 @@ FUNCTION_BLOCK _Nh_PLC_DIR  // list DIR and save to file in RAM
 					errID	:=	2; yTx0 	:= CONCAT(yTx0,'delete: IO.hLsF:{',yTx1,'}');
 				END_IF;
 				IF errID > 0 THEN
-					Go	:=	98; yTx0 := CONCAT(' Err: ',yTx0);
+					yTx0 := CONCAT(' Err: ',yTx0);
 				ELSE
+					yTx0	:= CONCAT('DELETED files from Root: {',dirName,'}'
+										,'; lifeTime: ',UINT_TO_STRING(lifeTime)
+										,' ; SubDir: ',BOOL_TO_STRINGF(noSubDir,'%b{N^Y}')
+										,'; EmptyDir: ',BOOL_TO_STRINGF(emptyDir,'%b{Y^N}')
+										,'; checkFile: ',BOOL_TO_STRINGF(checkFile,'%b{Y^N}')																				
+										 );	
+					rb	:=	_NhSysLogMsg(msg:=yTx0,openfH:=IO.hLsF, ini:=FALSE,eRowAfter:=TRUE,maxSize:=0);							
 					_Nh_Dir_Data.dName		:= dirName;		
+					_Nh_Dir_Data.dHed.dUp := 'R';													// sign for next cycle, that DIR pased	
 					_Nh_PLC_DIR_Data_ADD( IO:=IO);	//, Name:=dirName );					// add 1.line to PLC_DIR.log
 				END_IF;		
 
+//				IO.hDir := INVALID_HANDLE_VALUE;
+
+
+		10:	// read nex file/DIR or open new DIR 
+				ok1	:= IO.hDir <> INVALID_HANDLE_VALUE;									// DIRs is open
+				IF ok1 THEN
+					ok1 := DirRead(hDir := IO.hDir, dirInfo := IO.Info);	   		// read next file/DIR
+//					_Nh_Dir_Data.dHed.dUp := ' ';													// sign for next cycle, that DIR pased	
+					IF ok1 THEN ;																	// ADD dir/file
+					ELSIF noSubDir THEN															// End of DIR, No Search in Subdir
+						Go	:= 99;																	// Go previous dir
+						RETURN;
+					ELSE																				// End of DIR
+						rb := _NhFclose(fH:=IO.hDir, dir:=TRUE);
+						Go	:= 12;																	// Go previous dir
+						RETURN;
+					END_IF;
+				END_IF;
+				IF ok1 = FALSE THEN
+					IO.hDir	:= DirOpen( dirName := dirName, dirinfo:=IO.Info );
+					IF IO.hDir = INVALID_HANDLE_VALUE THEN
+						// Empty Dir - from 12-previous DID or from 3-start	
+						IF IO.fPdir > 0 THEN
+							IF tree=FALSE AND emptyDir THEN	
+								IF 	FIND(dirName,aSys.YYYY_MM) > 0 THEN;				// actual mont DIRs '2025_05/'				
+								ELSIF FIND(dirName,'/SYS/') > 0 THEN;						// RAM/SYS/	
+								ELSIF FIND(dirName,'/USR/') > 0 THEN;						// RAM/USR/*	
+								ELSE
+									rb	:=	_NhSysLogMsg(msg:=dirName,openfH:=IO.hLsF, ini:=FALSE,noTime:=TRUE,maxSize:=0);
+//									rb	:=	_NhSysLogMsg(ini:=0, msg:=' EMPTY-Dir: {'+dirName+'} fP:'+UDINT_TO_STRING(IO.fPdir));					
+								END_IF;
+							END_IF;		
+							Go	:=	12;
+//							RETURN;
+						ELSE
+							yTx0	:=	CONCAT('  ! Err: DirOpen {',dirName,'}; fN: {',IO.Info.fileName,'}');
+							errID	:=	10; 					
+						END_IF;		
+					ELSIF tree = FALSE THEN	
+//						rb := _NhFclose(fH:=IO.hDir, dir:=TRUE);
+						Go	:=	12; 
+//						RETURN;
+					ELSE
+						ok1	:=	TRUE;
+					END_IF;
+				END_IF
+				IF ok1 THEN
+					Go	:=	10;																							// next file in Dir
+					yTx0 := MID(IO.Info.fileName,1,LEN(IO.Info.fileName));								// last char in dirName for check if DIR or file
+					IF IO.info.fileName = '' THEN																// no file in new open DIR / unknown err
+						ErrID := 10;
+						yTx0 := 'IO.info.fileName=""';					
+					ELSIF yTx0 = '/' THEN																				// is DIR
+						ok1 := TRUE;
+						IF 	IO.info.fileName = 'USB/' THEN	ok1 := aSys.DiskHed.disk[2].Exist;
+						ELSIF IO.info.fileName = 'SDC/' THEN	ok1 := aSys.DiskHed.disk[3].Exist;
+						ELSIF IO.info.fileName = 'RAM/' THEN	ok1 := aSys.DiskHed.disk[4].Exist;
+						ELSIF GoDelete = FALSE 	THEN ; 																	// list writes all files
+						ELSIF _Nh_Chk_Mask(what:=2, path:=IO.info.fileName) THEN	ok1 := FALSE;
+						END_IF;
+						IF ok1 THEN
+							_Nh_Dir_Data.dName := CONCAT(dirName,IO.Info.fileName);
+							rb := _Nh_PLC_DIR_Data_ADD( IO:=IO ); 				 								// OK: add new rec with DIR
+						END_IF;
+
+//					ELSIF false	THEN		// file													
+					ELSIF checkFile	THEN		// file													
+						ok1	:=	TRUE; 								// Write
+						IF 	GoDelete = FALSE 	THEN	; 												// list writes all files
+						ELSIF _Nh_Chk_Mask(what:=3, path:=dirName) THEN	ok1 := FALSE;
+						END_IF;
+						IF ok1 THEN
+							IO.DaysOld := SUB_DT_DT_LONG(aSys.NhDT, IO.Info.modifyTime);
+							_Nh_Dir_Data.fName	:= CONCAT(dirName,IO.info.fileName,_Nh_CRLF);
+							_Nh_PLC_DIR_Data_ADD( IO:=IO, file:=TRUE );
+						END_IF;
+					END_IF;
+				END_IF;
+
+		12:	// Go Up to previous DIR
+				IF IO.fPdir <= USINT_TO_UDINT(IO.lenRow) THEN										// 1.row i root = END
+					IF tree THEN																				
+						IF emptyDir THEN
+							rb	:=	_NhSysLogMsg(msg:='Deleted EMPTY DIRs:',openfH:=IO.hLsF,ini:=FALSE,eRowBefore:=TRUE,eRowAfter:=TRUE,maxSize:=0);							
+						END_IF;
+						IO.fPdir	:= IO.fSdir;
+						tree		:= FALSE;																	// 2.cycle = check Empty DIRs
+						Go := 12;
+					ELSE
+						Go	:=	99;
+					END_IF;	
+				ELSE
+					IO.fPdir	:= IO.fPdir - USINT_TO_UDINT(IO.lenRow);					
+					IF FileSetPos( hFile := IO.hLsD, offset := IO.fPdir) THEN					// previous (Up) Dir
+						fRW	:=	FileRead(hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=USINT_TO_UDINT(IO.lenRow));
+						dirName	:= _Nh_Dir_Data.dName;													// set Actual DIR for check file
+						IF tree = FALSE THEN																	// 1.cycle = create DIR
+							rb := _NhFclose(fH:=IO.hDir, dir:=TRUE);
+							Go	:= 10;																			// Go next DIR (up  to file)
+						ELSIF _Nh_Dir_Data.dHed.dUp <> ' ' THEN											// DIR has already been passed.
+							Go	:= 12;																			// Go next DIR (up  to file)
+						ELSIF FileSetPos( hFile := IO.hLsD, offset := IO.fPdir) THEN			// always=TRUE,  only to adjust begin row
+							_Nh_Dir_Data.dHed.dUp := 'Y';													// sign for next cycle, that DIR pased	
+							fRW	:=	FileWrite( hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=1 );					
+							Go	:= 10;																			// next DIR
+							IF FIND(dirName,'/.') > 0  THEN;												// Skip Hidden Dir-olny 
+								Go := 12;
+							END_IF;
+						ELSE																			// unknown Err
+							errID	:=	12; 											
+							yTx0	:=	CONCAT('Unknown Err; fP:',UDINT_TO_STRING(IO.fPdir));
+						END_IF;		
+						rb := FileSetPos( hFile := IO.hLsD, offset := IO.fPdir);				// sets the position to the beginning of the line where DIR is loaded
+					ELSE
+						errID	:=	12; 
+						yTx0	:=	CONCAT('Err-FileSetPos(fP)=FALSE: fP:',UDINT_TO_STRING(IO.fPdir));
+					END_IF;							
+				END_IF;
+
+
+		90:	// Cancel
+				errID := 90; 				// close files correctly
+		99:	// END with error, OR no ERROR
+				rb			:= _NhSysLogMsg(msg:='->End   scan DIRs. '+UINT_TO_STRING(nCyc)+' cyc');
+				done		:=	TRUE;
+				busy		:=	FALSE;
+				dirName	:= '';
+				rb 		:= _NhFclose(fH:=IO.hDir, dir:=TRUE);
+				rb 		:= _NhFclose(fH:=IO.hLsD);
+				rb 		:= _NhFclose(fH:=IO.hLsF);
+				Go			:=	0;
+				RETURN;
+	ELSE		
+		errID:=100;
+		yTx0	:= CONCAT('No CASE Go:=',USINT_TO_STRINGF(Go,'%3u'));
+	END_CASE;
+	nCyc	:= nCyc + 1;	
+	IF errID > 0 THEN
+		Go	:=	99;
+		ok1	:=	FALSE;
+		ok2	:= TRUE;
+		CASE errID OF
+			1:		ok1	:= TRUE;		// open log-files
+			10:	ok1	:= TRUE;		// open DIR
+			90:	yTx0	:=	' *Cancel scan DIRs !';
+		END_CASE;
+		IF ok2 THEN	
+			yTx0	:= CONCAT(' ! Err _Nh_PLC_DIR: ',USINT_TO_STRINGF(errID,'%03u')
+									,' Msg: ',yTx0
+									,';hDir: ',BOOL_TO_STRINGF(IO.hDir <> INVALID_HANDLE_VALUE,'%b{Y^N}')
+									,';hLsD: ',BOOL_TO_STRINGF(IO.hLsD <> INVALID_HANDLE_VALUE,'%b{Y^N}')
+									,';hLsF: ',BOOL_TO_STRINGF(IO.hLsF <> INVALID_HANDLE_VALUE,'%b{Y^N}')				
+										);
+		END_IF;
+		IF ok1 THEN
+				rb		:=	GetLastErrTxt(errCode:=GetLastErr(), errMessage := yTx2);
+				yTx0	:= CONCAT(yTx0,';GetErr: ',yTx2);
+		END_IF;
+		rb := _NhSysLogMsg(msg:=yTx0);
+	END_IF;
+END_FUNCTION_BLOCK
+
+VAR_GLOBAL
+	fb_Nh_PLC_DIR		: _Nh_PLC_DIR;
+END_VAR
+
+(*
+		2:		// close DIR 
+				Go	:=	GoNext;
+				rb := _NhFclose(fH:=IO.hDir, dir:=TRUE);
+				rb := _NhFclose(fH:=IO.hLsD);
+				rb := _NhFclose(fH:=IO.hLsF);
+
+		3:		// open DIRs 
+
+		5:		lDir(NoSubDir:=TRUE);
+				IF lDir.exec THEN
+					rb	:=	_NhSysLogMsg(write:=TRUE, ini:=0, msg:='  START: ldir {'+lDir.DirName+'}');					
+				END_IF	
+				IF lDir.Done OR lDir.Err THEN
+						Go	:=	98;	errID	:=	5; 					
+				ELSIF	lDir.found THEN
+					IF lDir.isDir THEN
+						rb	:=	_NhSysLogMsg(ini:=0, msg:='   ..20-DIR....{'+lDir.fileInfo.pathName+'}'+'{'+lDir.fileInfo.fileName+'}');					
+					ELSIF	lDir.isDirEmpty THEN
+						rb	:=	_NhSysLogMsg(ini:=0, msg:='   ..20-EMPTY....{'+lDir.fileInfo.pathName+'}'+'{'+lDir.fileInfo.fileName+'}');					
+					ELSE
+						rb	:=	_NhSysLogMsg(ini:=0, msg:='   ....20-FILE..{'+lDir.fileInfo.pathName+'}'+'{'+lDir.fileInfo.fileName+'}');					
+					END_IF;		
+				ELSIF	lDir.isDirEmpty THEN
+					rb	:=	_NhSysLogMsg(ini:=0, msg:='   ..20-EE-EMPTY....{'+lDir.fileInfo.pathName+'}'+'{'+lDir.fileInfo.fileName+'}');					
+				END_IF;
 		10:	// open DIR / start with dirName
 				IO.hDir	:= DirOpen( dirName := dirName, dirinfo:=IO.Info );
 				IF IO.hDir = INVALID_HANDLE_VALUE THEN
@@ -2969,34 +3113,43 @@ FUNCTION_BLOCK _Nh_PLC_DIR  // list DIR and save to file in RAM
 //					rb	:=	_NhSysLogMsg(ini:=0, msg:='... 11: FALSE=DirRead(); Info.FileName {'+ IO.Info.FileName + '}');					
 					rb := _NhFclose(fH:=IO.hDir, dir:=TRUE);
 					Go	:= 12;																		// Go previous dir
+					IF noSubDir THEN																// finished the current DIR, not go to subDir - End
+						Go	:= 98; 																	// End
+					END_IF;
 				ELSE																					
-					Go	:=	20;																		// additional tests and ADD dir/file
+					Go	:=	20;																					// additional tests and ADD dir/file
 				END_IF;
 		12:	// Go Up to previous DIR
-				IF IO.fPdir <= 100 THEN																// 1.row i root = END
+				IF IO.fPdir <= USINT_TO_UDINT(IO.lenRow) THEN										// 1.row i root = END
 					Go	:=	98;	errID	:=	0;
-				ELSIF noSubDir THEN																// finished the current DIR, no Go to subDir
-					Go	:= 98; 																		// End
 				ELSE
-					IO.fPdir	:= IO.fPdir - 100;					
-					IF FileSetPos( hFile := IO.hLsD, offset := IO.fPdir) THEN				// previous (Up) Dir
+					IO.fPdir	:= IO.fPdir - USINT_TO_UDINT(IO.lenRow);					
+					IF FileSetPos( hFile := IO.hLsD, offset := IO.fPdir) THEN					// previous (Up) Dir
 //						rb			:=_NhSysLogMsg(msg:='12.1 Yes- IO.fPdir: '+UDINT_TO_STRING(IO.fPdir) + ' dirName:{' + dirName+'}' );						
-						fRW		:= FileRead(hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=100);	//size:=INT_TO_UDINT(LEN(yTx0)) );
-						dirName 	:= _Nh_Dir_Data.dName;										// Actual DIR for check file
-						IF _Nh_Dir_Data.dHed.dUp <> ' ' THEN								// DIR has already been passed.
+						fRW	:=	FileRead(hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=USINT_TO_UDINT(IO.lenRow));
+						dirName	:= _Nh_Dir_Data.dName;													// set Actual DIR for check file
+						IF _Nh_Dir_Data.dHed.dUp <> ' ' THEN											// DIR has already been passed.
+							Go	:= 12;																			// Go next DIR (up  to file)
 //							rb		:=_NhSysLogMsg(msg:='12.2 Yes; dUp:"'+_Nh_Dir_Data.dHed.dUp+'"; IO.fPdir: '+UDINT_TO_STRING(IO.fPdir) + ' fR: '+ UDINT_TO_STRING(fRW) + ' dirName:{' + dirName+'}' );						
-							Go	:= 12;															// next up DIR
-						ELSIF FileSetPos( hFile := IO.hLsD, offset := IO.fPdir) THEN		// begin row
-							Go	:=	10;															
-							IF GoDelete THEN								// try Delete files
-								yTx0 := _NH2_SYS_DIR;					// exclude SYS dir
-								IF _Nh_Chk_File_Mask(dir:=TRUE, mask:=yTx0, path:=dirName)  THEN
-									_Nh_Dir_Data.dHed.dUp := 'S';								// this is SYSEM Dir, not delete 
-								END_IF;
-							ELSE
-								_Nh_Dir_Data.dHed.dUp := 'Y';									// sign for next cycle, that DIR pased
+
+						ELSIF FileSetPos( hFile := IO.hLsD, offset := IO.fPdir) THEN			// always=TRUE,  only to adjust begin row
+							_Nh_Dir_Data.dHed.dUp := 'Y';													// sign for next cycle, that DIR pased	
+							fRW	:=	FileWrite( hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=1 );					
+							Go	:= 10;																			// next DIR
+							IF FIND(dirName,'/.') > 0  THEN;												// Skip Hidden Dir-olny 
+								Go := 12;
+							ELSIF GoDelete = FALSE THEN;													// only list
+						// next all only for delete/test file
+							ELSIF _Nh_Chk_Mask(what:=2, path:=dirName ) THEN; 						// exlude file in No-Del DIRs '/;/WWW/;/IMAGES/;/JS/;/JSN/;/LOGS/;/NOTIFY/;/FRM/'
+//							ELSIF FIND(_NH2_SYS_DIR, IO.info.fileName) > 0 THEN;								// excluded DIRs {WWW/...,FRM/}
+								Go := 12;
 							END_IF;
-							fRW	:= FileWrite( hFile:=IO.hLsD ,adrBuf:=PTR_TO_UDINT(ADR(_Nh_Dir_Data.dHed)),size:=1 );					
+							IF go = 10 THEN
+								rb		:=_NhSysLogMsg(msg:='12.YES-Go-In-Dir: IO.info.fileName:{'+IO.info.fileName+'}; dirName: {'+dirName+'}');
+							ELSE
+								rb		:=_NhSysLogMsg(msg:='12.NOO-Go-In-Dir: IO.info.fileName:{'+IO.info.fileName+'}; dirName: {'+dirName+'}');																
+							END_IF;
+
 						ELSE																			// unknown Err
 //							rb		:=_NhSysLogMsg(msg:='12.3 No - IO.fPdir: '+UDINT_TO_STRING(IO.fPdir) + ' fR: '+ UDINT_TO_STRING(fRW) + ' dirName:{' + dirName+'} yTx0:{'+yTx0+'}');
 							Go	:=	98;	errID	:=	12; 											
@@ -3013,104 +3166,70 @@ FUNCTION_BLOCK _Nh_PLC_DIR  // list DIR and save to file in RAM
 				Go	:=	11;																							// next file in Dir
 				yTx0 := MID(IO.Info.fileName,1,LEN(IO.Info.fileName));								// last char in dirName for check if DIR or file
 				IF yTx0 = '/' THEN																				// is DIR
-//					_Nh_Dir_Data.dHed.dDT	:= DT_TO_STRINGF(IO.Info.creationTime,'%TYYYY-MM-DD-hh:mm:ss');
-//					yTx0	:= CONCAT(dirName,IO.Info.fileName);						 
 					_Nh_Dir_Data.dName := CONCAT(dirName,IO.Info.fileName);
 //					rb	:=	_NhSysLogMsg(ini:=0, msg:='... 20.5.1 Begin; mask:{'+ _NH2_SYS_DIR+'}'+' path:{'+IO.info.fileName+'}');					
-					IF FIND(_Nh_Dir_Data.dName,'/.') > 0  THEN ;															// Hidden Dir; Skip
-					ELSIF sysOnly AND FIND('/RAM/;/SDC/;/USB/',IO.info.fileName) > 0 THEN;		// scan only disk[1] = SYS {special exclude}
-					ELSIF FIND(_NH2_SYS_DIR, IO.info.fileName) > 0 THEN;								// excluded DIRs {WWW/...,FRM/}
-						rb	:=	_NhSysLogMsg(ini:=0, msg:='... 20.5.2 NOT-Add Dir: Find mask:{'+ _NH2_SYS_DIR+'}'+' path:{'+IO.info.fileName+'}');					
-					ELSIF _Nh_PLC_DIR_Data_ADD( IO:=IO ) THEN; //, Name:=yTx0) THEN ; 								// OK: add new rec with DIR
+//					IF FIND(_Nh_Dir_Data.dName,'/.') > 0  THEN ;															// Hidden Dir; Skip
+//					ELSIF sysOnly AND FIND('/RAM/;/SDC/;/USB/',IO.info.fileName) > 0 THEN;		// scan only disk[1] = SYS {special exclude}
+//					ELSIF FIND(_NH2_SYS_DIR, IO.info.fileName) > 0 THEN;								// excluded DIRs {WWW/...,FRM/}
+//						rb	:=	_NhSysLogMsg(ini:=0, msg:='... 20.5.2 NOT-Add Dir: Find mask:{'+ _NH2_SYS_DIR+'}'+' path:{'+IO.info.fileName+'}');					
+//					IF sysOnly AND FIND('/RAM/;/SDC/;/USB/',IO.info.fileName) > 0 THEN;		// scan only disk[1] = SYS {special exclude}
+
+					rb	:=	_NhSysLogMsg(ini:=0, msg:='   ...20-DIR: dir/file {'+dirName+'}'+'{'+IO.info.fileName+'}');					
+
+					ok1	:=	TRUE; 								// Write
+
+					IF IO.info.fileName = '/USB/' AND aSys.DiskHed.disk[2].Exist = FALSE THEN
+						ok1	:=	FALSE; 								// Write						
+					ELSIF IO.info.fileName = '/SDC/' AND aSys.DiskHed.disk[3].Exist = FALSE THEN
+						ok1	:=	FALSE; 								// Write						
+					ELSIF IO.info.fileName = '/RAM/' AND aSys.DiskHed.disk[4].Exist = FALSE THEN
+						ok1	:=	FALSE; 								// Write						
+					END_IF;
+					IF ok1 = FALSE THEN
+						;			
+					ELSIF sysOnly THEN
+//						ok1 := _Nh_Chk_Mask(what:=3, path:=IO.info.fileName ) = FALSE; 					// exlude Sys dir '/RAM/;/SDC/;/USB/;'
+					END_IF;
+					IF ok1 THEN
+						rb := _Nh_PLC_DIR_Data_ADD( IO:=IO ); 				 								// OK: add new rec with DIR
 					END_IF;
 				ELSIF IO.info.fileName = '' THEN																// no file in new open DIR / unknown err
 //					Go	:=	98;	errID	:=	20;	yTx0:=' 20: info.fileName="" '; 
 					rb		:=	_NhSysLogMsg(ini:=0, msg:='... 20.5.3: ERR -info.fileName = ""');					
 				ELSE		// file													
+
+
+
+//					path		: NH_PLC_DIR_PATH;
+
+					IF _Nh_Dir_Data.path.hed.Name = 'PLCPA' THEN;
+					ELSIF _Nh_Log_PATH(wh := 24, frm := 1, wh2:=1) THEN								// /RAM/FRM/_PLC_PATH.TXT
+						rb := _NhFread(fN:=yTx1, fH:=fH, fS:=SIZEOF(_Nh_Dir_Data.path), adrVar:=ADR(_Nh_Dir_Data.path));
+						rb	:=	_NhSysLogMsg(ini:=0, msg:='... 20-read; path:{'+ yTx1+'}'+';exclFileMask:{'+_Nh_Dir_Data.path.exclFileMask+'} fRW: '+UDINT_TO_STRING(fRW));					
+					END_IF;
+
+
+					rb	:=	_NhSysLogMsg(ini:=0, msg:='   ...20-FILE: dir/file {'+dirName+'}'+'{'+IO.info.fileName+'}');					
+					
 					_Nh_Dir_Data.fName	:= CONCAT(dirName,IO.info.fileName,_Nh_CRLF);
 					ok1	:=	TRUE; 								// Write
-(*
-					IF true THEN //GoDelete THEN								// try Delete files
-						yTx0 := _NH2_SYS_DIR;					// exclude SYS dir
-//						IF _Nh_Chk_File_Mask(dir:=TRUE, mask:=yTx0, path:=IO.info.fileName) THEN
-						rb		:=	_NhSysLogMsg(ini:=0, msg:='... 20.5.1 Begin; mask:{'+ yTx0+'}'+' path:{'+IO.info.fileName+'}');					
-						IF FIND(yTx0,IO.info.fileName) > 0 THEN
-							ok1	:= FALSE;	
-						ELSE
-							rb		:=	_NhSysLogMsg(ini:=0, msg:='... 20.5.2 NOT-Find; mask:{'+ yTx0+'}'+' path:{'+IO.info.fileName+'}');					
-							yTx0	:= 'D';
-						END_IF;
-					ELSE
-						yTx0	:= ' ';								// flag DEL				
-					END_IF;
-*)
-
-					// exclude root files (NH2.exp,TecoApi.pub,..): GoDelete AND dirName = '/' 
+					// exclude root files "/"   (NH2.exp,TecoApi.pub,..): GoDelete AND dirName = '/' 
 					// exclude root files /WWW/ (001_NHM.XML;LOGIN.XML...): GoDelete AND dirName = '/WWW/' 
-
-//					IF FIND(_NH2_SYS_DIRxxx, IO.info.fileName) > 0 THEN;
-//					end_if;
-
 					// GoDelete AND 
-					IF dirName = '/' 		THEN; 	// exclude root files (NH2.exp,TecoApi.pub,..): 
-						ok1 := FALSE;
+
+					IF GoDelete = FALSE THEN; 
+					ELSIF dirName = '/' 		THEN; 	// exclude root files (NH2.exp,TecoApi.pub,..): 
+						ok1 := FALSE;						
 					ELSIF dirName = '/WWW/' 	THEN; 	// exclude root files /WWW/ (001_NHM.XML;LOGIN.XML...): GoDelete AND dirName = '/WWW/' 
 						ok1 := FALSE;
 					END_IF;
 
 					IF ok1 THEN
+						IO.DaysOld := SUB_DT_DT_LONG(aSys.NhDT, IO.Info.modifyTime);
 						_Nh_PLC_DIR_Data_ADD( IO:=IO, file:=TRUE );
 					END_IF;
 				END_IF;
-				
-		99:	// END with error, OR no ERROR
-				timeExec	:= SYSTEM_S.COUNTER_1SEC - timeExec;
-				rb			:= _NhSysLogMsg(msg:='->End   scan DIRs. '+UINT_TO_STRING(timeExec)+' sec');
-				done		:=	TRUE;
-				busy		:=	FALSE;
-				dirName	:= '';
-				sysOnly	:= FALSE;
-				Go	:=	0;
-	ELSE		
-		Go	:= 0;
-	END_CASE;
-	IF Go	= 98 THEN								// correct END or err/cancel with yTx0 error/message
-		Go	:=	2;	GoNext	:=	99;				// close files correctly
-		ok1	:=	FALSE;
-		CASE errID OF
-			0: 	RETURN;							// correct END 
-
-			1:		;
-			2:		ok1	:=	TRUE;
-			10:	;
-//			98:	errID:=0;
-			100:	yTx0 := '  *Cancel scan DIRs !';	errID:=0;
-		ELSE	errID := 0;					// Own err in yTx0
-		END_CASE;
-		IF errID > 0 THEN
-			yTx0	:= CONCAT(' ! _Nh_List_File_PLC.ErrID=',USINT_TO_STRINGF(errID,'%02u')
-									,' Msg: ',yTx0
-									,'; IO.hDir: ',BOOL_TO_STRINGF(IO.hDir <> INVALID_HANDLE_VALUE,'%b{Y^N')
-									,'; IO.hLsD: ',BOOL_TO_STRINGF(IO.hLsD <> INVALID_HANDLE_VALUE,'%b{Y^N')
-									,'; IO.hLsF: ',BOOL_TO_STRINGF(IO.hLsF <> INVALID_HANDLE_VALUE,'%b{Y^N')				
-										);
-			IF ok1 THEN
-				rb:=GetLastErrTxt(errCode:=GetLastErr(), errMessage := yTx2);
-				yTx0	:= CONCAT(yTx0,'; ErrTXT: ',yTx2);
-			END_IF;
-		END_IF;
-		rb:=_NhSysLogMsg(msg:=yTx0);
-	ELSIF cancel	THEN
-		Go	:= 98; errID := 100;
-	END_IF;
-	cancel 	:= FALSE;		
-	exec		:= FALSE;
-END_FUNCTION_BLOCK
-
-VAR_GLOBAL
-	fb_Nh_PLC_DIR		: _Nh_PLC_DIR;
-END_VAR
-
+*)				
 
 
 FUNCTION_BLOCK _Nh_Copy_DIR // copy file or directory

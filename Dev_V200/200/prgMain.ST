@@ -56,6 +56,7 @@ PROGRAM prgMain
 	aSys.mSec			:= REAL_TO_UINT( ROUND(  aSys.rSec ) );			            // UINT: doba minuleho cyklu v mS  (prevod zo 100 mikrosekund)							
 //	aSys.rTime     	:= TIME_TO_REAL(aSys.NhTime);				// REAL: cas v sekundach od polnoci
 	
+(*
 	IF System_S.F_EDGE_10SEC THEN	//System_S.F_EDGE_1MIN OR  System_S.R_EDGE_1MIN THEN				// kazdych 30sec
 		aSys.LogHed.Quite10Sec := aSys.LogHed.Quite10Sec + 1;
 		IF aSys.LogHed.Quite10Sec > 6 THEN														// ak nebol 1 min zapis, zavrie subor
@@ -63,6 +64,9 @@ PROGRAM prgMain
 		END_IF;
 		aSys.mSecMax			:= 0;
 	END_IF;
+*)
+
+
  	aSys.mSecMax 	:= MAX(aSys.mSec, aSys.mSecMax);
 	aSys.et50		:= aSys.et50 + SYSTEM_S.LAST_CYCLE_TIME_100US;			
 	IF aSys.PULSE_BEEP THEN
@@ -171,8 +175,10 @@ PROGRAM prgMain
 			fbWebPush();
             
 			aSys.F_EDGE_1MIN		:= FALSE;		// vynuluje sa edge
+			aSys.F_EDGE_1HOUR		:= FALSE;		// vynuluje sa edge			
 			aSys.F_EDGE_1DAY		:= FALSE;		// vynuluje sa edge			
 			aSys.F_EDGE_1MON		:= FALSE;		// vynuluje sa edge
+			aSys.F_EDGE_1YEAR		:= FALSE;		// vynuluje sa edge
 			aSys.Restart  			:= false;                     						// vynuluje sa restart, ale az ked sa prebehu prvykrat vsetky DEV
 
 
@@ -477,30 +483,20 @@ PROGRAM prgMain
 				ELSE
 					aSys.IS_RBx			:= false;
 					aSys.Size_RBx 		:= 0;
-					yTx1					:= 'WWW/LOGS/';
+//					yTx1					:= 'WWW/LOGS/';
 			  	END_IF;
 //				yTx1		:= 'WWW/NH2/';
 //				rb:=DirCreate( dirName := yTx1 );																	// create default LOG adr
-				aSys.Restart     		:= true;
+				aSys.Restart     		:= TRUE;
 				aSys.RefCyc				:=	1;
 //				aSys.rst.In				:= true;
-				aSys.CfgBckOk			:=	false;																	// flag, that BckFile no-Exiat
+				aSys.CfgBckOk			:=	FALSE;																	// flag, that BckFile no-Exiat
 				aSys.Size_DBx 			:= UINT_TO_UDINT( SizeOfDataBox()) * 1024;   								// 128 kb   (128*1024=131072 Byte)
 				aSys.IS_DBX				:= aSys.Size_DBx >= 131072;
-				aSys.DiskHed.USB_Ready.In	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
-				aSys.DiskHed.USB_Ready.Q	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
 
-				IF IS_COLD_RESTART_PLC 		THEN	yTx2:='COLD';
-				ELSIF IS_HOT_RESTART_PLC   THEN  yTx2:='HOT';
-				ELSIF IS_RESTART_PLC       THEN  yTx2:='RST';
-				ELSE 						      	   yTx2:='UNKNOWN';
-				END_IF;
+//				aSys.DiskHed.USB_Ready.In	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
+//				aSys.DiskHed.USB_Ready.Q	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
 
-				rb:=_NhSysLogMsg(write:=1,eRowBefore:=1,msg:=' *** '+yTx2+' RESTART ***   DBx: '+UINT_TO_STRING(SizeOfDataBox())+' kB, RBx: '+UINT_TO_STRING( SizeOfRamBox() )+BOOL_TO_STRINGF(SYSTEM_S.USB_DISK_READY, ' kB; USB:%b{Y^N}')+'   *** ');
-				rb:=_NhSysLogMsg(eRowAfter:=1,NoTime:=1,msg:=DT_TO_STRINGF(_NhLastPowerOffState.LastDt, '%TYY.MM.DD-hh:mm:ss.zzz ') +',Ini:='+USINT_TO_STRING(_NhLastPowerOffState.ini) );
-
-
-				CloseAllFiles();                                         	
 				aDbx.aCfx[0]   := _cfg0;
 		   	aDbx.aCfx[1]   := _par0;
 	   		aDbx.aCfx[2]   := _vaz0;
@@ -512,22 +508,31 @@ PROGRAM prgMain
      			FOR i := 2  TO _Nh_Par DO                                                     // offset default Empty vety
      				aPar[i].ofs   := aPar[i-1].ofs + aPar[i-1].siz ;
      			END_FOR;
-
 				RandomU(seed := _NhSeed, init:=true);
-
-
-			  rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=_NH_RAM, value := 0);
+			  	
+				rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=_NH_RAM, value := 0);
 
 				_Nh_CUST_RESTART();                          											// nejake vlasne veci po restarte
 
-//				_Nh_Log_Dbx_ADD(ev:='AL1',src:='PIR',key:='Pir-1',val:='On',subj:=1,rom:=101);
+				IF IS_COLD_RESTART_PLC 		THEN	yTx0:='COLD';
+				ELSIF IS_HOT_RESTART_PLC   THEN  yTx0:='HOT';
+				ELSIF IS_RESTART_PLC       THEN  yTx0:='RST';
+				ELSE 						      	   yTx0:='UNKNOWN';
+				END_IF;
 
 				SYSTEM_S.F_EDGE_1DAY 	:= true;												// simulate new day for refresh day in room/het	
-//				fb_Nh_Create_DIR.exec 	:= TRUE;												// vynuluje sa vytvaranie adresarov
+            aSys.Ini 					:= 251;
+
+
+    	251: 	// 2.cyc After restart - create dir OK
+				rb:=_NhCloseAllFiles();                                         	
+				rb:=_NhSysLogMsg(write:=1,eRowBefore:=1,msg:=' *** '+yTx0+' RESTART ***   DBx: '+UINT_TO_STRING(SizeOfDataBox())+' kB, RBx: '+UINT_TO_STRING( SizeOfRamBox() )+BOOL_TO_STRINGF(SYSTEM_S.USB_DISK_READY, ' kB; USB:%b{Y^N}')+'   *** ');
+				rb:=_NhSysLogMsg(eRowAfter:=1,NoTime:=1,msg:=DT_TO_STRINGF(_NhLastPowerOffState.LastDt, '%TYY.MM.DD-hh:mm:ss.zzz ') +',Ini:='+USINT_TO_STRING(_NhLastPowerOffState.ini) );
+//				_Nh_Log_Dbx_ADD(ev:='AL1',src:='PIR',key:='Pir-1',val:='On',subj:=1,rom:=101);
             aSys.Ini 				:= 241;
 
-    	251:    // After create dir or Running createc Dir
-				;
+//            aSys.Ini 				:= 255;
+
 	 	252:    // test
             ;
 		254:    // Error
@@ -539,17 +544,17 @@ PROGRAM prgMain
 	// time events - change progtam date
 	IF SYSTEM_S.F_EDGE_1DAY  THEN				   											// novy den
 		aSys.F_EDGE_1DAY	:= true;														// NH event	
+		aSys.F_EDGE_1MON 	:= aSys.MONTH 	<> SYSTEM_S.COUNTER_MONTHS;												// NH event		
+		aSys.F_EDGE_1YEAR	:= aSys.YEAR 	<> SYSTEM_S.COUNTER_YEARS;
+		aSys.YEAR 			:= SYSTEM_S.COUNTER_YEARS;								// Nh month
+		aSys.MONTH 			:= SYSTEM_S.COUNTER_MONTHS;							//	Nh month
+		aSys.DAY				:= SYSTEM_S.COUNTER_DAYS_OF_MONTH;					// Nh month
 		aSys.RefCycNew		:= true;														// v dalsom cykle nastartuje TypDay
-		IF	aSys.MONTH 	<> SYSTEM_S.COUNTER_MONTHS OR
-			aSys.YEAR 	<> SYSTEM_S.COUNTER_YEARS	THEN							// new month OR Year
-			fb_Nh_Create_DIR.exec	:= true;												// vytvori nove adresare pre novy mesiac
-			aSys.F_EDGE_1MON 		:= true;												// NH event		
-		END_IF
-		aSys.YEAR 		:= SYSTEM_S.COUNTER_YEARS;								// Nh month
-		aSys.MONTH 		:= SYSTEM_S.COUNTER_MONTHS;								// Nh month
-		aSys.DAY			:= SYSTEM_S.COUNTER_DAYS_OF_MONTH;						// Nh month
+		aSys.YYYY_MM		:= CONCAT(USINT_TO_STRINGF(aSys.YEAR, '20%02d'),'_',USINT_TO_STRINGF(aSys.MONTH, '%02d'),'/');
+		fb_Nh_Create_DIR.exec	:= aSys.F_EDGE_1MON ;							// vytvori nove adresare pre novy mesiac
 	ELSIF  SYSTEM_S.F_EDGE_1MIN  THEN                   									// new min
 		aSys.F_EDGE_1MIN			:= true;												// NH event		
+		aSys.F_EDGE_1HOUR			:= SYSTEM_S.F_EDGE_1MIN;						// NH event		
 		aSys.RefCycNew				:= true;												// v dalsom cykle nastartuje TypDay
 		// after xxx seconds of error-free operation, make a CFG backup
 	ELSIF aSys.RestartBck = false THEN										// este nebol urobeny backup po restarte		
@@ -560,10 +565,9 @@ PROGRAM prgMain
 		END_IF
 	END_IF;
 
-
 	fb_Nh_Create_DIR();												// test and create directories
+
 	fb_Nh_Cfg_Backup();      	// save from mRam[] to file, or restore to mRam[] from file
-//	fbCopyDir();  		// copies/renames a file or the entire contents of a directory
 	fb_Nh_Copy_Dir();
 	fb_Nh_Log_DBX_RW();		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
 	fb_Nh_PLC_DIR();

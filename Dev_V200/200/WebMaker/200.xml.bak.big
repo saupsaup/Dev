@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1250" ?>
-<web version="8.1" propfont="true" foot="" dwMode="0" MaxUid="28283" height="1219" width="610" menu="false" title="false" border="false" top="0" left="0" iniScale="100" maxScale="100" useIniScale="false" useMaxScale="false" userScale="true" webApp="true" bgdupl="true" bgcolor="16777215" icon="FAVICON.ICO" id18="0" author="© Au Media, s.r.o." encoding="windows-1250" flat="false" flatcolor="16771043">
+<web version="8.1" propfont="true" foot="" dwMode="0" MaxUid="28284" height="1219" width="610" menu="false" title="false" border="false" top="0" left="0" iniScale="100" maxScale="100" useIniScale="false" useMaxScale="false" userScale="true" webApp="true" bgdupl="true" bgcolor="16777215" icon="FAVICON.ICO" id18="0" author="© Au Media, s.r.o." encoding="windows-1250" flat="false" flatcolor="16771043">
 	<panels></panels>
 	<Grid Enable="1" X="5" Y="5" />
 	<globalset newdim="1" pvstyle="1" maxvar="0" />
@@ -173,7 +173,7 @@
 		</page>
 	</group>
 	<group caption="Service" level="9" locked="0" altdim="true" notforid="true" width="585" height="800" dwMode="0" useIniScale="false" useMaxScale="false" userScale="true" iniScale="100" maxScale="100" Uid="28163">
-		<page caption="CrDir" name="CRDIR.XML" background="" bgcolor="3548178" repeat="false" hidden="false" ajax="true" pause="1000" level="0" Uid="28199" ucid="1762879653" width="585" height="768">
+		<page caption="CrDir" name="CRDIR.XML" background="" bgcolor="3548178" repeat="false" hidden="false" ajax="true" pause="1000" level="0" Uid="28199" ucid="1762927537" width="585" height="768">
 			<object caption="" X="62" Y="4" xoff="2" yoff="6" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28186">
 				<image optcap="" variable="fb_Nh_Create_DIR.exec" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
@@ -342,7 +342,7 @@
 			<object caption="Path" X="4" Y="87" xoff="6" yoff="7" level="0" readonly="false" front="65408" back="16777215" strong="false" italic="false" size="18" transparent="true" visneg="false" Uid="28267">
 				<label />
 			</object>
-			<object caption="" X="41" Y="81" xoff="5" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28268">
+			<object caption="" X="41" Y="81" xoff="5" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28268" hint="busy">
 				<image optcap="" variable="fb_Nh_List_DIR_PLC.busy" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="47" Y="81" xoff="7" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28272">
@@ -351,8 +351,8 @@
 			<object caption="" X="11" Y="91" xoff="5" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28273">
 				<image optcap="" variable="fb_Nh_List_DIR_PLC.exec" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
-			<object caption="" X="31" Y="91" xoff="0" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28274" hint="CheckDel">
-				<image optcap="" variable="fb_Nh_List_DIR_PLC.CheckDel" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			<object caption="" X="31" Y="91" xoff="0" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28274" hint="GoDelete">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.GoDelete" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="37" Y="91" xoff="7" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28276" hint="testOnly">
 				<image optcap="" variable="fb_Nh_List_DIR_PLC.testOnly" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
@@ -363,16 +363,19 @@
 			<object caption="" X="35" Y="81" xoff="3" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28278" hint="Cancel">
 				<image optcap="" variable="fb_Nh_List_DIR_PLC.cancel" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
-			<object caption="" X="43" Y="91" xoff="4" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28279" hint="testOnly">
-				<image optcap="" variable="fb_Nh_List_DIR_PLC.testOnly" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			<object caption="" X="43" Y="91" xoff="4" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28279" hint="delEmptyDIR">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.delEmptyDIR" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
-			<object caption="" X="49" Y="91" xoff="1" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28280" hint="delEmptyDir">
-				<image optcap="" variable="fb_Nh_List_DIR_PLC.delEmptyDir" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			<object caption="" X="49" Y="91" xoff="1" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28280" hint="append">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.append" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 			<object caption="" X="56" Y="87" xoff="5" yoff="2" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="18" transparent="false" visneg="false" Uid="28281">
 				<edit variable="fb_Nh_List_DIR_PLC.timeExec" type="UINT" intf="0" timf="" align="left" zero="false" prec="-1" size="4" global="true" border="true" width="58" height="28" tabindex="30" />
 			</object>
-			<object caption="" X="17" Y="91" xoff="2" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28282" hint="noSubdir">
+			<object caption="" X="17" Y="91" xoff="2" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28282" hint="sysOnly">
+				<image optcap="" variable="fb_Nh_List_DIR_PLC.sysOnly" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
+			</object>
+			<object caption="" X="22" Y="91" xoff="7" yoff="0" level="0" readonly="false" front="0" back="16777215" strong="false" italic="false" size="13" transparent="true" visneg="false" Uid="28283" hint="noSubdir">
 				<image optcap="" variable="fb_Nh_List_DIR_PLC.noSubdir" type="BOOL" on="OK1.PNG" off="OK0.PNG" />
 			</object>
 		</page>
@@ -2041,7 +2044,7 @@
 		<layer visible="1" frozen="0" name="" />
 	</Layers>
 	<security crypt="1" count="10">
-		<user level="5" name="nopass" pass="9121B04EDA66" />
+		<user level="9" name="nopass" pass="9121B04EDA66" />
 		<user level="9" name="saup" pass="8C2AB443" />
 		<user level="-1" name="2" pass="CD" />
 		<user level="-1" name="3" pass="CC" />
