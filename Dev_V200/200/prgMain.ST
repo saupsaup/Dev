@@ -1,7 +1,9 @@
 ﻿{ $ IFNDEF _Nh_CUST_RESTART } 	                 // ak nie je definovana funkcia v uzivatelskom subore, vytvori sa pre
+(*
    FUNCTION _Nh_CUST_RESTART  {HIDDEN} : BOOL
 		;
    END_FUNCTION
+*)
 { $ END_IF } 	
 
 TYPE _Nh_Last_State_ON : STRUCT 		// last state PRG/CPU before restart
@@ -15,12 +17,8 @@ END_TYPE
 
 VAR_GLOBAL
 //DeleteFiles : DeleteSurplusFilesEx := ( delEmptyDir := true ); // delete surplus files in  given  directory
-
-
   	fb_Nh_Import_CIB		: _Nh_Import_CIB;
 	fb_Nh_Cfg_Restart		: _Nh_Cfg_Restart;
-//	fb_Nh_Create_DIR		: _Nh_Create_DIR_FB;
-//	fb_Nh_Copy_DIR			: _Nh_Copy_DIR;
 	fb_Nh_Log_DBX_RW		: _Nh_Log_DBX_RW;		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
 END_VAR
 VAR_GLOBAL RETAIN
@@ -138,6 +136,11 @@ PROGRAM prgMain
 			ELSE			
 					aSys.RefCyc := aSys.RefCyc + 1;                 // rucne sa moze nastartovat hocikde v programe na (1), tu sa prida na (2)
 			END_CASE;
+(*
+               Paradox( chan_code := CH5_uni, par_system_data := paradox_data,
+                         max_zone_count  := paradox_max_zone_count);
+               aSys.ExtPSN := Paradox.com_ok;
+*)
 
 (*)
             IF SYSTEM_S.F_EDGE_1DAY OR aSys.Restart THEN                   // novy den
@@ -460,7 +463,7 @@ PROGRAM prgMain
 
 		241:    // COPY NH2/200/FRM/*.* -> RAM/FRM/
             	IF aSys.DiskHed.Disk[4].Exist THEN												// RAM exist, go copy
-   					_Nh_Log_Path(wh:=5, frm:=0);                                  // yTx3,yTx4
+   					_Nh_Log_Path(wh:=24, frm:=1, wh2:=1);                                  // yTx3,yTx4
 	     				yTx2 		:= CONCAT('START Copy {',yTx3,'}->{',yTx4,'}');													// START Create Dir
                	rb      	:= _Nh1RowTxt(logRst := 1);
                	fb_Nh_Copy_Dir(init:=TRUE,Go:= 2,IniRun:=255,IniEnd:=242,IniErr:=249);
@@ -471,11 +474,11 @@ PROGRAM prgMain
 				yTx2		:= CONCAT('END   Copy  f: ',UINT_TO_STRING(fb_Nh_Copy_Dir.files),' s: ',UDINT_TO_STRING(fb_Nh_Copy_Dir.allSize) )  ;
     			rb			:= _Nh1RowTxt(logRst := 1);
       		aSys.Ini := 230;
-
 	 	249: 	// Err Copy Dir
 				;
 	 	250: 	// restart
   				//          aSys.prgChange    		:= PROGRAMISCHANGED();
+				rb:=_NhCloseAllFiles();                                         	
 				IF CPU_CODE >= 2000 THEN
 					rb 					:= ResizeRamBox( newSize := 16*1024);   	// 16MB*1024 = 16384 kByte
 					aSys.Size_RBx 		:= UINT_TO_UDINT( SizeOfRamBox() ) * 1024;   							// 128 kb   (128*1024=131072 Byte)
@@ -494,6 +497,7 @@ PROGRAM prgMain
 				aSys.Size_DBx 			:= UINT_TO_UDINT( SizeOfDataBox()) * 1024;   								// 128 kb   (128*1024=131072 Byte)
 				aSys.IS_DBX				:= aSys.Size_DBx >= 131072;
 
+
 //				aSys.DiskHed.USB_Ready.In	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
 //				aSys.DiskHed.USB_Ready.Q	:= SYSTEM_S.USB_DISK_READY;									// vynuluje sa flag USB ready	
 
@@ -510,9 +514,9 @@ PROGRAM prgMain
      			END_FOR;
 				RandomU(seed := _NhSeed, init:=true);
 			  	
-				rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=_NH_RAM, value := 0);
+//				rb	:= SetValueToRamBox(ramBoxAddress:=0, length:=_NH_RAM, value := 0);
 
-				_Nh_CUST_RESTART();                          											// nejake vlasne veci po restarte
+//				_Nh_CUST_RESTART();                          											// nejake vlasne veci po restarte
 
 				IF IS_COLD_RESTART_PLC 		THEN	yTx0:='COLD';
 				ELSIF IS_HOT_RESTART_PLC   THEN  yTx0:='HOT';
@@ -525,9 +529,8 @@ PROGRAM prgMain
 
 
     	251: 	// 2.cyc After restart - create dir OK
-				rb:=_NhCloseAllFiles();                                         	
-				rb:=_NhSysLogMsg(write:=1,eRowBefore:=1,msg:=' *** '+yTx0+' RESTART ***   DBx: '+UINT_TO_STRING(SizeOfDataBox())+' kB, RBx: '+UINT_TO_STRING( SizeOfRamBox() )+BOOL_TO_STRINGF(SYSTEM_S.USB_DISK_READY, ' kB; USB:%b{Y^N}')+'   *** ');
-				rb:=_NhSysLogMsg(eRowAfter:=1,NoTime:=1,msg:=DT_TO_STRINGF(_NhLastPowerOffState.LastDt, '%TYY.MM.DD-hh:mm:ss.zzz ') +',Ini:='+USINT_TO_STRING(_NhLastPowerOffState.ini) );
+
+				rb:=_NhSysLogMsg(write:=0,eRowBefore:=1,msg:=' *** '+yTx0+' RESTART ***   DBx: '+UINT_TO_STRING(SizeOfDataBox())+' kB, RBx: '+UINT_TO_STRING( SizeOfRamBox() )+BOOL_TO_STRINGF(SYSTEM_S.USB_DISK_READY, ' kB; USB:%b{Y^N}')+'   *** ');				rb:=_NhSysLogMsg(eRowAfter:=1,NoTime:=1,msg:=DT_TO_STRINGF(_NhLastPowerOffState.LastDt, '%TYY.MM.DD-hh:mm:ss.zzz ') +',Ini:='+USINT_TO_STRING(_NhLastPowerOffState.ini) );
 //				_Nh_Log_Dbx_ADD(ev:='AL1',src:='PIR',key:='Pir-1',val:='On',subj:=1,rom:=101);
             aSys.Ini 				:= 241;
 
@@ -566,11 +569,10 @@ PROGRAM prgMain
 	END_IF;
 
 	fb_Nh_Create_DIR();												// test and create directories
-
 	fb_Nh_Cfg_Backup();      	// save from mRam[] to file, or restore to mRam[] from file
 	fb_Nh_Copy_Dir();
-	fb_Nh_Log_DBX_RW();		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
-	fb_Nh_PLC_DIR();
+//	fb_Nh_Log_DBX_RW();		// write log to buffer (DBx,RBx) and read from buffer and send datagram to Pi or Write to USB/LOG
+//	fb_Nh_PLC_DIR();
 	
 	_NhLastPowerOffState.LastDt	:= aSys.NhDT;
 	_NhLastPowerOffState.ini 	:= aSys.ini;

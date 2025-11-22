@@ -2144,7 +2144,7 @@ FUNCTION _Nh_Web_CMD    : BOOL
 
 (*
      54: // aktivovat/deaktivovat blikac/opozdovac pre DEV  (pridat/odobrat vetu v acfg[36])
-(*
+
 
             xPar^.out.Bl1 := NOT xPar^.out.Bl1;
             IF xPar^.out.Bl1 THEN                                // treba najst vetu

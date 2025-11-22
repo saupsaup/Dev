@@ -614,7 +614,7 @@ FUNCTION_BLOCK _NhWebControl    {HIDDEN}
             END_IF;
             IF xUsr^.cx.IP[1].y > 1.0 THEN
                yk       := MIN(xUsr^.cx.IP[1].y, 1.14) ;
-//               yk       := MIN(xUsr^.cx.IP[1].y, 1.5) ;
+               yk       := MIN(xUsr^.cx.IP[1].y, 1.5) ;
             ELSE
                yk       := 1.0;
             END_IF;

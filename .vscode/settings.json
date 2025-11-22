@@ -31,17 +31,20 @@
 	"numberedBookmarks.showInExplorer": true,
 	"numberedBookmarks.navigateThroughAllFiles": "replace",
 	"numberedBookmarks.saveBookmarksInProject": true,
-
 	"editor.stickyScroll.enabled": true,
-"editor.stickyScroll.showOutline": true,
-"editor.stickyScroll.maxLineCount": 4,
-
+	"editor.stickyScroll.showOutline": true,
+	"editor.stickyScroll.maxLineCount": 4,
 	// ============================================================
 	// 🧱 EDITOR – odsadenie, formátovanie, ST asociácie
 	// ============================================================
 	"files.associations": {
+		"*.txt,*.TXT": "plaintext",
 		"*.st.ST.bak.BAK": "structured-text",
 		//	"*.ST": "structured-text"
+	},
+		"files.encoding": "utf8",
+		"[plaintext]": {
+			"files.encoding": "windows1250"
 	},
 	"search.seedWithSelection": "always",
 	"editor.find.seedSearchStringFromSelection": "selection",
@@ -144,6 +147,4 @@
 		"**/node_modules/**": true,
 		"**/.Trash/**": true
 	},
-
-
 }

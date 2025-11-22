@@ -1,4 +1,4 @@
-﻿{ $ IFDEF __NH_WEB }
+﻿{ $ IFDEF __NH_WEB }                            
 
 FUNCTION _Nh_Shw_Val {HIDDEN}: BOOL
    VAR_INPUT
@@ -253,11 +253,11 @@ FUNCTION _Nh_Shw_Obj   {HIDDEN}    : BOOL                    // vykresli objekty
                            END_IF;
                   251 :     // to co je v cf.ID, formatom 1.12
                            yTx1 := INSERT(xDev^.cf.ID,'.',2);
-                           yTx1 := CONCAT(yTx1,'   (',INT_TO_STRINGF(xR^.h.cf.n,'%d'),')')  ;
+                           yTx1 := CONCAT(yTx1,'   {' ,INT_TO_STRINGF(xR^.h.cf.n,'%d'),'}')  ;
                   252 :     // nazov ROM alebo zony
                            IF xDev^.cf.rom = 0 OR USINT_TO_INT(xDev^.cf.rom) > aCfg[1].rec THEN
 										c := 0;
-                              yTx1 := CONCAT('!!!-Rom: ', USINT_TO_STRING(xDev^.cf.rom));
+                              yTx1 := CONCAT( '!-Rom: ', USINT_TO_STRING(xDev^.cf.rom) );
 				               ELSIF aCfg[xR^.h.cf.c].RomIsZone THEN
 										c := 3;
                            ELSE
@@ -1385,7 +1385,7 @@ FUNCTION _Nh_Shw_Obj   {HIDDEN}    : BOOL                    // vykresli objekty
 							END_IF;
 
 
-(*
+
 							IF xR^.o.ob[0].BgC > 0 THEN                           // v tomto riadku je aktivny slider = modry kruh nad cislom
 								IF xR^.o.ob[0].fn > 0 THEN                         // suvisi aj s inym datumom
 									xB^.r[ xR^.o.ob[0].fn ].o.ob[0].BgC := 0;
@@ -1876,6 +1876,7 @@ FUNCTION _Nh_Shw_Obj   {HIDDEN}    : BOOL                    // vykresli objekty
 									xB^.r[1].o.ob[0].y	:=	xR^.o.ob[7].y-20;			// preberie suradnicu z objektu sviatok
 					         END_IF;
 							END_IF;
+
 							IF pp > 0 AND xPtB^ AND xR^.o.ob[0].set6 THEN		// vypisuje sa text dna
   		               	_NhVal2(
 										xy		:= true,
@@ -1887,6 +1888,7 @@ FUNCTION _Nh_Shw_Obj   {HIDDEN}    : BOOL                    // vykresli objekty
                               FgT   := 3,						// farba textu
                               wT    := 28 );
 							END_IF;
+
       				END_IF;	
 
 

@@ -2987,7 +2987,7 @@ END_VAR
             xFrmHed  := ADR(_START_FRM_SYS); 		
             Go 		:= 3;
 				IF all THEN
-					_Nh_Log_Path(wh:=1, fN:='FRM');	
+					_Nh_Log_Path(wh:=21, frm:=1);	
 // 	           rb       := ForceDirs(fileName := yTx2);
 					yTx2 		:= CONCAT('New FRM_SYS: ',yTx2);
  					rb 		:= _Nh1RowTxt(logRst := 1);
@@ -3000,7 +3000,7 @@ END_VAR
       		GoNext	:= 0;
 				{$IFDEF __NH_WEB}
 					xFrmHed  := ADR(_START_FRM_WEB); 			
-					_Nh_Log_Path(wh:=1, fN:='FRM');	
+					_Nh_Log_Path(wh:=21, frm:=1);	
 					yTx2 		:= CONCAT('New FRM_WEB: ',yTx2);
  					rb 		:= _Nh1RowTxt(logRst := 1);
 
@@ -3019,7 +3019,7 @@ END_VAR
 
        4 :
       	   cyc   := cyc + 1;
-				_Nh_Log_Path(wh:=1, fN:='FRM');	
+				_Nh_Log_Path(wh:=21, frm:=1);	
             WHILE xFrmHed^.Size > 0 DO
       	      yTx3 := CONCAT(yTx2, xFrmHed^.hed.Name ,'.FRM');
          	   fH   := FileOpen(fileName := yTx3, mode := F_WRITE);

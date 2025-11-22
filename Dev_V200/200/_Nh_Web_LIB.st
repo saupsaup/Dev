@@ -574,8 +574,7 @@ FUNCTION _Nh_Vaz1_LOG  {HIDDEN}   : BOOL           // najst alebo vymazat vetu/v
 							,';',INT_TO_STRINGF  (xVaz^.ou.n,'%4d')
 							,';',INT_TO_STRINGF  (xVaz^.in.p,'%4d'));							
 
-							_Nh_Log_Path(wh:=4,fN:='EXP');
-
+	_Nh_Log_Path(wh:=99, fN:='EXP');
 	yTx1          := CONCAT(yTx2,'_vaz_',USINT_TO_STRING(cv),'.txt' );
 	IF nv = 1 THEN
       _Nh1Rowtxt(write:=true);
@@ -672,7 +671,7 @@ FUNCTION _Nh_Vaz_LOG  {HIDDEN}   : BOOL           // najst alebo vymazat vetu/ve
    yTx3  := CONCAT(	yTx3
 							,';',yTx2);
 	If adrexp THEN
-							_Nh_Log_Path(wh:=4,fN:='EXP');
+		_Nh_Log_Path(wh:=99, fN:='EXP');
  		yTx1  := CONCAT(yTx2,'_vaz_',USINT_TO_STRING(cv),'.txt' );
 		yTx2	:= yTx3;
 		IF nv = 1 THEN          	

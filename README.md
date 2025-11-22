@@ -70,7 +70,7 @@ Hľadať v súbore								⌘ F		Ctrl F
 Hľadať v celom projekte						⌥ F		Ctrl ⇧ F
 Nahradiť v súbore								⌥ ⌘ F
 Nahradiť v celom projekte					⌘ ⇧ H	Ctrl ⇧ H
-Prejs na zaciatok definicie (VAR) 		⌥ F3
+Prejs na zaciatok definicie (VAR) 		    ⌥ F3
 Hľadať 				FUNCTION [clipb]		Ctrl ⌥ F
 nastavit previos	FUNCTION [clipb]		⌥ PgUp	- skok na predchadzajucie blok zaciankuci FUNCTION
 nastavit Next	 	FUNCTION [clipb]		⌥ PgDn	- skok na nasledujuci blok zaciankuci FUNCTION

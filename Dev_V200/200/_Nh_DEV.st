@@ -2099,7 +2099,7 @@ END_FUNCTION
 				END_IF;				
 			END_IF;
 		END_IF;
-(*
+
 		IF _Nh_IO_DEV(io := xPtIO) THEN												// ochrana pred prehriatim/prechladenim
 
 
@@ -4538,7 +4538,8 @@ FUNCTION _Nh_ROM  {HIDDEN}  :BOOL  // ukladanie hodnot do ROM a nasledne do ZON
    END_FOR;
 END_FUNCTION
 
-(*FUNCTION _Nh_ROM  :BOOL  // ukladanie hodnot do ROM a nasledne do ZON
+(*
+FUNCTION _Nh_ROM  :BOOL  // ukladanie hodnot do ROM a nasledne do ZON
    _Nh_ROM 	:= _NH_DEV_INI(c:=1);
    xRoW  	:= xRoW1;
    FOR nd := 1 TO aCfg[cf].Rec DO
@@ -4608,7 +4609,7 @@ END_FUNCTION
 
 
 
-(*
+
          IF aSys.Cyc_F_Min = 4 THEN													// 3. cyklus po ptrrchode na novu minutu
 //				xRom^.cx.pDay.Day  := xZon^.cx.pDay.Day ;
 				_Nh_TypDay(xDay:=ADR(xRom^.cx.pDay), xFix:=ADR(xRom^.cx.pDay.Fix), go:=true);
@@ -4632,8 +4633,6 @@ END_FUNCTION
 				xRom^.me.ClearBli	:= false;													// resetne priznak pre nastavovanie Dark Rolety
             _NhDevRef(xR  := xRom, ref := ok2 <> xRom^.cx.Dark);
          END_IF;
-*)
-(*
          // alarm
          // odpocitava blokovanie vsetkych PIR v miestnsti [min] po vypnuti WSB
 			IF _Nh_Dev_ET_USINT(t := 2, et := ADR(xRom^.me.BlPirOff) ) THEN

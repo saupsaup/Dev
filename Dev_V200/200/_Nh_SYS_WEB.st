@@ -3674,17 +3674,19 @@ FUNCTION  _NhIsObrOk {HIDDEN}: BOOL (* yTx1:=CONCAT('_',UINT_TO_STRINGF(frm,'%03
 	VAR_INPUT
 		frm	: UINT;
 	END_VAR
-//	_NhIsObrOk	:= _Nh_Log_Path(wh:=7,frm:=frm);	
-	yTx0 := CONCAT('_',UINT_TO_STRINGF(frm,'%03u'));
- 	If yFrmName.Name = yTx0 THEN
+//	yTx0 := CONCAT('_',UINT_TO_STRINGF(frm,'%03u'));
+	rb := _Nh_Log_PATH(wh:=24, frm:=7, obr:=frm); 		//yTx2:='_999", yTx1:='RAM/FRM/_999.FRM'
+// 	If yFrmName.Name = yTx0 THEN
+ 	If yFrmName.Name = yTx2 THEN
 		_NhIsObrOk := TRUE;
 		RETURN;
 	ELSE
 		_NhIsObrOk := false;	
 	END_IF;
-	fH 	:= INVALID_HANDLE_VALUE;
-	yTx0 	:= CONCAT(aSys.DiskHed.Disk[4].path,'FRM/',yTx0,'.FRM');							// RAM/
-  	IF _NhFOpen(fN:=yTx0, fH:=fH) THEN
+//	fH 	:= INVALID_HANDLE_VALUE;
+//	yTx0 	:= CONCAT(aSys.DiskHed.Disk[4].path,'FRM/',yTx0,'.FRM');							// RAM/
+//  	IF _NhFOpen(fN:=yTx0, fH:=fH) THEN
+  	IF _NhFOpen(fN:=yTx1, fH:=fH) THEN
      	yFrmName.siz 	:= fS;	
   		yFrmName.siz 	:= FileRead  (hFile := fH, adrBuf := PTR_TO_UDINT(ADR(mObr)), size := fS );
 		_NhIsObrOk		:= yFrmName.siz = fS;

@@ -143,7 +143,7 @@ FUNCTION_BLOCK _Nh_Import_CIB	// kopia vsetkych, alebo modifikovanych CFG/PAR/VA
 				ELSE
 					busy	:= true;	grp:=0;
 					Go		:= 11;         				
-					_Nh_Log_Path(wh:=22,frm:=1,wh2:=1);
+					_Nh_Log_Path(wh:=22, frm:=1, wh2:=1);
 //					yTx0	:= CONCAT(yTx1, DT_TO_STRINGF(aSys.NhDT,'%TDD_hhmm.cib') );
 					yTx0	:= yTx1;
 					yTx2	:= CONCAT('.Import to: ',yTx0);

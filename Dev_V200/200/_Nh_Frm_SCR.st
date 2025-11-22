@@ -531,7 +531,7 @@
 						xU^.n := 3;	
 					END_IF;
 
-       70:  // ventil vody
+      70:  // ventil vody
 				xVvo			:= xDev;
 	         xOh         := ADR(xR^.o.ob[0]);
    	      xOh^.aVar   := PTR_TO_UDINT(ADR(xVvo^.cf.typ));
