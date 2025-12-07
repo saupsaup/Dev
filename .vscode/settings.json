@@ -4,18 +4,18 @@
 	// ============================================================
 	"favorites.groups": [
 		"Default",
-		"Dev_V200/200 "
+		"Dev_V201/201 "
 	],
-	"favorites.currentGroup": "Dev_V200/200 ",
+	"favorites.currentGroup": "Dev_V201/201 ",
 	// ============================================================
 	// ⚙️ MOSAIC / VM KONFIGURÁCIA
 	// ============================================================
 	// IP a port PLC (pre VSC2m.exe)
 	"mosaic.plcHost": "192.168.33.200:61682",
 	// Hlavný adresár projektu
-	"mosaic.projectDir": "M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200",
+	"mosaic.projectDir": "M:\\\\NachHouseApp\\\\Dev\\\\Dev_V201\\\\201",
 	// Cesta k .mak súboru pre kompiláciu
-	"mosaic.makPathWin": "M:\\\\NachHouseApp\\\\Dev\\\\Dev_V200\\\\200\\\\200.mak",
+	"mosaic.makPathWin": "M:\\\\NachHouseApp\\\\Dev\\\\Dev_V201\\\\201\\\\201.mak",
 	// Cesta ku Mosaic binárkam vo Windows VM
 	"mosaic.mosaicBin": "C:\\\\Program Files (x86)\\\\Teco\\\\Mosaic 2025.1\\\\Application",
 	// Zdieľaný priečinok medzi Mac ↔ Windows
@@ -110,6 +110,8 @@
 	// Skryté priečinky/súbory v Exploreri (čistejší strom)
 	"files.exclude": {
 		".vscode/**": false,
+		"**/*.cfg": true,
+		"**/*.mpr_": true,
 		"**/*.bak": true,
 		"**/*.st.bak": true,
 		"**/Backup.st/**": true,

@@ -5,7 +5,7 @@
 		// 1️⃣  MAPOVANIE DISKU M: (Mac → Windows VM)
 		// ============================================================
 		{
-  "label": "Mosaic: Map M:",
+  "label": "v00 Mosaic: Map M:",
   "type": "shell",
   "command": "prlctl",
   "args": [
@@ -22,7 +22,7 @@
 		// 2️⃣  BUILD PROJEKTU VO WINDOWS (MosaicL)
 		// ============================================================
 		{
-			"label": "Mosaic: Build (Windows VM)",
+			"label": "ddd Mosaic: Build (Windows VM)",
 			"type": "shell",
 			"dependsOn": "Mosaic: Map M:",
 			"command": "prlctl",
@@ -35,7 +35,7 @@
 				"cd /d \"${config:mosaic.mosaicBin}\" && MosaicL.exe -ttr -lnk -sg+ -sr- -log- -pub -olc- -psw- -plcpsw- -sc- -sl- -exml- -epub- -eexp+ \"${config:mosaic.makPathWin}\""
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/200"
+				"cwd": "${workspaceFolder}/201"
 			},
 
 			// ========================================================
@@ -44,8 +44,8 @@
 			"problemMatcher": [
 				{
 					"owner": "st",
-					"fileLocation": ["relative", "${workspaceFolder}/200"],
-					"pattern": {
+					"fileLocation": ["relative", "${workspaceFolder}/201"],
+					"pattern": { 
 						"regexp": "^\\[ST:(Error|Warning)\\]\\s+([_A-Za-z0-9\\.-]+)\\s+\\((\\d+),\\s*(\\d+)\\):\\s*(.*)$",
 						"severity": 1,
 						"file": 2,
@@ -56,7 +56,7 @@
 				},
 				{
 					"owner": "st",
-					"fileLocation": ["relative", "${workspaceFolder}/200"],
+					"fileLocation": ["relative", "${workspaceFolder}/201"],
 					"pattern": {
 						"regexp": "^\\[Xpro:(Fatal|Error)\\]\\:\\s*(.*)$",
 						"severity": 1,

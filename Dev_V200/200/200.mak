@@ -1,9 +1,9 @@
 ﻿; Varování: Tento soubor je spravován vývojovým prostredím Mosaic.
 ; Nedoporucuje se upravovat ho rucne!
 
-#program 200 , V1.1.2.3
+#program 200 , V2.9.8.7
 ;**************************************
-#libname "_Nh2", 20251119
+#libname "_Nh2", 20251124
 ;<ActionName/>	NachHouse
 ;<Programmer/>	Ing.Peter Aust
 ;<FirmName/>	Au Media, s.r.o.

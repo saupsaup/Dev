@@ -121,7 +121,6 @@ PROGRAM prgMain
 
 
 
-
 	CASE aSys.ini OF
        0:	// riadna prevadzka
 			// sekvencia 3 cyklov za sebou po prechode na novu minutu, alebo natvrdo zadanim aSys.RefCycNew := true
